@@ -14,7 +14,6 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
   logoMedia,
   onTitleChange,
   onLogoMediaChange,
-  onSubmit,
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state

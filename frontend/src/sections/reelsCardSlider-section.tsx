@@ -17,7 +17,6 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
   items,
 }) => {
   const [selectedItem, setSelectedItem] = useState<ReelsCardItem | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isButtonHovered, setIsButtonHovered] = useState(false); // Hover durumu
 
   const modalVariants = {
@@ -27,13 +26,13 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+
     setSelectedItem(null); // setTimeout'u kaldırdık
   };
 
   const openModal = (item: ReelsCardItem) => {
     setSelectedItem(item);
-    setIsModalOpen(true);
+
   };
 
   const renderMedia = (mediaUrl: string, style?: React.CSSProperties) => {

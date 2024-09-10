@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaTrash } from "react-icons/fa";
 import MediaFormModal from "./MediaFormModal";
@@ -24,7 +24,7 @@ const GalleryList = () => {
       setMediaList(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Medya listesi alınamadı:", error);
-      setErrorMessage("Medya listesi alınamadı.");
+      setErrorMessage("Medya listesi alınamadı."); // Hata mesajını ayarla
     }
   };
 
@@ -48,7 +48,7 @@ const GalleryList = () => {
       setMediaList(mediaList.filter((media) => media.Key !== key));
     } catch (error) {
       console.error("Dosya silinirken hata oluştu:", error);
-      setErrorMessage("Dosya silinirken bir hata oluştu.");
+      setErrorMessage("Dosya silinirken bir hata oluştu."); // Hata mesajını ayarla
     }
   };
 
@@ -84,6 +84,12 @@ const GalleryList = () => {
             <span>Yeni</span>&nbsp;<span>Ekle</span>
           </button>
         </div>
+
+        {errorMessage && (
+          <div className="text-red-500 mt-4">
+            <p>{errorMessage}</p>
+          </div>
+        )}
 
         <table className="w-full mt-6 border-collapse">
           <thead>

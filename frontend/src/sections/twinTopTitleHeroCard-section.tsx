@@ -83,7 +83,7 @@ const TwinTopTitleHeroCardSection: React.FC<
           <p className="text-[16px] font-semibold mb-5">{leftSubTitle}</p>
           <a
             href={leftButtonUrl}
-            className="inline-block w-[120px] h-[50px] px-8 py-2 border-2 border-white text-white text-center no-underline rounded-xl font-sans text-[18px] transition-colors duration-300 ease-in-out hover:bg-transparent hover:text-[#666666] hover:border-[#666666] flex justify-center items-center"
+            className=" w-[120px] h-[50px] px-8 py-2 border-2 border-white text-white text-center no-underline rounded-xl font-sans text-[18px] transition-colors duration-300 ease-in-out hover:bg-transparent hover:text-[#666666] hover:border-[#666666] flex justify-center items-center"
           >
             {leftButtonText}
           </a>
@@ -105,7 +105,7 @@ const TwinTopTitleHeroCardSection: React.FC<
           <p className="text-[16px] font-semibold mb-5">{rightSubTitle}</p>
           <a
             href={rightButtonUrl}
-            className="inline-block w-[120px] h-[50px] px-8 py-2 border-2 border-white text-white text-center no-underline rounded-xl font-sans text-[18px] transition-colors duration-300 ease-in-out hover:bg-transparent hover:text-[#666666] hover:border-[#666666] flex justify-center items-center"
+            className=" w-[120px] h-[50px] px-8 py-2 border-2 border-white text-white text-center no-underline rounded-xl font-sans text-[18px] transition-colors duration-300 ease-in-out hover:bg-transparent hover:text-[#666666] hover:border-[#666666] flex justify-center items-center"
           >
             {rightButtonText}
           </a>

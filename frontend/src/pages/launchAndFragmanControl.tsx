@@ -6,8 +6,6 @@ const apiUrl = import.meta.env.VITE_BE_URL; // API URL'sini import ediyoruz
 
 const LaunchAndFragmanControl: React.FC = () => {
   const { launchId } = useParams<{ launchId: string }>(); // URL'den launchId'yi alıyoruz
-  const [launchDate, setLaunchDate] = useState<string | null>(null); // Lansman tarihi
-  const [endDate, setEndDate] = useState<string | null>(null); // Lansman bitiş tarihi
   const [loading, setLoading] = useState<boolean>(true); // Yüklenme durumu
   const [redirect, setRedirect] = useState<string | null>(null); // Yönlendirme durumu
 
@@ -16,8 +14,6 @@ const LaunchAndFragmanControl: React.FC = () => {
       try {
         const response = await axios.get(`${apiUrl}/launch/${launchId}`); // API'den veri çekiyoruz
         const { launchDate, endDate } = response.data; // launchDate ve endDate verilerini alıyoruz
-        setLaunchDate(launchDate);
-        setEndDate(endDate);
 
         // Tarihleri date objelerine çeviriyoruz
         const launchDateObj = new Date(launchDate);

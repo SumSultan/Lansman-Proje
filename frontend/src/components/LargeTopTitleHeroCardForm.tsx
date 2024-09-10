@@ -26,7 +26,6 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
   onButtonTextChange,
   onButtonUrlChange,
   onMediaChange,
-  onFormSubmit,
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -120,16 +119,6 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleSubmit = () => {
-    const formData = {
-      title,
-      subTitle,
-      buttonText,
-      buttonUrl,
-      media,
-    };
-    onFormSubmit(formData);
-  };
 
   return (
     <div className="flex flex-col space-y-6 p-4">

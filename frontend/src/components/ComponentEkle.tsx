@@ -65,7 +65,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
   const [leftSubTitle, setLeftSubTitle] = useState<string>("");
   const [leftButtonText, setLeftButtonText] = useState<string>("");
   const [leftButtonUrl, setLeftButtonUrl] = useState<string>("");
-  const [backgroundMedia, setBackgroundMedia] = useState<string>(""); // Yeni state ekledik
 
   const [miniCardItems, setMiniCardItems] = useState<
     {

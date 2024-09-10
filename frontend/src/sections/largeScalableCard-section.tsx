@@ -10,7 +10,7 @@ const LargeScalableSection: React.FC<LargeScalableSectionProps> = ({
 }) => {
   const [scale, setScale] = useState(0.5); // Başlangıçta küçük olacak
   const [animate, setAnimate] = useState(false); // Açılış animasyonu kontrolü
-  const { ref, inView, entry } = useInView({
+  const { ref, entry } = useInView({
     threshold: Array.from({ length: 11 }, (_, i) => i / 10), // Görünme oranlarını dinler
   });
 

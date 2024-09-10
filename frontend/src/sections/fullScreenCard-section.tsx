@@ -73,7 +73,7 @@ const FullScreenCardSection: React.FC<FullScreenCardSectionProps> = ({
     transform: "translateY(0)",
   };
 
-  const handleSlideClick = (index: number, event: React.MouseEvent) => {
+  const handleSlideClick = (event: React.MouseEvent) => {
     const slideWidth = event.currentTarget.clientWidth;
     const clickPosition = event.nativeEvent.offsetX;
 
@@ -109,7 +109,7 @@ const FullScreenCardSection: React.FC<FullScreenCardSectionProps> = ({
         }}
       >
         {items.map((item, index) => (
-          <SwiperSlide key={index} onClick={(e) => handleSlideClick(index, e)}>
+          <SwiperSlide key={index} onClick={(e) => handleSlideClick(e)}>
             <FullScreenCard {...item} />
           </SwiperSlide>
         ))}
