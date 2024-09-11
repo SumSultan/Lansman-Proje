@@ -21,6 +21,7 @@ import TwinFlipCardSection from "../sections/twinFlipCard-section";
 import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-section";
 import LargePopupCardSection from "../sections/largePopupCard-section";
 import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
+import BottomTextCardSection from "../sections/BottomTextCardSection";
 
 interface FullScreenCardItem {
   media: string;
@@ -163,7 +164,15 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
-
+          if (component.type === "Bottom Text Card") {
+            return (
+              <BottomTextCardSection
+                key={component._id}
+                text={component.content.text || ""}
+                media={component.content.media || ""}
+              />
+            );
+          }
           if (component.type === "Header") {
             return (
               <div key={component._id}>

@@ -28,11 +28,12 @@ const OrderSettings = () => {
     }
   }, [launchId]);
 
-  // deployDesign state'i güncellenince preview durumunu kontrol ediyoruz
   useEffect(() => {
     if (deployDesign && deployDesign.length > 0) {
-      const currentPreview = deployDesign?.find((item) => item.preview);
-      setIsPreviewEnabled(currentPreview ? currentPreview.preview : false); // Eğer preview varsa güncelle, yoksa false yap
+      const currentPreview = deployDesign.find((item) => item.preview);
+      setIsPreviewEnabled(currentPreview ? currentPreview.preview : false);
+    } else {
+      setIsPreviewEnabled(false);
     }
   }, [deployDesign]);
 

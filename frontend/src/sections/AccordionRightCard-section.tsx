@@ -28,7 +28,6 @@ const AccordionRightCardSection: React.FC<AccordionRightCardSectionProps> = ({
   };
 
   useEffect(() => {
-    // Her accordion içeriği için height değerini ölçüyoruz
     const heights: { [key: number]: number } = {};
     contentRefs.current.forEach((ref, index) => {
       if (ref) {
@@ -55,64 +54,68 @@ const AccordionRightCardSection: React.FC<AccordionRightCardSectionProps> = ({
   };
 
   return (
-    <div
-      ref={ref}
-      style={{
-        margin: "40px 0", // Alttan ve üsten 40px margin
-        ...animationStyle,
-        ...(inView ? visibleStyle : {}),
-      }}
-      className="flex justify-between bg-[#fafafa] rounded-[20px] shadow-lg h-[787px] w-[1400px] mx-auto ps-10"
-    >
-      {/* Sol kısım - Accordion */}
-      <div className="w-[45%] h-full flex flex-col items-start justify-center mr-16 overflow-y-auto">
-        {accordian.map((item, index) => (
-          <div key={index} className="w-full">
-            <div
-              onClick={() => toggleAccordion(index)}
-              className="mb-8 cursor-pointer w-full bg-transparent border-b border-gray-300"
-            >
-              <h3 className="text-[24px] font-semibold flex justify-between items-center text-gray-900">
-                {item.title}
-                <FaChevronDown
-                  className={`transform transition-transform duration-200 text-[16px] text-gray-500 ${
-                    openIndex === index ? "rotate-180" : "rotate-0"
-                  }`}
-                />
-              </h3>
+    <div className="w-full min-h-screen flex justify-center items-center">
+      <div
+        ref={ref}
+        style={{
+          margin: "40px 0",
+          ...animationStyle,
+          ...(inView ? visibleStyle : {}),
+        }}
+        className="flex bg-[#fafafa] rounded-[20px] shadow-lg h-[787px] w-[1400px] mx-auto"
+      >
+        {/* Sol kısım - Accordion */}
+        <div className="w-[45%] h-full flex flex-col items-start justify-center mr-16 overflow-y-auto">
+          {accordian.map((item, index) => (
+            <div key={index} className="w-full">
+              <div
+                onClick={() => toggleAccordion(index)}
+                className="mb-8 cursor-pointer w-full bg-transparent border-b border-gray-300"
+                style={{ paddingLeft: "15px" }}
+              >
+                <h3 className="text-[24px] font-semibold flex justify-between items-center text-gray-900">
+                  {item.title}
+                  <FaChevronDown
+                    className={`transform transition-transform duration-200 text-[16px] text-gray-500 ${
+                      openIndex === index ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                </h3>
+              </div>
+              <div
+                ref={(el) => (contentRefs.current[index] = el)}
+                style={{
+                  maxHeight:
+                    openIndex === index ? `${heights[index]}px` : "0px",
+                  transition: "max-height 0.5s ease",
+                  overflow: "hidden",
+                  paddingLeft: "5px",
+                }}
+                className="mt-2 mb-8 text-[17px] text-gray-600 leading-relaxed break-words whitespace-normal"
+              >
+                {item.subTitle}
+              </div>
             </div>
-            {/* Alt metin animasyonlu açılma */}
-            <div
-              ref={(el) => (contentRefs.current[index] = el)}
-              style={{
-                maxHeight: openIndex === index ? `${heights[index]}px` : "0px",
-                transition: "max-height 0.5s ease",
-                overflow: "hidden",
-              }}
-              className="mt-2 mb-8 text-[17px] text-gray-600 leading-relaxed break-words whitespace-normal"
-            >
-              {item.subTitle}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      {/* Sağ kısım - Medya */}
-      <div className="w-[55%] h-[787px] flex-shrink-0 order-2">
-        {fileType === "mp4" || fileType === "webm" ? (
-          <video
-            controls
-            className="w-full h-full rounded-[15px] shadow-xl object-cover"
-          >
-            <source src={mediaUrl} type={`video/${fileType}`} />
-          </video>
-        ) : (
-          <img
-            src={mediaUrl}
-            alt="Media"
-            className="w-full h-full rounded-r-lg shadow-xl object-cover"
-          />
-        )}
+        {/* Sağ kısım - Medya */}
+        <div className="w-[55%] h-[787px] flex-shrink-0">
+          {fileType === "mp4" || fileType === "webm" ? (
+            <video
+              controls
+              className="w-full h-full rounded-[15px] shadow-xl object-cover"
+            >
+              <source src={mediaUrl} type={`video/${fileType}`} />
+            </video>
+          ) : (
+            <img
+              src={mediaUrl}
+              alt="Media"
+              className="w-full h-full rounded-r-lg shadow-xl object-cover"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ import { useParams } from "react-router-dom";
 import useDeployDesignStore from "../zustands/useDeployDesingStore";
 import { DeployDesign } from "../zustands/useDeployDesingStore";
 import React, { useState, ChangeEvent, useEffect } from "react"; // useEffect'i buraya ekledik
+import BottomTextCardForm from "./BottomTextCardForm";
 
 Modal.setAppElement("#root");
 
@@ -620,6 +621,12 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           leftMedia,
         };
         break;
+      case "Bottom Text Card":
+        content = {
+          text,
+          media,
+        };
+        break;
       case "Twin Flip Card":
         content = {
           rightFrontMedia,
@@ -880,7 +887,15 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onRemoveCard={handleRemoveMiniCard}
           />
         );
-
+      case "Bottom Text Card":
+        return (
+          <BottomTextCardForm
+            text={text}
+            media={media}
+            onTextChange={handleTextChange}
+            onMediaChange={handleMediaChange}
+          />
+        );
       case "Twin Top Title Hero Card": // Yeni eklenen seçenek
         return (
           <TwinTopTitleHeroCardForm
@@ -969,6 +984,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
               <option value="Full Text">Full Text</option>
               <option value="Reels Card Slider">Reels Card Slider</option>
               <option value="Right Text Card">Right Text Card</option>
+              <option value="Bottom Text Card">Bottom Text Card</option>
               <option value="Left Text Card">Left Text Card</option>
               <option value="Top Text Card">Top Text Card</option>
               <option value="Info Card Slider">Info Card Slider</option>

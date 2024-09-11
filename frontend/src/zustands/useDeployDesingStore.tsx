@@ -54,6 +54,10 @@ export type Components = {
     title: string;
     subTitle: string;
   }>;
+  bottomTextCard?: {
+    text: string;
+    media: string;
+  };
 };
 
 export type DeployDesign = {

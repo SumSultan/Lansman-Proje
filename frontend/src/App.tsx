@@ -15,8 +15,7 @@ import PreviewPage from "./pages/previewPage"; // PreviewPage bileşenini içe a
 import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarın
 import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
-import FragmanPage from "./pages/fragman";
-import LaunchAndFragmanControl from "./pages/launchAndFragmanControl"; // launchAndFragmanControl bileşenini ekleyin
+import LaunchPage from "./pages/launchAndFragmanControl"; // launchAndFragmanControl bileşenini ekleyin
 
 const App = () => {
   return (
@@ -80,17 +79,10 @@ const App = () => {
                   </PreviewRoute>
                 }
               />
-
-              {/* Yeni URL'ye PreviewPage Yönlendirmesi */}
-              <Route
-                path="/fragman/:launchId" // Fragman için route
-                element={<FragmanPage />}
-              />
-
               {/* Launch kontrolü ve yönlendirme */}
               <Route
                 path="/lansman/:launchId" // Yeni rota için launch kontrolü
-                element={<LaunchAndFragmanControl />}
+                element={<LaunchPage />}
               />
 
               {/* Error route */}

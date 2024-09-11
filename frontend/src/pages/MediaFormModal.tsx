@@ -14,6 +14,7 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
   onMediaUploaded,
 }) => {
   const [mediaName, setMediaName] = useState("");
+  const [companyName, setCompanyName] = useState(""); // Firma adı için state eklendi
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -21,6 +22,12 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setMediaName(event.target.value);
+  };
+
+  const handleCompanyNameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setCompanyName(event.target.value);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +40,8 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!mediaFile || !mediaName) {
+    // Zorunlu alanlar kontrolü
+    if (!mediaFile || !mediaName || !companyName) {
       setErrorMessage("Lütfen tüm alanları doldurun.");
       return;
     }
@@ -42,8 +50,9 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
     formData.append("mediaUploadOrLink", mediaFile); // backend'deki 'req.file' bu veriyi alır
     formData.append(
       "mediaName",
-      `${mediaName}.${mediaFile.name.split(".").pop()}`
+      `${mediaName}.${companyName}.${mediaFile.name.split(".").pop()}`
     ); // Medya adını ve uzantısını birleştir
+    formData.append("companyName", companyName); // Firma adını ekledik
 
     try {
       const response = await axios.post(`${apiUrl}/media`, formData, {
@@ -116,7 +125,24 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
               type="text"
               value={mediaName}
               onChange={handleMediaNameChange}
-              placeholder="lansmanAdi_medyaAdi"
+              placeholder="Medya Adı"
+              className="border rounded p-2"
+              style={{ width: "413px", height: "50px" }} // Genişlik ve yükseklik
+            />
+          </div>
+
+          <div className="mb-4">
+            <label
+              className="block text-[#243757] font-poppins font-[400] text-[14px] leading-[20px] mb-1"
+              style={{ width: "100%" }}
+            >
+              Firma Adı
+            </label>
+            <input
+              type="text"
+              value={companyName}
+              onChange={handleCompanyNameChange}
+              placeholder="Firma Adı"
               className="border rounded p-2"
               style={{ width: "413px", height: "50px" }} // Genişlik ve yükseklik
             />
