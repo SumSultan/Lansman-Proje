@@ -65,8 +65,8 @@ const HeaderSection: React.FC<HeaderSectionProps> = ({ title, logoMedia }) => {
           src={logoMediaUrl}
           alt="Logo Media"
           style={{
-            width: "400px",
-            height: "400px",
+            width: "200px",
+            height: "200px",
             borderRadius: "10px",
             objectFit: "contain",
             overflow: "hidden",
