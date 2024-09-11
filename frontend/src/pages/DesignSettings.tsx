@@ -218,8 +218,8 @@ const OrderSettings = () => {
             </div>
           </div>
 
-          <div className="w-[651px] h-[796px]">
-            <div className="space-y-4 overflow-y-auto h-[670px]">
+          <div className="w-[651px] h-[1600px]">
+            <div className="space-y-4 overflow-y-auto h-[1500px]">
               {deployDesign &&
                 deployDesign.length > 0 &&
                 deployDesign.map((item, index) => (

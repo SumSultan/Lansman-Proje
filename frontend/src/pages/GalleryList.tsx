@@ -13,6 +13,7 @@ interface MediaItem {
 const GalleryList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Arama çubuğu için yeni state
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -56,6 +57,11 @@ const GalleryList = () => {
     fetchMedia(); // Medya yüklendiğinde medya listesini yenile
   };
 
+  // Arama fonksiyonu
+  const filteredMediaList = mediaList.filter((media) =>
+    media.Key.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="flex h-full">
       <NavBar />
@@ -66,23 +72,58 @@ const GalleryList = () => {
 
         <div className="flex justify-between items-center">
           <h2 className="font-poppins font-medium text-lg">Galeri</h2>
-          <button
-            className="bg-white text-[#091E42] border border-[#D6D6D6] shadow-md flex items-center justify-center"
-            onClick={handleAddNewClick}
-            style={{
-              width: "92px",
-              height: "40px",
-              borderRadius: "8px",
-              padding: "10px 16px",
-              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-              fontFamily: "Poppins, sans-serif",
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "20px",
-            }}
-          >
-            <span>Yeni</span>&nbsp;<span>Ekle</span>
-          </button>
+
+          <div className="flex space-x-4 items-center">
+            {/* Arama çubuğu */}
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Medya Adı ile Ara"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-[#D6D6D6] rounded-md px-4 py-2 pl-10 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"
+                style={{
+                  height: "40px", // Arama çubuğunun yüksekliği buton ile aynı yapıldı
+                }}
+              />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5 absolute left-3 top-2.5 text-gray-400"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+                />
+              </svg>
+            </div>
+
+            {/* Yeni Ekle Butonu */}
+            <button
+              className="bg-white text-[#091E42] border border-[#D6D6D6] shadow-md flex items-center justify-center"
+              onClick={handleAddNewClick}
+              style={{
+                width: "92px",
+                height: "40px", // Buton yüksekliği arama çubuğu ile aynı yapıldı
+                borderRadius: "8px",
+                padding: "10px 16px",
+                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                fontFamily: "'Poppins', sans-serif",
+                fontSize: "14px",
+                fontWeight: "500",
+                lineHeight: "20px",
+                color: "#2E2E2E",
+                border: "1px solid #D6D6D6",
+                backgroundColor: "#FFFFFF",
+              }}
+            >
+              <span>Yeni</span>&nbsp;<span>Ekle</span>
+            </button>
+          </div>
         </div>
 
         {errorMessage && (
@@ -102,7 +143,7 @@ const GalleryList = () => {
             </tr>
           </thead>
           <tbody>
-            {mediaList.map((media, index) => (
+            {filteredMediaList.map((media, index) => (
               <tr key={media.Key} className="border-t">
                 <td className="p-2">{`DL${index + 1}`}</td>
                 <td className="p-2">{media.Key.split(".")[0]}</td>

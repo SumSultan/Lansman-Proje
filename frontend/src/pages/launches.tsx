@@ -116,13 +116,42 @@ const Launches = () => {
             >
               Lansmanlar
             </h1>
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 items-center">
+              {/* Arama çubuğu */}
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Lansman Adı ile Ara"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border border-[#D6D6D6] rounded-md px-4 py-2 pl-10 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"
+                  style={{
+                    height: "40px", // Make the input height same as the button
+                  }}
+                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 absolute left-3 top-2.5 text-gray-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
+                  />
+                </svg>
+              </div>
+
+              {/* Yeni Ekle Butonu */}
               <button
                 className="bg-white text-[#091E42] border border-[#D6D6D6] shadow-md flex items-center justify-center"
                 onClick={handleCreateClick}
                 style={{
                   width: "92px",
-                  height: "40px",
+                  height: "40px", // Set the button height explicitly
                   borderRadius: "8px",
                   padding: "10px 16px",
                   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -149,35 +178,8 @@ const Launches = () => {
             görüntüleyebilirsiniz.
           </h2>
 
-          {/* Arama çubuğu */}
-          <div className="my-4 flex justify-start">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Lansman Adı ile Ara"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="border border-gray-300 rounded-full px-4 py-2 pl-10 w-80 shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"
-              />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5 absolute left-3 top-2.5 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM21 21l-4.35-4.35"
-                />
-              </svg>
-            </div>
-          </div>
-
           {/* Filtreleme butonları */}
-          <div className="flex space-x-4 my-2">
+          <div className="flex space-x-4 mt-6"> {/* mt-6 ile sadece üst boşluk eklendi */}
             <button
               onClick={() => handleFilterChange("all")}
               className={`${
