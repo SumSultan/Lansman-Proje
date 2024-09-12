@@ -14,9 +14,7 @@ interface TwinTopTitleHeroCardSectionProps {
   leftButtonUrl: string;
 }
 
-const TwinTopTitleHeroCardSection: React.FC<
-  TwinTopTitleHeroCardSectionProps
-> = ({
+const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = ({
   rightMedia,
   rightTitle,
   rightSubTitle,
@@ -64,9 +62,33 @@ const TwinTopTitleHeroCardSection: React.FC<
     );
   };
 
+  const gradientOverlayStyle = {
+    position: "absolute" as const,
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 1,
+    background: `
+      linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.9) 10%,    /* Yoğun siyah */
+        rgba(0, 0, 0, 0.8) 20%,    /* Yavaşça açılan siyah */
+        rgba(0, 0, 0, 0.7) 30%,    /* Siyahın daha da açılması */
+        rgba(0, 0, 0, 0.6) 40%,    /* Gri tonlarına geçiş */
+        rgba(64, 64, 64, 0.5) 50%, /* Griye dönüşüm devam ediyor */
+        rgba(128, 128, 128, 0.4) 60%, /* Daha açık gri */
+        rgba(128, 128, 128, 0.3) 70%, /* Şeffaf griye geçiş */
+        rgba(192, 192, 192, 0.2) 80%, /* Daha şeffaf gri */
+        rgba(192, 192, 192, 0.1) 90%, /* Neredeyse şeffaf gri */
+        rgba(192, 192, 192, 0) 100%   /* Tamamen şeffaf */
+      )
+    `,
+  };
+
   return (
     <div
-      className="flex justify-between p-5 bg-white rounded-lg mb-5 w-[1440px] mx-auto"
+      className="flex justify-between p-5 bg-white rounded-lg mb-5 w-full max-w-[1440px] mx-auto px-5 gap-x-5" // px-5 sağ-sol boşluk ve gap-x-5 arası boşluk
       style={{ margin: "40px 0" }} // Alttan ve üsten 40px margin eklendi
     >
       {/* Left Card */}
@@ -76,6 +98,7 @@ const TwinTopTitleHeroCardSection: React.FC<
           leftInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >
+        <div style={gradientOverlayStyle}></div> {/* Gradyan geçişi */}
         <div className="absolute top-5 left-1/2 transform -translate-x-1/2 text-white font-sans text-center z-10">
           <h3 className="text-[30px] font-bold mb-2 tracking-wider">
             {leftTitle}
@@ -98,6 +121,7 @@ const TwinTopTitleHeroCardSection: React.FC<
           rightInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >
+        <div style={gradientOverlayStyle}></div> {/* Gradyan geçişi */}
         <div className="absolute top-5 left-1/2 transform -translate-x-1/2 text-white font-sans text-center z-10">
           <h3 className="text-[30px] font-bold mb-2 tracking-wider">
             {rightTitle}
