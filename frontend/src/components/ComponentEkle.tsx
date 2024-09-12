@@ -23,7 +23,7 @@ import { useParams } from "react-router-dom";
 import useDeployDesignStore from "../zustands/useDeployDesingStore";
 import { DeployDesign } from "../zustands/useDeployDesingStore";
 import React, { useState, ChangeEvent, useEffect } from "react"; // useEffect'i buraya ekledik
-import BottomTextCardForm from "./BottomTextCardForm";
+import BottomTextCardForm from "../components/BottomTextCardForm";
 
 Modal.setAppElement("#root");
 
@@ -66,6 +66,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
   const [leftSubTitle, setLeftSubTitle] = useState<string>("");
   const [leftButtonText, setLeftButtonText] = useState<string>("");
   const [leftButtonUrl, setLeftButtonUrl] = useState<string>("");
+ 
 
   const [miniCardItems, setMiniCardItems] = useState<
     {
@@ -271,35 +272,33 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
   const handleAddAccordianItem = () => {
     setAccordianItems([...accordianItems, { title: "", subTitle: "" }]);
   };
-
-  const handleRemoveAccordianItem = (index: number) => {
-    setAccordianItems((prevItems) =>
-      prevItems.filter((_, idx) => idx !== index)
-    );
-  };
-
+  
   const handleAccordianTitleChange = (
     index: number,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const { value } = e.target;
     setAccordianItems((prevItems) =>
       prevItems.map((item, idx) =>
-        idx === index ? { ...item, title: e.target.value } : item
+        idx === index ? { ...item, title: value } : item
       )
     );
   };
-
   const handleAccordianSubTitleChange = (
     index: number,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    const { value } = e.target;
     setAccordianItems((prevItems) =>
       prevItems.map((item, idx) =>
-        idx === index ? { ...item, subTitle: e.target.value } : item
+        idx === index ? { ...item, subTitle: value } : item
       )
     );
   };
 
+  const handleRemoveAccordianItem = (index: number) => {
+  setAccordianItems((prevItems) => prevItems.filter((_, idx) => idx !== index));
+};
   const handleButtonTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setButtonText(e.target.value);
   };
@@ -621,12 +620,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           leftMedia,
         };
         break;
-      case "Bottom Text Card":
-        content = {
-          text,
-          media,
-        };
-        break;
       case "Twin Flip Card":
         content = {
           rightFrontMedia,
@@ -674,6 +667,13 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           leftButtonUrl,
         };
         break;
+      case "Bottom Text Card":
+        content = {
+          text,
+          media,
+        };
+        break;  
+
       default:
         console.error("Geçersiz component seçimi");
         return;
@@ -783,6 +783,17 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onMediaChange={handleMediaChange}
           />
         );
+      
+        case "Bottom Text Card":
+          return (
+            <BottomTextCardForm
+              text={text}
+              media={media}
+              onTextChange={handleTextChange}
+              onMediaChange={handleMediaChange}
+            />
+          );  
+      
       case "Info Card Slider":
         return (
           <InfoCardSliderForm
@@ -887,15 +898,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onRemoveCard={handleRemoveMiniCard}
           />
         );
-      case "Bottom Text Card":
-        return (
-          <BottomTextCardForm
-            text={text}
-            media={media}
-            onTextChange={handleTextChange}
-            onMediaChange={handleMediaChange}
-          />
-        );
+
       case "Twin Top Title Hero Card": // Yeni eklenen seçenek
         return (
           <TwinTopTitleHeroCardForm
@@ -982,9 +985,9 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
               <option value="Large Flip Card">Large Flip Card</option>
               <option value="Large Scalable Card">Large Scalable Card</option>
               <option value="Full Text">Full Text</option>
+              <option value="Bottom Text Card">Bottom Text Card</option>
               <option value="Reels Card Slider">Reels Card Slider</option>
               <option value="Right Text Card">Right Text Card</option>
-              <option value="Bottom Text Card">Bottom Text Card</option>
               <option value="Left Text Card">Left Text Card</option>
               <option value="Top Text Card">Top Text Card</option>
               <option value="Info Card Slider">Info Card Slider</option>
