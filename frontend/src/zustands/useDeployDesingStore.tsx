@@ -58,6 +58,7 @@ export type Components = {
     text: string;
     media: string;
   };
+  searchQuery?: string; // Yeni eklenen alan
 };
 
 export type DeployDesign = {
@@ -68,6 +69,7 @@ export type DeployDesign = {
   preview: boolean;
   content: Partial<Components>; // "components" yerine "content"
   type: string; // Yeni "type" alanı eklendi
+  searchQuery?: string;
 };
 
 interface DeployDesignStore {

@@ -1,29 +1,30 @@
 import Modal from "react-modal";
-import LargeCardForm from "../components/LargeCard";
-import LargePopupCardForm from "../components/LargePopupCard";
-import FlipCardForm from "../components/LargeFlipCard";
-import LargeScalableCardForm from "../components/LargeScalableCard";
-import FullTextForm from "../components/FullTextForm";
-import ReelsCardSliderForm from "../components/ReelsCardSliderForm";
-import RightTextCardForm from "../components/RightTextCard";
-import LeftTextCardForm from "../components/LeftTextCardForm";
-import TopTextCardForm from "../components/TopTextCardForm";
-import InfoCardSliderForm from "../components/InfoCardSliderForm";
-import CTACardForm from "../components/CTACardForm";
-import TitleForm from "../components/TitleForm";
-import TwinCardForm from "../components/TwinCardForm";
-import TwinFlipCardForm from "../components/TwinFlipCardForm";
-import AccordionRightCardForm from "../components/AccordionRightCardForm";
-import LargeTopTitleHeroCardForm from "../components/LargeTopTitleHeroCardForm";
-import FullScreenCardSliderForm from "../components/FullScreenCardSliderForm";
-import MiniCardSliderForm from "../components/MiniCardSlider";
-import HeaderForm from "../components/HeaderForm";
-import TwinTopTitleHeroCardForm from "../components/TwinTopTitleHeroCardForm"; // Yeni bileşen eklendi
+import LargeCardForm from "./LargeCard";
+import LargePopupCardForm from "./LargePopupCard";
+import FlipCardForm from "./LargeFlipCard";
+import LargeScalableCardForm from "./LargeScalableCard";
+import FullTextForm from "./FullTextForm";
+import ReelsCardSliderForm from "./ReelsCardSliderForm";
+import RightTextCardForm from "./RightTextCard";
+import LeftTextCardForm from "./LeftTextCardForm";
+import TopTextCardForm from "./TopTextCardForm";
+import InfoCardSliderForm from "./InfoCardSliderForm";
+import CTACardForm from "./CTACardForm";
+import TitleForm from "./TitleForm";
+import TwinCardForm from "./TwinCardForm";
+import TwinFlipCardForm from "./TwinFlipCardForm";
+import AccordionRightCardForm from "./AccordionRightCardForm";
+import LargeTopTitleHeroCardForm from "./LargeTopTitleHeroCardForm";
+import FullScreenCardSliderForm from "./FullScreenCardSliderForm";
+import MiniCardSliderForm from "./MiniCardSlider";
+import HeaderForm from "./HeaderForm";
+import TwinTopTitleHeroCardForm from "./TwinTopTitleHeroCardForm"; // Yeni bileşen eklendi
 import { useParams } from "react-router-dom";
 import useDeployDesignStore from "../zustands/useDeployDesingStore";
 import { DeployDesign } from "../zustands/useDeployDesingStore";
 import React, { useState, ChangeEvent, useEffect } from "react"; // useEffect'i buraya ekledik
-import BottomTextCardForm from "../components/BottomTextCardForm";
+import BottomTextCardForm from "./BottomTextCardForm";
+import SearchForm from "./searchForm";
 
 Modal.setAppElement("#root");
 
@@ -66,7 +67,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
   const [leftSubTitle, setLeftSubTitle] = useState<string>("");
   const [leftButtonText, setLeftButtonText] = useState<string>("");
   const [leftButtonUrl, setLeftButtonUrl] = useState<string>("");
- 
 
   const [miniCardItems, setMiniCardItems] = useState<
     {
@@ -155,6 +155,15 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
       logoMedia: "",
     },
   ]);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const handleClearFilters = () => {
+    // Filtreleri temizlemek için gerekli kodlar
+  };
 
   const handleRightTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setRightTitle(e.target.value);
@@ -272,7 +281,13 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
   const handleAddAccordianItem = () => {
     setAccordianItems([...accordianItems, { title: "", subTitle: "" }]);
   };
-  
+
+  const handleRemoveAccordianItem = (index: number) => {
+    setAccordianItems((prevItems) =>
+      prevItems.filter((_, idx) => idx !== index)
+    );
+  };
+
   const handleAccordianTitleChange = (
     index: number,
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -296,9 +311,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
     );
   };
 
-  const handleRemoveAccordianItem = (index: number) => {
-  setAccordianItems((prevItems) => prevItems.filter((_, idx) => idx !== index));
-};
   const handleButtonTextChange = (e: ChangeEvent<HTMLInputElement>) => {
     setButtonText(e.target.value);
   };
@@ -546,6 +558,15 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           logoMedia,
         };
         break;
+      case "Search Form":
+        // searchQuery burada content'e eklenir.
+        content = {
+          searchQuery,
+        };
+        break;
+
+        break;
+        break;
       case "Large Card":
         content = {
           media,
@@ -620,6 +641,12 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           leftMedia,
         };
         break;
+      case "Bottom Text Card":
+        content = {
+          text,
+          media,
+        };
+        break;
       case "Twin Flip Card":
         content = {
           rightFrontMedia,
@@ -667,13 +694,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           leftButtonUrl,
         };
         break;
-      case "Bottom Text Card":
-        content = {
-          text,
-          media,
-        };
-        break;  
-
       default:
         console.error("Geçersiz component seçimi");
         return;
@@ -712,6 +732,15 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onSubmit={handleFormSubmit} // Burada onSubmit fonksiyonunu ekliyoruz
           />
         );
+      case "Search Form":
+        return (
+          <SearchForm
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchChange}
+            onClearFilters={handleClearFilters} // onClearFilters prop'unu ekliyoruz
+          />
+        );
+
       case "Large Card":
         return (
           <LargeCardForm
@@ -783,17 +812,6 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onMediaChange={handleMediaChange}
           />
         );
-      
-        case "Bottom Text Card":
-          return (
-            <BottomTextCardForm
-              text={text}
-              media={media}
-              onTextChange={handleTextChange}
-              onMediaChange={handleMediaChange}
-            />
-          );  
-      
       case "Info Card Slider":
         return (
           <InfoCardSliderForm
@@ -898,7 +916,15 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onRemoveCard={handleRemoveMiniCard}
           />
         );
-
+      case "Bottom Text Card":
+        return (
+          <BottomTextCardForm
+            text={text}
+            media={media}
+            onTextChange={handleTextChange}
+            onMediaChange={handleMediaChange}
+          />
+        );
       case "Twin Top Title Hero Card": // Yeni eklenen seçenek
         return (
           <TwinTopTitleHeroCardForm
@@ -982,12 +1008,13 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
               <option value="Header">Header</option>
               <option value="Large Card">Large Card</option>
               <option value="Large Popup Card">Large Popup Card</option>
+              <option value="Search Form">Search Form</option>
               <option value="Large Flip Card">Large Flip Card</option>
               <option value="Large Scalable Card">Large Scalable Card</option>
               <option value="Full Text">Full Text</option>
-              <option value="Bottom Text Card">Bottom Text Card</option>
               <option value="Reels Card Slider">Reels Card Slider</option>
               <option value="Right Text Card">Right Text Card</option>
+              <option value="Bottom Text Card">Bottom Text Card</option>
               <option value="Left Text Card">Left Text Card</option>
               <option value="Top Text Card">Top Text Card</option>
               <option value="Info Card Slider">Info Card Slider</option>

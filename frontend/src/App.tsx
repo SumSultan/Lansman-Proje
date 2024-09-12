@@ -16,6 +16,7 @@ import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarı
 import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
 import LaunchPage from "./pages/launchAndFragmanControl"; // launchAndFragmanControl bileşenini ekleyin
+import HomePage from "./pages/homelist";
 
 const App = () => {
   return (
@@ -28,6 +29,14 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/" element={<Navigate to="/launches" replace />} />
 
+              <Route
+                path="/homelist"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
               {/* Protected Routes */}
               <Route
                 path="/launches"

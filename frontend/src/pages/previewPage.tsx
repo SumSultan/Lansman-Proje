@@ -22,6 +22,7 @@ import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-sectio
 import LargePopupCardSection from "../sections/largePopupCard-section";
 import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
+import SearchSection from "../sections/search-card-section";
 
 interface FullScreenCardItem {
   media: string;
@@ -52,6 +53,7 @@ interface ReelsCardItem {
   subTitle: string;
 }
 interface Content {
+  searchQuery?: string; // searchQuery alanını ekledik
   title?: string;
   subTitle?: string;
   buttonText?: string;
@@ -142,6 +144,14 @@ const PreviewPage: React.FC = () => {
                 buttonText={component.content.buttonText || ""}
                 buttonUrl={component.content.buttonUrl || ""}
                 title={component.content.title || ""}
+              />
+            );
+          }
+          if (component.type === "Search Form") {
+            return (
+              <SearchSection
+                key={component._id}
+                searchQuery={component.content.searchQuery || ""}
               />
             );
           }
