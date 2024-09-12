@@ -47,6 +47,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
       }
     };
 
+    
     if (isModalOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
