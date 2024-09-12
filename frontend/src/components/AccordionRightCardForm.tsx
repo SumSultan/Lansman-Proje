@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react"; // useRef'i buraya ekledim
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
 
 interface AccordionRightCardFormProps {
@@ -13,7 +13,7 @@ interface AccordionRightCardFormProps {
   ) => void;
   onAccordianSubTitleChange: (
     index: number,
-    e: ChangeEvent<HTMLInputElement>
+    e: ChangeEvent<HTMLTextAreaElement>
   ) => void;
 }
 
@@ -28,6 +28,8 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [charCounts, setCharCounts] = useState<number[]>(accordian.map(() => 0)); // Karakter sayacı
+  const [errors, setErrors] = useState<string[]>(accordian.map(() => "")); // Hata mesajı için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -46,13 +48,9 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
     fetchMediaList();
   }, []);
 
-  // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -68,7 +66,6 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
     };
   }, [isModalOpen]);
 
-  // Medya önizleme fonksiyonu
   const renderFilePreview = (file: string) => {
     const fileType = file.split(".").pop()?.toLowerCase();
     const previewStyle = "w-full h-32 object-cover mb-2";
@@ -105,20 +102,32 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
           </video>
         );
       default:
-        return (
-          <p className="text-center">
-            Desteklenmeyen dosya formatı: {fileType}
-          </p>
-        );
+        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
     }
   };
 
-  // Medya seçimi yapıldıktan sonra media state'ini güncelleyen fonksiyon
   const handleMediaSelect = (selectedMedia: string) => {
     onMediaChange({
       target: { value: selectedMedia },
     } as ChangeEvent<HTMLSelectElement>);
-    setIsModalOpen(false); // Modalı kapatıyoruz
+    setIsModalOpen(false);
+  };
+
+  const handleSubTitleChange = (index: number, e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    const updatedCharCounts = [...charCounts];
+    const updatedErrors = [...errors];
+
+    if (newText.length <= 200) { // Karakter sınırını 200 yapıyoruz
+      updatedErrors[index] = ""; // Hata mesajını temizliyoruz
+    } else {
+      updatedErrors[index] = "Karakter sınırını aştınız!"; // Hata mesajı
+    }
+
+    updatedCharCounts[index] = newText.length;
+    setCharCounts(updatedCharCounts);
+    setErrors(updatedErrors);
+    onAccordianSubTitleChange(index, e);
   };
 
   return (
@@ -144,15 +153,15 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
           <input
             type="text"
             readOnly
-            value={media || "Media Seç"} // Başlangıç ismini buraya ekledim
-            onClick={() => setIsModalOpen(true)} // Modalı açan buton
+            value={media || "Media Seç"}
+            onClick={() => setIsModalOpen(true)}
             className="block text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm sm:text-sm"
             style={{
-              width: "396px", // Genişlik (396px)
-              height: "50px", // Yükseklik (50px)
-              padding: "10px 16px", // İç boşluklar (Padding)
-              borderRadius: "8px", // Kenar yuvarlama
-              outline: "none", // Mavi çerçeveyi kaldırmak için
+              width: "396px",
+              height: "50px",
+              padding: "10px 16px",
+              borderRadius: "8px",
+              outline: "none",
             }}
           />
         </div>
@@ -167,7 +176,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               <button
                 type="button"
                 className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
-                onClick={() => setIsModalOpen(false)} // Kapatma butonu eklendi
+                onClick={() => setIsModalOpen(false)}
               >
                 X
               </button>
@@ -226,9 +235,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               </button>
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">
-                Başlık
-              </label>
+              <label className="block text-sm text-[#1F2937] mb-1">Başlık</label>
               <input
                 type="text"
                 value={section.title}
@@ -237,17 +244,23 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
               />
             </div>
+
+            {/* Alt Başlık alanını textarea'ya dönüştürüyoruz */}
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">
-                Alt Başlık
-              </label>
-              <input
-                type="text"
+              <label className="block text-sm text-[#1F2937] mb-1">Yazı</label>
+              <textarea
                 value={section.subTitle}
-                onChange={(e) => onAccordianSubTitleChange(index, e)}
-                placeholder="Input"
-                className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+                onChange={(e) => handleSubTitleChange(index, e)}
+                placeholder="Yazı Alanı"
+                className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+                rows={3}
+                style={{ resize: "none" }} // Yeniden boyutlandırma devre dışı
               />
+              {/* Hata mesajı ve karakter sayacı */}
+              {errors[index] && <p className="text-red-500 text-xs mt-1">{errors[index]}</p>}
+              <div className="text-right text-sm text-gray-500 mt-1">
+                {charCounts[index]}/200
+              </div>
             </div>
           </div>
         ))}
@@ -257,16 +270,16 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
             onClick={onAddAccordianItem}
             className="bg-[#FCFCFC] text-[#353642] border border-[#D6D6D6] rounded-lg shadow-xs focus:outline-none"
             style={{
-              width: "184px", // Genişlik
-              height: "40px", // Yükseklik
-              padding: "10px 16px", // İçerik iç boşlukları
-              borderRadius: "8px", // Kenar yuvarlama
-              border: "1px solid #D6D6D6", // Sınır rengi
-              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)", // Gölge efekti
-              fontFamily: "Poppins", // Yazı tipi
-              fontSize: "14px", // Yazı boyutu
-              color: "#101828", // Yazı rengi
-              textAlign: "left", // Sol hizalama
+              width: "184px",
+              height: "40px",
+              padding: "10px 16px",
+              borderRadius: "8px",
+              border: "1px solid #D6D6D6",
+              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+              fontFamily: "Poppins",
+              fontSize: "14px",
+              color: "#101828",
+              textAlign: "left",
             }}
           >
             Accordion Bölüm Ekle

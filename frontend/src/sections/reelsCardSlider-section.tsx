@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaTimes } from "react-icons/fa"; // FaTimes importu
+import { FaTimes } from "react-icons/fa";
 
 interface ReelsCardItem {
   media: string;
@@ -17,7 +17,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
   items,
 }) => {
   const [selectedItem, setSelectedItem] = useState<ReelsCardItem | null>(null);
-  const [isButtonHovered, setIsButtonHovered] = useState(false); // Hover durumu
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   const modalVariants = {
     hidden: { opacity: 0, scale: 0.8 },
@@ -26,13 +26,11 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
   };
 
   const closeModal = () => {
-
-    setSelectedItem(null); // setTimeout'u kaldırdık
+    setSelectedItem(null);
   };
 
   const openModal = (item: ReelsCardItem) => {
     setSelectedItem(item);
-
   };
 
   const renderMedia = (mediaUrl: string, style?: React.CSSProperties) => {
@@ -45,7 +43,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
           controls
           style={{
             ...style,
-            width: "auto",
+            width: "100%",
             height: "100%",
             objectFit: "contain",
             zIndex: 0,
@@ -126,20 +124,23 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
     fontSize: "16px",
   };
 
+  // Tam ekran için modalContentStyle ayarı
   const modalContentStyle: React.CSSProperties = {
     position: "relative",
-    maxWidth: "100%",
-    maxHeight: "100vh",
-    overflow: "auto",
+    width: "100vw", // Ekran genişliği
+    height: "100vh", // Ekran yüksekliği
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden", // Taşma olmasın
   };
 
+  // Tam ekran media için stil
   const modalImageStyle: React.CSSProperties = {
-    width: "auto",
+    width: "100%",
     height: "100%",
-    maxWidth: "100%",
-    maxHeight: "100%",
+    objectFit: "contain", // Görseli tam olarak sığdır
     borderRadius: "20px",
-    objectFit: "contain",
   };
 
   // Çarpı butonuna hover efekti için stil
@@ -160,12 +161,11 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
     transition: "all 0.3s ease",
   };
 
-  // Hover stili: #666666 gri ve şeffaf beyaz iç kısım
   const buttonHoverStyle: React.CSSProperties = isButtonHovered
     ? {
-        backgroundColor: "transparent", // İç kısım şeffaf
-        color: "#666666", // Çarpı simgesi gri (#666666)
-        border: "2px solid #666666", // Çerçeve gri (#666666)
+        backgroundColor: "transparent",
+        color: "#666666",
+        border: "2px solid #666666",
       }
     : {};
 
@@ -230,18 +230,12 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
                 onMouseEnter={() => setIsButtonHovered(true)}
                 onMouseLeave={() => setIsButtonHovered(false)}
               >
-                <FaTimes
-                  className={`text-xl ${
-                    isButtonHovered ? "text-[#666666]" : "text-white"
-                  }`}
-                />
+                <FaTimes className={`text-xl ${isButtonHovered ? "text-[#666666]" : "text-white"}`} />
               </motion.button>
 
               {/* Render Selected Item Media */}
               {renderMedia(
-                `${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${
-                  selectedItem.media
-                }`,
+                `${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${selectedItem.media}`,
                 modalImageStyle
               )}
             </motion.div>

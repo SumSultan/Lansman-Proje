@@ -16,6 +16,8 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
+  const [error, setError] = useState<string>(""); // Hata mesajı için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -36,10 +38,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -92,9 +91,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">
-            Desteklenmeyen dosya formatı: {fileType}
-          </p>
+          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
         );
     }
   };
@@ -104,6 +101,18 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
       target: { value: selectedMedia },
     } as ChangeEvent<HTMLSelectElement>);
     setIsModalOpen(false);
+  };
+
+  // Karakter sınırı kontrolü
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= 250) { // Karakter sınırını 250 yapıyoruz
+      setError(""); // Hata mesajını temizliyoruz
+      onTextChange(e);
+    } else {
+      setError("Karakter sınırını aştınız!"); // Hata mesajı
+    }
+    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
   };
 
   return (
@@ -117,7 +126,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
         </label>
         <textarea
           value={text}
-          onChange={onTextChange}
+          onChange={handleTextChange} // Karakter sınırı kontrolü fonksiyonunu bağlıyoruz
           placeholder="Yazı Alanı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           rows={4}
@@ -131,6 +140,15 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
             outline: "none",
           }}
         />
+        {/* Hata mesajı ve karakter sayacı textarea'nın altında */}
+        {error && (
+          <p className="text-red-500 text-xs mt-1" style={{ marginLeft: "3%" }}>
+            {error}
+          </p>
+        )}
+        <div className="text-right text-sm text-gray-500 mt-1" style={{ marginLeft: "3%" }}>
+          {charCount}/250
+        </div>
       </div>
 
       <div className="flex flex-col">

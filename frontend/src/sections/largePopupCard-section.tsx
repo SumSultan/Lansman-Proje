@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaExpandAlt, FaTimes } from "react-icons/fa";
 import { useInView } from "react-intersection-observer";
-import { motion, AnimatePresence } from "framer-motion"; // Framer Motion importları
+import { motion, AnimatePresence } from "framer-motion";
 
 interface LargePopupCardSectionProps {
   media: string;

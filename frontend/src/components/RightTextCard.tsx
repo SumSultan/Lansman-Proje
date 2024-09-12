@@ -16,6 +16,8 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
+  const [error, setError] = useState<string>(""); // Hata mesajı için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -36,10 +38,7 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -106,11 +105,22 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
     setIsModalOpen(false);
   };
 
+  // Karakter sınırı kontrolü
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= 325) { // Karakter sınırını 325 yapıyoruz
+      setError(""); // Hata mesajını temizliyoruz
+      onTextChange(e);
+    } else {
+      setError("Karakter sınırını aştınız!"); // Hata mesajı
+    }
+    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
+  };
+
   return (
     <div className="flex flex-col space-y-6 p-4">
+      {/* Yazı alanı */}
       <div className="flex flex-col" style={{ marginLeft: "3%" }}>
-        {" "}
-        {/* Soldan %3 boşluk */}
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
           style={{ width: "413px", height: "16px", lineHeight: "15.62px" }}
@@ -119,7 +129,7 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
         </label>
         <textarea
           value={text}
-          onChange={onTextChange}
+          onChange={handleTextChange} // Karakter sınırı kontrolü fonksiyonunu bağlıyoruz
           placeholder="Yazı Alanı"
           className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm"
           rows={4}
@@ -132,11 +142,17 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
             outline: "none",
           }}
         />
+        {/* Hata mesajı ve karakter sayacı textarea'nın altında */}
+        {error && (
+          <p className="text-red-500 text-xs mt-1">{error}</p>
+        )}
+        <div className="text-right text-sm text-gray-500 mt-1">
+          {charCount}/325
+        </div>
       </div>
 
+      {/* Medya alanı */}
       <div className="flex flex-col" style={{ marginLeft: "3%" }}>
-        {" "}
-        {/* Soldan %3 boşluk */}
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
           style={{ width: "413px", height: "16px", lineHeight: "15.62px" }}
@@ -159,6 +175,7 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
         />
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div

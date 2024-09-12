@@ -16,6 +16,8 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
+  const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
+  const [error, setError] = useState<string>(""); // Hata mesajı için state
   const modalRef = useRef<HTMLDivElement>(null); // Modal için useRef
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -109,6 +111,18 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
     setIsModalOpen(false); // Modalı kapatıyoruz
   };
 
+  // Karakter sınırı kontrolü
+  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    const newText = e.target.value;
+    if (newText.length <= 325) { // Karakter sınırını 325 yapıyoruz
+      setError(""); // Hata mesajını temizliyoruz
+      onTextChange(e);
+    } else {
+      setError("Karakter sınırını aştınız!"); // Hata mesajı
+    }
+    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
+  };
+
   return (
     <div className="flex flex-col space-y-6 p-4">
       {/* Medya alanı */}
@@ -139,7 +153,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
         </label>
         <textarea
           value={text}
-          onChange={onTextChange}
+          onChange={handleTextChange} // Güncellenmiş fonksiyonu bağlıyoruz
           placeholder="Yazı Alanı"
           className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm"
           rows={4}
@@ -152,6 +166,13 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             outline: "none",
           }}
         />
+        {/* Karakter sayacı ve hata mesajı */}
+        <div className="text-right text-sm text-gray-500 mt-1">
+          {charCount}/325 {/* Karakter sayacını da 325 olarak güncelliyoruz */}
+        </div>
+        {error && (
+          <p className="text-red-500 text-xs mt-1">{error}</p>
+        )}
       </div>
 
       {/* Modal */}
