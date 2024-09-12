@@ -22,7 +22,7 @@ import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-sectio
 import LargePopupCardSection from "../sections/largePopupCard-section";
 import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
-import SearchSection from "../sections/search-card-section";
+import SpaceSection from "../sections/SpaceSection"; // SpaceSection bileşeni eklendi
 
 interface FullScreenCardItem {
   media: string;
@@ -42,8 +42,8 @@ interface MiniCardItem {
   buttonText: string;
   text: string;
   logoMedia: string;
-  buttonUrl: string; // Yeni eklenen alan
-  backgroundMedia: string; // Yeni eklenen alan
+  buttonUrl: string;
+  backgroundMedia: string;
 }
 
 interface ReelsCardItem {
@@ -53,7 +53,6 @@ interface ReelsCardItem {
   subTitle: string;
 }
 interface Content {
-  searchQuery?: string; // searchQuery alanını ekledik
   title?: string;
   subTitle?: string;
   buttonText?: string;
@@ -79,10 +78,10 @@ interface Content {
   text?: string;
   accordianItems?: Array<{ title: string; subTitle: string }>;
   infoCardSliderItems?: InfoCardItem[];
-  frontMedia?: string; // LargeFlipCardSection için gerekli
-  backMedia?: string; // LargeFlipCardSection için gerekli
-  miniCardItems?: MiniCardItem[]; // MiniCardSliderSection için gerekli
-  reelsCardSliderItems?: ReelsCardItem[]; // ReelsCardSliderSection için gerekli
+  frontMedia?: string;
+  backMedia?: string;
+  miniCardItems?: MiniCardItem[];
+  reelsCardSliderItems?: ReelsCardItem[];
 }
 
 interface Component {
@@ -108,7 +107,7 @@ const PreviewPage: React.FC = () => {
         setComponents(componentsData);
       } catch (error) {
         console.error("Error fetching data:", error);
-        navigate("/404"); // Hata oluşursa 404 sayfasına yönlendir
+        navigate("/404");
       }
     };
 
@@ -134,7 +133,6 @@ const PreviewPage: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-4 max-w-full bg-white">
         {components.map((component) => {
-          console.log("component", component);
           if (!component.content) return null;
 
           if (component.type === "CTA Card") {
@@ -144,14 +142,6 @@ const PreviewPage: React.FC = () => {
                 buttonText={component.content.buttonText || ""}
                 buttonUrl={component.content.buttonUrl || ""}
                 title={component.content.title || ""}
-              />
-            );
-          }
-          if (component.type === "Search Form") {
-            return (
-              <SearchSection
-                key={component._id}
-                searchQuery={component.content.searchQuery || ""}
               />
             );
           }
@@ -170,10 +160,11 @@ const PreviewPage: React.FC = () => {
             return (
               <FullScreenCardSection
                 key={component._id}
-                items={component.content.fullScreenCardItems || []} // items prop olarak gönderildi
+                items={component.content.fullScreenCardItems || []}
               />
             );
           }
+
           if (component.type === "Bottom Text Card") {
             return (
               <BottomTextCardSection
@@ -183,14 +174,14 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Header") {
             return (
-              <div key={component._id}>
-                <HeaderSection
-                  title={component.content.title || ""}
-                  logoMedia={component.content.logoMedia || ""}
-                />
-              </div>
+              <HeaderSection
+                key={component._id}
+                title={component.content.title || ""}
+                logoMedia={component.content.logoMedia || ""}
+              />
             );
           }
 
@@ -211,6 +202,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Large Top Title Hero Card") {
             return (
               <LargeTopTitleHeroCardSection
@@ -219,7 +211,7 @@ const PreviewPage: React.FC = () => {
                 subTitle={component.content.subTitle || ""}
                 buttonText={component.content.buttonText || ""}
                 buttonUrl={component.content.buttonUrl || ""}
-                media={component.content.media || ""} // Media'yı sadece dosya adı olarak geçiyoruz
+                media={component.content.media || ""}
               />
             );
           }
@@ -261,6 +253,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Left Text Card") {
             return (
               <LeftTextCardSection
@@ -270,6 +263,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Mini Card Slider") {
             return (
               <MiniCardSliderSection
@@ -278,6 +272,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Right Text Card") {
             return (
               <RightTextCardSection
@@ -287,6 +282,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Top Text Card") {
             return (
               <TopTextCardSection
@@ -296,6 +292,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Twin Card") {
             return (
               <TwinCardSection
@@ -305,6 +302,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Twin Flip Card") {
             return (
               <TwinFlipCardSection
@@ -316,6 +314,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Twin Top Title Hero Card") {
             return (
               <TwinTopTitleHeroCardSection
@@ -333,6 +332,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Large Popup Card") {
             return (
               <LargePopupCardSection
@@ -341,6 +341,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
           if (component.type === "Reels Card Slider") {
             return (
               <ReelsCardSliderSection
@@ -349,6 +350,12 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
+
+          // SpaceSection bileşeni burada ekleniyor
+          if (component.type === "Space") {
+            return <SpaceSection key={component._id} />;
+          }
+
           return null;
         })}
       </div>

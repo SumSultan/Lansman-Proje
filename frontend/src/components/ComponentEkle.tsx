@@ -11,6 +11,7 @@ import TopTextCardForm from "./TopTextCardForm";
 import InfoCardSliderForm from "./InfoCardSliderForm";
 import CTACardForm from "./CTACardForm";
 import TitleForm from "./TitleForm";
+import SpacerForm from "./spaceform";
 import TwinCardForm from "./TwinCardForm";
 import TwinFlipCardForm from "./TwinFlipCardForm";
 import AccordionRightCardForm from "./AccordionRightCardForm";
@@ -675,6 +676,11 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           fullScreenCardItems,
         };
         break;
+        case "Space":
+    content = {
+      spacer: true,
+    };
+    break;
       case "Mini Card Slider":
         content = {
           miniCardItems,
@@ -951,10 +957,12 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           />
         );
 
-      default:
-        return null;
-    }
-  };
+        case "Space":
+          return <SpacerForm />; // SpacerForm bileşeni ekleniyor
+        default:
+          return null;
+      }
+    };
 
   return (
     <Modal
@@ -1018,6 +1026,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
               <option value="Left Text Card">Left Text Card</option>
               <option value="Top Text Card">Top Text Card</option>
               <option value="Info Card Slider">Info Card Slider</option>
+              <option value="Space">Space</option>
               <option value="CTA Card">CTA Card</option>
               <option value="Title">Title</option>
               <option value="Twin Card">Twin Card</option>

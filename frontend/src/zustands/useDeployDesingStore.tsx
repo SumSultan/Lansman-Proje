@@ -27,6 +27,7 @@ export type Components = {
   rightButtonUrl?: string;
   leftTitle?: string;
   leftSubTitle?: string;
+  spacer?: boolean;
   leftButtonText?: string;
   leftButtonUrl?: string;
   miniCardItems?: Array<{
