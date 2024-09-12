@@ -118,16 +118,20 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
     const updatedCharCounts = [...charCounts];
     const updatedErrors = [...errors];
 
-    if (newText.length <= 200) { // Karakter sınırını 200 yapıyoruz
+    // Karakter sınırını 200 yapıyoruz
+    if (newText.length <= 200) {
       updatedErrors[index] = ""; // Hata mesajını temizliyoruz
+      updatedCharCounts[index] = newText.length; // Karakter sayacını güncelliyoruz
+      onAccordianSubTitleChange(index, e); // Alt başlık güncellenir
     } else {
       updatedErrors[index] = "Karakter sınırını aştınız!"; // Hata mesajı
+      updatedCharCounts[index] = 200; // 200 karakterle sınırlıyoruz
+      const truncatedEvent = { ...e, target: { ...e.target, value: newText.slice(0, 200) } };
+      onAccordianSubTitleChange(index, truncatedEvent as ChangeEvent<HTMLTextAreaElement>);
     }
 
-    updatedCharCounts[index] = newText.length;
     setCharCounts(updatedCharCounts);
     setErrors(updatedErrors);
-    onAccordianSubTitleChange(index, e);
   };
 
   return (
@@ -249,7 +253,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
             <div className="mb-4">
               <label className="block text-sm text-[#1F2937] mb-1">Yazı</label>
               <textarea
-                value={section.subTitle}
+                value={section.subTitle.slice(0, 200)}
                 onChange={(e) => handleSubTitleChange(index, e)}
                 placeholder="Yazı Alanı"
                 className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]"

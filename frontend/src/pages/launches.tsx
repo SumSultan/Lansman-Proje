@@ -30,10 +30,12 @@ const Launches = () => {
     setSortedLaunches([...launches].reverse());
   }, [launches]);
 
-  // Lansman adına göre arama fonksiyonu
+  // Lansman adı ve şirket adına göre arama fonksiyonu
   const searchLaunches = (launches: any[]) => {
-    return launches.filter((launch) =>
-      launch.launchName.toLowerCase().includes(searchTerm.toLowerCase())
+    return launches.filter(
+      (launch) =>
+        launch.launchName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        launch.companyName.toLowerCase().includes(searchTerm.toLowerCase())
     );
   };
 
@@ -121,7 +123,7 @@ const Launches = () => {
               <div className="relative">
                 <input
                   type="text"
-                  placeholder="Lansman Adı ile Ara"
+                  placeholder="Lansman Adı veya Şirket Adı ile Ara"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="border border-[#D6D6D6] rounded-md px-4 py-2 pl-10 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"

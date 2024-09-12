@@ -11,13 +11,14 @@ const FullTextForm: React.FC<FullTextFormProps> = ({ text, onTextChange }) => {
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
+
     if (newText.length <= 450) {
       setError(""); // Hata mesajını temizliyoruz
-      onTextChange(e); // OnTextChange propunu çağırıyoruz
+      onTextChange(e); // onTextChange propunu çağırıyoruz
+      setCharCount(newText.length); // Karakter sayacını güncelliyoruz
     } else {
       setError("Karakter sınırını aştınız!"); // Hata mesajı
     }
-    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
   };
 
   return (
@@ -31,7 +32,7 @@ const FullTextForm: React.FC<FullTextFormProps> = ({ text, onTextChange }) => {
           Yazı
         </label>
         <textarea
-          value={text}
+          value={text.slice(0, 450)} // Karakter sınırını burada zorunlu kılıyoruz
           onChange={handleTextChange} // Karakter sınırı kontrolü ile handleTextChange fonksiyonu bağlıyoruz
           placeholder="  Yazı Alanı" // Placeholder başında iki boşluk eklendi
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] placeholder:text-[#667085] placeholder:font-[16px] placeholder:leading-[24px]"

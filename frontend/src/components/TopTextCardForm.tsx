@@ -106,13 +106,16 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
   // Karakter sınırı kontrolü
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    if (newText.length <= 250) { // Karakter sınırını 250 yapıyoruz
+
+    // Eğer karakter sayısı 250'yi geçerse, yeni karakter kabul edilmez
+    if (newText.length <= 250) {
       setError(""); // Hata mesajını temizliyoruz
       onTextChange(e);
     } else {
       setError("Karakter sınırını aştınız!"); // Hata mesajı
     }
-    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
+
+    setCharCount(newText.length > 250 ? 250 : newText.length); // Karakter sayacını 250 ile sınırlıyoruz
   };
 
   return (
@@ -125,7 +128,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
           Yazı
         </label>
         <textarea
-          value={text}
+          value={text.slice(0, 250)} // Karakter sınırını burada uyguluyoruz
           onChange={handleTextChange} // Karakter sınırı kontrolü fonksiyonunu bağlıyoruz
           placeholder="Yazı Alanı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"

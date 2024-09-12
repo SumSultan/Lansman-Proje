@@ -39,15 +39,11 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
   // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
 
-    
     if (isModalOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     } else {
@@ -115,13 +111,16 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
   // Karakter sınırı kontrolü
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-    if (newText.length <= 325) { // Karakter sınırını 325 yapıyoruz
+
+    // Eğer karakter sayısı 325'i geçerse, yeni karakterleri kabul etmeyiz
+    if (newText.length <= 325) {
       setError(""); // Hata mesajını temizliyoruz
       onTextChange(e);
     } else {
       setError("Karakter sınırını aştınız!"); // Hata mesajı
     }
-    setCharCount(newText.length); // Karakter sayacını güncelliyoruz
+
+    setCharCount(newText.length > 325 ? 325 : newText.length); // Karakter sayacını 325'le sınırlıyoruz
   };
 
   return (
@@ -153,7 +152,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
           Yazı
         </label>
         <textarea
-          value={text}
+          value={text.slice(0, 325)} // Karakter sınırını burada uyguluyoruz
           onChange={handleTextChange} // Güncellenmiş fonksiyonu bağlıyoruz
           placeholder="Yazı Alanı"
           className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm"
@@ -169,7 +168,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
         />
         {/* Karakter sayacı ve hata mesajı */}
         <div className="text-right text-sm text-gray-500 mt-1">
-          {charCount}/325 {/* Karakter sayacını da 325 olarak güncelliyoruz */}
+          {charCount}/325 {/* Karakter sayacını 325 olarak güncelliyoruz */}
         </div>
         {error && (
           <p className="text-red-500 text-xs mt-1">{error}</p>
