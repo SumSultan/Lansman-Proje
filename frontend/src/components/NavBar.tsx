@@ -8,6 +8,11 @@ const NavBar = () => {
       </div>
       <ul className="flex flex-col p-4 space-y-4">
         <li>
+          <Link to="/homelist" className="hover:bg-gray-200 p-2 rounded">
+            Anasayfa
+          </Link>
+        </li>
+        <li>
           <Link to="/launches" className="hover:bg-gray-200 p-2 rounded">
             Lansman Listesi
           </Link>
