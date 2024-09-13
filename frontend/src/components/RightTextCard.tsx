@@ -14,10 +14,13 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -26,7 +29,10 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName || "", // Lansman adı yoksa boş bırakılıyor
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -38,7 +44,10 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -105,18 +114,22 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
     setIsModalOpen(false);
   };
 
+  // Filtreleme işlemi
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   // Karakter sınırı kontrolü
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
-
-    // Eğer karakter sayısı 325'i geçerse, yeni karakter kabul edilmez
     if (newText.length <= 325) {
       setError(""); // Hata mesajını temizliyoruz
       onTextChange(e);
     } else {
       setError("Karakter sınırını aştınız!"); // Hata mesajı
     }
-
     setCharCount(newText.length > 325 ? 325 : newText.length); // Karakter sayacını 325'e sınırlıyoruz
   };
 
@@ -131,8 +144,8 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
           Yazı
         </label>
         <textarea
-          value={text.slice(0, 325)} // Karakter sınırını burada uyguluyoruz
-          onChange={handleTextChange} // Karakter sınırı kontrolü fonksiyonunu bağlıyoruz
+          value={text.slice(0, 325)}
+          onChange={handleTextChange}
           placeholder="Yazı Alanı"
           className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm"
           rows={4}
@@ -145,10 +158,7 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
             outline: "none",
           }}
         />
-        {/* Hata mesajı ve karakter sayacı textarea'nın altında */}
-        {error && (
-          <p className="text-red-500 text-xs mt-1">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
         <div className="text-right text-sm text-gray-500 mt-1">
           {charCount}/325
         </div>
@@ -193,15 +203,28 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleMediaSelect(mediaItem)}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react"; // useRef eklendi
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
 
 interface InfoCardSliderFormProps {
@@ -26,6 +26,7 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null); // Seçilen item ID'si için state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
   const modalRef = useRef<HTMLDivElement>(null); // useRef eklendi
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -114,6 +115,11 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
         );
     }
   };
+
+  // Medya ve lansman adına göre filtreleme işlemi
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  );
 
   // Medya seçimi yapıldıktan sonra icon state'ini güncelleyen fonksiyon
   const handleMediaSelect = (selectedMedia: string) => {
@@ -252,8 +258,25 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
                 X
               </button>
               <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
+              {/* Arama çubuğu */}
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Medya adına göre ara"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                  style={{
+                    width: "300px",
+                    height: "40px",
+                    boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+              </div>
+
               <div className="grid grid-cols-4 gap-4">
-                {mediaList.map((mediaItem, index) => (
+                {filteredMediaList.map((mediaItem, index) => (
                   <div
                     key={index}
                     onClick={() => handleMediaSelect(mediaItem)}

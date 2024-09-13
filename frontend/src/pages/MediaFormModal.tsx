@@ -14,7 +14,7 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
   onMediaUploaded,
 }) => {
   const [mediaName, setMediaName] = useState("");
-  const [companyName, setCompanyName] = useState(""); // Firma adı için state eklendi
+  const [launchName, setLaunchName] = useState(""); // Firma adı yerine lansman adı
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -24,10 +24,10 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
     setMediaName(event.target.value);
   };
 
-  const handleCompanyNameChange = (
+  const handleLaunchNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setCompanyName(event.target.value);
+    setLaunchName(event.target.value);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -41,7 +41,7 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
     event.preventDefault();
 
     // Zorunlu alanlar kontrolü
-    if (!mediaFile || !mediaName || !companyName) {
+    if (!mediaFile || !mediaName || !launchName) {
       setErrorMessage("Lütfen tüm alanları doldurun.");
       return;
     }
@@ -50,9 +50,9 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
     formData.append("mediaUploadOrLink", mediaFile); // backend'deki 'req.file' bu veriyi alır
     formData.append(
       "mediaName",
-      `${mediaName}.${companyName}.${mediaFile.name.split(".").pop()}`
+      `${mediaName}.${launchName}.${mediaFile.name.split(".").pop()}`
     ); // Medya adını ve uzantısını birleştir
-    formData.append("companyName", companyName); // Firma adını ekledik
+    formData.append("launchName", launchName); // Lansman adını ekledik
 
     try {
       const response = await axios.post(`${apiUrl}/media`, formData, {
@@ -136,13 +136,13 @@ const MediaFormModal: React.FC<MediaFormModalProps> = ({
               className="block text-[#243757] font-poppins font-[400] text-[14px] leading-[20px] mb-1"
               style={{ width: "100%" }}
             >
-              Firma Adı
+              Lansman Adı
             </label>
             <input
               type="text"
-              value={companyName}
-              onChange={handleCompanyNameChange}
-              placeholder="Firma Adı"
+              value={launchName}
+              onChange={handleLaunchNameChange}
+              placeholder="Lansman Adı"
               className="border rounded p-2"
               style={{ width: "413px", height: "50px" }} // Genişlik ve yükseklik
             />

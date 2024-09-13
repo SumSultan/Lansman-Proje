@@ -25,6 +25,7 @@ import BottomTextCardSection from "../sections/BottomTextCardSection";
 import SpaceSection from "../sections/SpaceSection";
 import BannerSection from "../sections/BannerSection";
 import ReelsBottomCardSection from "../sections/ReelsBottomCardSection"; // ReelsBottomCardSection'u import ediyoruz
+import LaunchFilter from "../sections/launchFilter";
 
 interface FullScreenCardItem {
   media: string;
@@ -169,7 +170,13 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
-
+          if (component.type === "Search Form") {
+            return (
+              <div key={component._id}>
+                <LaunchFilter />
+              </div>
+            );
+          }
           if (component.type === "Full Screen Card Slider") {
             return (
               <FullScreenCardSection

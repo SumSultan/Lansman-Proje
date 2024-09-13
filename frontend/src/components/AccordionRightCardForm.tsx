@@ -26,10 +26,15 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
   onAccordianTitleChange,
   onAccordianSubTitleChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]); // Lansman adına göre medya listesi
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [charCounts, setCharCounts] = useState<number[]>(accordian.map(() => 0)); // Karakter sayacı
-  const [errors, setErrors] = useState<string[]>(accordian.map(() => "")); // Hata mesajı için state
+  const [charCounts, setCharCounts] = useState<number[]>(
+    accordian.map(() => 0)
+  );
+  const [errors, setErrors] = useState<string[]>(accordian.map(() => ""));
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -38,7 +43,10 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName,
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -50,7 +58,10 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -102,7 +113,11 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
           </video>
         );
       default:
-        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
+        return (
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
+        );
     }
   };
 
@@ -113,26 +128,41 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
     setIsModalOpen(false);
   };
 
-  const handleSubTitleChange = (index: number, e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleSubTitleChange = (
+    index: number,
+    e: ChangeEvent<HTMLTextAreaElement>
+  ) => {
     const newText = e.target.value;
     const updatedCharCounts = [...charCounts];
     const updatedErrors = [...errors];
 
-    // Karakter sınırını 200 yapıyoruz
     if (newText.length <= 200) {
-      updatedErrors[index] = ""; // Hata mesajını temizliyoruz
-      updatedCharCounts[index] = newText.length; // Karakter sayacını güncelliyoruz
-      onAccordianSubTitleChange(index, e); // Alt başlık güncellenir
+      updatedErrors[index] = "";
+      updatedCharCounts[index] = newText.length;
+      onAccordianSubTitleChange(index, e);
     } else {
-      updatedErrors[index] = "Karakter sınırını aştınız!"; // Hata mesajı
-      updatedCharCounts[index] = 200; // 200 karakterle sınırlıyoruz
-      const truncatedEvent = { ...e, target: { ...e.target, value: newText.slice(0, 200) } };
-      onAccordianSubTitleChange(index, truncatedEvent as ChangeEvent<HTMLTextAreaElement>);
+      updatedErrors[index] = "Karakter sınırını aştınız!";
+      updatedCharCounts[index] = 200;
+      const truncatedEvent = {
+        ...e,
+        target: { ...e.target, value: newText.slice(0, 200) },
+      };
+      onAccordianSubTitleChange(
+        index,
+        truncatedEvent as ChangeEvent<HTMLTextAreaElement>
+      );
     }
 
     setCharCounts(updatedCharCounts);
     setErrors(updatedErrors);
   };
+
+  // Lansman adına göre medya filtreleme
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col items-center">
@@ -185,15 +215,35 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
                 X
               </button>
               <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+              <div className="mb-4">
+                <input
+                  type="text"
+                  placeholder="Lansman Adına Göre Ara"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                  style={{
+                    width: "300px",
+                    height: "40px",
+                    boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                  }}
+                />
+              </div>
               <div className="grid grid-cols-4 gap-4">
-                {mediaList.map((mediaItem, index) => (
+                {filteredMediaList.map((mediaItem, index) => (
                   <div
                     key={index}
-                    onClick={() => handleMediaSelect(mediaItem)}
+                    onClick={() => handleMediaSelect(mediaItem.key)}
                     className="cursor-pointer"
                   >
-                    {renderFilePreview(mediaItem)}
-                    <p className="text-center text-sm truncate">{mediaItem}</p>
+                    {renderFilePreview(mediaItem.key)}
+                    <p className="text-center text-sm truncate">
+                      {mediaItem.key}
+                    </p>
+                    <p className="text-center text-sm truncate">
+                      {mediaItem.launchName}
+                    </p>{" "}
+                    {/* Lansman adı gösteriliyor */}
                   </div>
                 ))}
               </div>
@@ -239,7 +289,9 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               </button>
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Başlık</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Başlık
+              </label>
               <input
                 type="text"
                 value={section.title}
@@ -249,7 +301,6 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               />
             </div>
 
-            {/* Alt Başlık alanını textarea'ya dönüştürüyoruz */}
             <div className="mb-4">
               <label className="block text-sm text-[#1F2937] mb-1">Yazı</label>
               <textarea
@@ -258,10 +309,11 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
                 placeholder="Yazı Alanı"
                 className="block w-full text-gray-900 bg-white border border-gray-300 sm:text-sm p-3 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
                 rows={3}
-                style={{ resize: "none" }} // Yeniden boyutlandırma devre dışı
+                style={{ resize: "none" }}
               />
-              {/* Hata mesajı ve karakter sayacı */}
-              {errors[index] && <p className="text-red-500 text-xs mt-1">{errors[index]}</p>}
+              {errors[index] && (
+                <p className="text-red-500 text-xs mt-1">{errors[index]}</p>
+              )}
               <div className="text-right text-sm text-gray-500 mt-1">
                 {charCounts[index]}/200
               </div>

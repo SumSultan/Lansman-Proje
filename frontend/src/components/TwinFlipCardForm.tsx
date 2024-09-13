@@ -22,7 +22,13 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
   onLeftFrontMediaChange,
   onLeftBackMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
+  const [rightFrontSearchTerm, setRightFrontSearchTerm] = useState<string>(""); // Sağ ön medya arama
+  const [rightBackSearchTerm, setRightBackSearchTerm] = useState<string>(""); // Sağ arka medya arama
+  const [leftFrontSearchTerm, setLeftFrontSearchTerm] = useState<string>(""); // Sol ön medya arama
+  const [leftBackSearchTerm, setLeftBackSearchTerm] = useState<string>(""); // Sol arka medya arama
   const [isRightFrontModalOpen, setIsRightFrontModalOpen] =
     useState<boolean>(false);
   const [isRightBackModalOpen, setIsRightBackModalOpen] =
@@ -39,7 +45,10 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName || "", // Lansman adı
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -155,6 +164,41 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
     setIsLeftBackModalOpen(false);
   };
 
+  // Arama fonksiyonları
+  const filteredRightFrontMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key
+        .toLowerCase()
+        .includes(rightFrontSearchTerm.toLowerCase()) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(rightFrontSearchTerm.toLowerCase())
+  );
+
+  const filteredRightBackMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(rightBackSearchTerm.toLowerCase()) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(rightBackSearchTerm.toLowerCase())
+  );
+
+  const filteredLeftFrontMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(leftFrontSearchTerm.toLowerCase()) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(leftFrontSearchTerm.toLowerCase())
+  );
+
+  const filteredLeftBackMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(leftBackSearchTerm.toLowerCase()) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(leftBackSearchTerm.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col items-center space-y-6 p-4">
       {/* Right Card */}
@@ -242,15 +286,28 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sağ Ön Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={rightFrontSearchTerm}
+              onChange={(e) => setRightFrontSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredRightFrontMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleRightFrontSelect(mediaItem)}
+                  onClick={() => handleRightFrontSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -280,15 +337,28 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sağ Arka Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={rightBackSearchTerm}
+              onChange={(e) => setRightBackSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredRightBackMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleRightBackSelect(mediaItem)}
+                  onClick={() => handleRightBackSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -318,15 +388,28 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sol Ön Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={leftFrontSearchTerm}
+              onChange={(e) => setLeftFrontSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredLeftFrontMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleLeftFrontSelect(mediaItem)}
+                  onClick={() => handleLeftFrontSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -356,15 +439,28 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sol Arka Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={leftBackSearchTerm}
+              onChange={(e) => setLeftBackSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredLeftBackMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleLeftBackSelect(mediaItem)}
+                  onClick={() => handleLeftBackSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

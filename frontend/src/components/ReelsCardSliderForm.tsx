@@ -23,9 +23,12 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
   onAddItem,
   onRemoveItem,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]); // Medya listesi, medya ve lansman adı içeriyor
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -34,7 +37,10 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName || "", // Lansman adı yoksa boş bırakılıyor
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -85,7 +91,6 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             className={previewStyle}
           />
         );
-
       case "mp4":
       case "webm":
       case "ogg":
@@ -101,7 +106,6 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             Tarayıcınız bu videoyu oynatmayı desteklemiyor.
           </video>
         );
-
       default:
         return (
           <p className="text-center">
@@ -119,6 +123,13 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
       setIsModalOpen(false);
     }
   };
+
+  // Filtreleme işlemi
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col items-center">
@@ -252,15 +263,28 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleMediaSelect(mediaItem)}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

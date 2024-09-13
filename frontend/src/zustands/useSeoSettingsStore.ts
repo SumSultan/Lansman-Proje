@@ -17,9 +17,11 @@ interface SeoSettings {
 
 interface SeoSettingsState {
   seoSettings: SeoSettings;
+  allSeoSettings: SeoSettings[]; // Yeni eklenen alan: tüm SEO ayarlarını tutan array
   setSeoSettings: (settings: Partial<SeoSettings>) => void;
   saveSeoSettings: () => Promise<void>;
   fetchSeoSettings: (launchId: string) => Promise<void>;
+  fetchAllSeoSettings: () => Promise<void>; // Yeni eklenen fonksiyon: tüm SEO ayarlarını getirir
   updateSeoSettings: (
     launchId: string,
     settings: Partial<SeoSettings>
@@ -39,6 +41,8 @@ const useSeoSettingsStore = create<SeoSettingsState>((set, get) => ({
     followStatus: false,
     launchUrl: "",
   },
+
+  allSeoSettings: [], // Yeni eklenen alan: başlangıç değeri boş array
 
   setSeoSettings: (settings) =>
     set((state) => ({
@@ -95,6 +99,16 @@ const useSeoSettingsStore = create<SeoSettingsState>((set, get) => ({
       } else {
         console.error("Bilinmeyen bir hata oluştu:", error);
       }
+    }
+  },
+
+  // Yeni eklenen fonksiyon: Tüm SEO ayarlarını getirir ve array'e kaydeder
+  fetchAllSeoSettings: async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/seoSettings`);
+      set({ allSeoSettings: response.data }); // Gelen veriyi allSeoSettings array'ine kaydediyoruz
+    } catch (error) {
+      console.error("Tüm SEO ayarları alınırken bir hata oluştu:", error);
     }
   },
 

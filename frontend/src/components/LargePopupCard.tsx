@@ -12,6 +12,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
   const modalRef = useRef<HTMLDivElement>(null); // useRef eklendi
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -52,7 +53,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
     };
   }, [isModalOpen]);
 
-  // renderFilePreview fonksiyonu
+  // Medya dosyalarının önizlemesi için fonksiyon
   const renderFilePreview = (file: string) => {
     const fileType = file.split(".").pop()?.toLowerCase();
     const previewStyle = "w-full h-32 object-cover mb-2";
@@ -101,7 +102,12 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
     }
   };
 
-  // Medya seçimi yapıldıktan sonra media state'ini güncelleyen fonksiyon
+  // Medya ve lansman adına göre filtreleme işlemi
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  );
+
+  // Medya seçildikten sonra media state'ini güncelleyen fonksiyon
   const handleMediaSelect = (selectedMedia: string) => {
     onMediaChange({
       target: { value: selectedMedia },
@@ -144,8 +150,25 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
+            {/* Arama çubuğu eklendi */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Medya adına göre ara"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+            </div>
+
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
                   onClick={() => handleMediaSelect(mediaItem)}

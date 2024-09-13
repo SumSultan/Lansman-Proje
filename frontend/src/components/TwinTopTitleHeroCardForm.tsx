@@ -46,11 +46,16 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
   onLeftButtonTextChange,
   onLeftButtonUrlChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { Key: string; launchName: string }[]
+  >([]);
   const [isRightMediaModalOpen, setIsRightMediaModalOpen] =
     useState<boolean>(false);
   const [isLeftMediaModalOpen, setIsLeftMediaModalOpen] =
     useState<boolean>(false);
+  const [rightMediaSearchTerm, setRightMediaSearchTerm] = useState<string>("");
+  const [leftMediaSearchTerm, setLeftMediaSearchTerm] = useState<string>("");
+
   const rightMediaModalRef = useRef<HTMLDivElement>(null);
   const leftMediaModalRef = useRef<HTMLDivElement>(null);
 
@@ -61,7 +66,10 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          Key: media.Key,
+          launchName: media.launchName || "Unknown",
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -159,6 +167,26 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
     } as ChangeEvent<HTMLSelectElement>);
     setIsLeftMediaModalOpen(false); // Modalı kapat
   };
+
+  // Right Media arama fonksiyonu
+  const filteredRightMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.Key.toLowerCase().includes(
+        rightMediaSearchTerm.toLowerCase()
+      ) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(rightMediaSearchTerm.toLowerCase())
+  );
+
+  // Left Media arama fonksiyonu
+  const filteredLeftMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.Key.toLowerCase().includes(leftMediaSearchTerm.toLowerCase()) ||
+      mediaItem.launchName
+        .toLowerCase()
+        .includes(leftMediaSearchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col items-center">
@@ -316,15 +344,27 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Right Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya veya lansman adına göre ara"
+              value={rightMediaSearchTerm}
+              onChange={(e) => setRightMediaSearchTerm(e.target.value)}
+              className="mb-4 p-2 border border-gray-300 rounded-lg w-full"
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredRightMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleRightMediaSelect(mediaItem)}
+                  onClick={() => handleRightMediaSelect(mediaItem.Key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.Key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.Key}
+                  </p>
+                  <p className="text-center text-xs text-gray-500 truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -347,15 +387,27 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Left Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya veya lansman adına göre ara"
+              value={leftMediaSearchTerm}
+              onChange={(e) => setLeftMediaSearchTerm(e.target.value)}
+              className="mb-4 p-2 border border-gray-300 rounded-lg w-full"
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredLeftMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleLeftMediaSelect(mediaItem)}
+                  onClick={() => handleLeftMediaSelect(mediaItem.Key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.Key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.Key}
+                  </p>
+                  <p className="text-center text-xs text-gray-500 truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

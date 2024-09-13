@@ -14,10 +14,11 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
-  const [error, setError] = useState<string>(""); // Hata mesajı için state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -26,7 +27,10 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key); // Medya isimlerini alıyoruz
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName || "", // Lansman adını ekliyoruz
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -38,7 +42,10 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -91,7 +98,9 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
         );
     }
   };
@@ -103,20 +112,12 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
     setIsModalOpen(false);
   };
 
-  // Karakter sınırı kontrolü
-  const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = e.target.value;
-
-    // Eğer karakter sayısı 250'yi geçerse, yeni karakter kabul edilmez
-    if (newText.length <= 250) {
-      setError(""); // Hata mesajını temizliyoruz
-      onTextChange(e);
-    } else {
-      setError("Karakter sınırını aştınız!"); // Hata mesajı
-    }
-
-    setCharCount(newText.length > 250 ? 250 : newText.length); // Karakter sayacını 250 ile sınırlıyoruz
-  };
+  // Arama için filtreleme
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col space-y-6 p-4">
@@ -128,8 +129,8 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
           Yazı
         </label>
         <textarea
-          value={text.slice(0, 250)} // Karakter sınırını burada uyguluyoruz
-          onChange={handleTextChange} // Karakter sınırı kontrolü fonksiyonunu bağlıyoruz
+          value={text}
+          onChange={onTextChange}
           placeholder="Yazı Alanı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           rows={4}
@@ -143,15 +144,6 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
             outline: "none",
           }}
         />
-        {/* Hata mesajı ve karakter sayacı textarea'nın altında */}
-        {error && (
-          <p className="text-red-500 text-xs mt-1" style={{ marginLeft: "3%" }}>
-            {error}
-          </p>
-        )}
-        <div className="text-right text-sm text-gray-500 mt-1" style={{ marginLeft: "3%" }}>
-          {charCount}/250
-        </div>
       </div>
 
       <div className="flex flex-col">
@@ -192,15 +184,28 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleMediaSelect(mediaItem)}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

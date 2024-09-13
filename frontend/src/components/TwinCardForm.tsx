@@ -14,9 +14,13 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
   onRightMediaChange,
   onLeftMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isRightModalOpen, setIsRightModalOpen] = useState<boolean>(false);
   const [isLeftModalOpen, setIsLeftModalOpen] = useState<boolean>(false);
+  const [rightSearchTerm, setRightSearchTerm] = useState<string>(""); // Sağ medya için arama
+  const [leftSearchTerm, setLeftSearchTerm] = useState<string>(""); // Sol medya için arama
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -25,7 +29,10 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key); // Medya isimlerini alıyoruz
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName || "", // Lansman adını ekledik
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -58,7 +65,6 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
     };
   }, [isRightModalOpen, isLeftModalOpen]);
 
-  // Medya dosyasını önizlemek için renderFilePreview fonksiyonu
   const renderFilePreview = (file: string) => {
     const fileType = file.split(".").pop()?.toLowerCase();
     const previewStyle = "w-full h-32 object-cover mb-2";
@@ -103,7 +109,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
     }
   };
 
-  // Medya seçimini yöneten fonksiyonlar
+  // Sağ medya seçimi
   const handleRightMediaSelect = (selectedMedia: string) => {
     onRightMediaChange({
       target: { value: selectedMedia },
@@ -111,12 +117,27 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
     setIsRightModalOpen(false); // Modalı kapatıyoruz
   };
 
+  // Sol medya seçimi
   const handleLeftMediaSelect = (selectedMedia: string) => {
     onLeftMediaChange({
       target: { value: selectedMedia },
     } as ChangeEvent<HTMLSelectElement>);
     setIsLeftModalOpen(false); // Modalı kapatıyoruz
   };
+
+  // Sağ medya için filtreleme
+  const filteredRightMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(rightSearchTerm.toLowerCase()) ||
+      mediaItem.launchName.toLowerCase().includes(rightSearchTerm.toLowerCase())
+  );
+
+  // Sol medya için filtreleme
+  const filteredLeftMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(leftSearchTerm.toLowerCase()) ||
+      mediaItem.launchName.toLowerCase().includes(leftSearchTerm.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col space-y-6 p-4">
@@ -132,7 +153,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
           type="text"
           readOnly
           value={rightMedia || "  Medya Seç"}
-          onClick={() => setIsRightModalOpen(true)} // Sağ medya için modal açılıyor
+          onClick={() => setIsRightModalOpen(true)}
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px", marginLeft: "3%" }}
         />
@@ -150,7 +171,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
           type="text"
           readOnly
           value={leftMedia || "  Medya Seç"}
-          onClick={() => setIsLeftModalOpen(true)} // Sol medya için modal açılıyor
+          onClick={() => setIsLeftModalOpen(true)}
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px", marginLeft: "3%" }}
         />
@@ -166,20 +187,33 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
             <button
               type="button"
               className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
-              onClick={() => setIsRightModalOpen(false)} // Kapatma butonu
+              onClick={() => setIsRightModalOpen(false)}
             >
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sağ Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={rightSearchTerm}
+              onChange={(e) => setRightSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredRightMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleRightMediaSelect(mediaItem)}
+                  onClick={() => handleRightMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -204,20 +238,33 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
             <button
               type="button"
               className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
-              onClick={() => setIsLeftModalOpen(false)} // Kapatma butonu
+              onClick={() => setIsLeftModalOpen(false)}
             >
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Sol Medya Seç</h3>
+            <input
+              type="text"
+              placeholder="Medya adına veya lansman adına göre arama"
+              value={leftSearchTerm}
+              onChange={(e) => setLeftSearchTerm(e.target.value)}
+              className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
+              style={{ width: "300px", height: "40px" }}
+            />
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredLeftMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleLeftMediaSelect(mediaItem)}
+                  onClick={() => handleLeftMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

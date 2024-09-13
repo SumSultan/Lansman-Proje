@@ -29,6 +29,7 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -118,6 +119,11 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
     } as ChangeEvent<HTMLSelectElement>);
     setIsModalOpen(false);
   };
+
+  // Medya dosyalarını arama terimine göre filtreleme
+  const filteredMediaList = mediaList.filter((mediaItem) =>
+    mediaItem.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
 
   return (
@@ -251,8 +257,25 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
+            {/* Arama Çubuğu Eklendi */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Medya adına göre ara"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+            </div>
+
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
                   onClick={() => handleMediaSelect(mediaItem)}

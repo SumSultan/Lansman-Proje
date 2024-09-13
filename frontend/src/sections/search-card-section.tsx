@@ -1,85 +1,149 @@
-import React, { useState } from "react";
-import {
-  FaSearch,
-  FaSync,
-  FaEnvelope,
-  FaCalendarAlt,
-  FaClock,
-} from "react-icons/fa";
+import React from "react";
 
-interface SearchSectionProps {
-  searchQuery: string; // Prop olarak geçeceğimiz searchQuery
+// Props arayüzünü tanımlayın
+interface SearchComponentSectionProps {
+  searchQuery: string;
+  onSearchQueryChange: (query: string) => void;
+  loading: boolean;
+  onButtonClick: (type: string) => void;
+  onFocus?: () => void; // onFocus fonksiyonunu ekledik ve opsiyonel yaptık
 }
 
-const SearchSection: React.FC<SearchSectionProps> = ({ searchQuery }) => {
-  const [localSearchQuery, setLocalSearchQuery] = useState(searchQuery);
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocalSearchQuery(e.target.value);
-  };
-
-  const handleClearFilters = () => {
-    setLocalSearchQuery(""); // Arama kutusunu temizle
-  };
-
+const SearchSection: React.FC<SearchComponentSectionProps> = ({
+  searchQuery,
+  onSearchQueryChange,
+  loading,
+  onButtonClick,
+}) => {
   return (
-    <div className="p-6 bg-gray-100 min-h-screen flex flex-col items-center justify-start">
-      <h1 className="text-2xl font-bold text-[#5F2EEA] mb-6 text-center">
-        Lansman Arama
-      </h1>
-
-      {/* Filtre Kartları */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
-        <div className="bg-gray-200 p-4 rounded-lg text-center shadow-md cursor-pointer">
-          <FaCalendarAlt className="text-3xl mb-2 text-gray-600 mx-auto" />
-          <p className="font-semibold text-sm text-gray-800">
-            Bugünün Lansmanları
-          </p>
-        </div>
-        <div className="bg-gray-200 p-4 rounded-lg text-center shadow-md cursor-pointer">
-          <FaEnvelope className="text-3xl mb-2 text-gray-600 mx-auto" />
-          <p className="font-semibold text-sm text-gray-800">
-            Devam Eden Lansmanlar
-          </p>
-        </div>
-        <div className="bg-gray-200 p-4 rounded-lg text-center shadow-md cursor-pointer">
-          <FaClock className="text-3xl mb-2 text-gray-600 mx-auto" />
-          <p className="font-semibold text-sm text-gray-800">
-            Gelecek Lansmanlar
-          </p>
-        </div>
-        <div className="bg-gray-200 p-4 rounded-lg text-center shadow-md cursor-pointer">
-          <FaSync className="text-3xl mb-2 text-gray-600 mx-auto" />
-          <p className="font-semibold text-sm text-gray-800">
-            Geçmiş Lansmanlar
-          </p>
-        </div>
-      </div>
-
-      {/* Temizle Butonu */}
-      <div className="flex items-center mb-6">
+    <div className="p-6 bg-gradient-to-r from-blue-100 via-purple-100 to-pink-100 shadow-lg rounded-xl">
+      {/* Lansman Butonları */}
+      <div className="grid grid-cols-4 gap-6 mb-6">
         <button
-          className="bg-gray-200 p-3 rounded-full text-sm flex items-center space-x-2"
-          onClick={handleClearFilters}
+          type="button"
+          className="bg-gradient-to-br from-purple-600 to-indigo-600 p-5 rounded-xl text-center flex flex-col items-center hover:shadow-xl transition duration-300 transform hover:scale-105 text-white"
+          onClick={() => onButtonClick("todayLaunches")}
+          disabled={loading}
         >
-          <FaSync className="text-lg text-gray-600" />
-          <span>Temizle</span>
+          <svg
+            className="w-10 h-10 mb-2 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 4v16m8-8H4"
+            />
+          </svg>
+          <span>Bugünün Lansmanları</span>
+        </button>
+
+        <button
+          type="button"
+          className="bg-gradient-to-br from-green-500 to-teal-400 p-5 rounded-xl text-center flex flex-col items-center hover:shadow-xl transition duration-300 transform hover:scale-105 text-white"
+          onClick={() => onButtonClick("ongoing")}
+          disabled={loading}
+        >
+          <svg
+            className="w-10 h-10 mb-2 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 8v8m-4-4h8"
+            />
+          </svg>
+          <span>Devam Eden Lansmanlar</span>
+        </button>
+
+        <button
+          type="button"
+          className="bg-gradient-to-br from-yellow-500 to-orange-400 p-5 rounded-xl text-center flex flex-col items-center hover:shadow-xl transition duration-300 transform hover:scale-105 text-white"
+          onClick={() => onButtonClick("upcoming")}
+          disabled={loading}
+        >
+          <svg
+            className="w-10 h-10 mb-2 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M4 12h16m-8-8v16"
+            />
+          </svg>
+          <span>Gelecek Lansmanlar</span>
+        </button>
+
+        <button
+          type="button"
+          className="bg-gradient-to-br from-red-500 to-pink-400 p-5 rounded-xl text-center flex flex-col items-center hover:shadow-xl transition duration-300 transform hover:scale-105 text-white"
+          onClick={() => onButtonClick("past")}
+          disabled={loading}
+        >
+          <svg
+            className="w-10 h-10 mb-2 text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+          <span>Geçmiş Lansmanlar</span>
         </button>
       </div>
 
-      {/* Arama Çubuğu */}
-      <div className="relative w-full max-w-xl">
+      {/* Arama Kutusu */}
+      <div className="flex items-center bg-white p-4 rounded-xl shadow-md">
+        <svg
+          className="w-6 h-6 text-gray-400 mr-3"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
+            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+          />
+        </svg>
         <input
           type="text"
-          value={localSearchQuery}
-          onChange={handleSearchChange}
-          placeholder="Arama"
-          className="w-full border border-gray-300 p-4 rounded-lg pl-10 bg-gray-50"
+          value={searchQuery}
+          onChange={(e) => onSearchQueryChange(e.target.value)}
+          placeholder="Arama yapın..."
+          className="w-full p-3 border-2 border-gray-300 rounded focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200"
+          disabled={loading}
         />
-        <div className="absolute inset-y-0 left-3 flex items-center">
-          <FaSearch className="text-gray-400" />
-        </div>
       </div>
+
+      {/* Yükleniyor durumu */}
+      {loading && (
+        <p className="mt-6 text-center text-lg text-indigo-600">
+          Yükleniyor...
+        </p>
+      )}
     </div>
   );
 };
