@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, useRef } from "react"; // useRef eklendi
+import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
 
 interface LargePopupCardFormProps {
@@ -34,10 +34,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -118,7 +115,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   return (
     <div className="flex flex-col space-y-6 p-4" style={{ paddingLeft: "6%" }}>
       {" "}
-      {/* Soldan %3 boşluk eklendi */}
+      {/* Soldan %6 boşluk eklendi */}
       <div className="flex flex-col">
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
@@ -134,6 +131,10 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span>960x630(px)
+        </p>
       </div>
       {/* Modal */}
       {isModalOpen && (

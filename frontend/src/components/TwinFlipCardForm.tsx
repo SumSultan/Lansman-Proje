@@ -218,6 +218,9 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
             style={{ width: "423px", height: "50px" }}
           />
+          <p style={{ color: "#667085", fontSize: "12px" }}>
+            <span style={{ color: "red" }}>*</span>440x710(px)
+          </p>
         </div>
 
         {/* Right Back Media */}
@@ -233,6 +236,9 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
             style={{ width: "423px", height: "50px" }}
           />
+          <p style={{ color: "#667085", fontSize: "12px" }}>
+            <span style={{ color: "red" }}>*</span>440x710(px)
+          </p>
         </div>
       </div>
 
@@ -253,6 +259,9 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
             style={{ width: "423px", height: "50px" }}
           />
+          <p style={{ color: "#667085", fontSize: "12px" }}>
+            <span style={{ color: "red" }}>*</span>440x710(px)
+          </p>
         </div>
 
         {/* Left Back Media */}
@@ -268,6 +277,9 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
             style={{ width: "423px", height: "50px" }}
           />
+          <p style={{ color: "#667085", fontSize: "12px" }}>
+            <span style={{ color: "red" }}>*</span>440x710(px)
+          </p>
         </div>
       </div>
 

@@ -186,6 +186,10 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
             outline: "none",
           }}
         />
+        {/* Yıldız işaretli medya ölçüsü ekleniyor */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span>500x600(px)
+        </p>
       </div>
 
       {/* Modal */}

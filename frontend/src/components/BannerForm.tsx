@@ -111,7 +111,6 @@ const BannerForm: React.FC<BannerFormProps> = ({
     setIsModalOpen(false);
   };
 
-  
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col">
@@ -180,6 +179,10 @@ const BannerForm: React.FC<BannerFormProps> = ({
             marginLeft: "3%", // Input alanını da soldan %3 kaydırıyoruz
           }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "3%" }}>
+          <span style={{ color: "red" }}>*</span>1270x300(px)
+        </p>
       </div>
 
       {/* Modal */}

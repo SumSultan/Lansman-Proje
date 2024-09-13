@@ -125,7 +125,6 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
     mediaItem.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col">
@@ -240,6 +239,9 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
             marginLeft: "3%", // Input alanını da soldan %3 kaydırıyoruz
           }}
         />
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "3%" }}>
+          <span style={{ color: "red" }}>*</span>1050x650(px)
+        </p>
       </div>
 
       {/* Modal */}

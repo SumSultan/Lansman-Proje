@@ -143,6 +143,10 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
             outline: "none",
           }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "3%" }}>
+          <span style={{ color: "red" }}>*</span>1040x400(px)
+        </p>
       </div>
 
       <div className="flex flex-col">

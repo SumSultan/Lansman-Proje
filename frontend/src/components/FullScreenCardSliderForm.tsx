@@ -31,13 +31,13 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<
     { key: string; launchName: string }[]
-  >([]); // Medya listesi, medya ve lansman adı içeriyor
-  const [selectedCardId, setSelectedCardId] = useState<number | null>(null); // Hangi kartın seçildiğini takip ediyoruz
+  >([]);
+  const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
   const [isMediaModalOpen, setIsMediaModalOpen] = useState<boolean>(false);
   const [isLogoMediaModalOpen, setIsLogoMediaModalOpen] =
     useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
-  const [logoSearchTerm, setLogoSearchTerm] = useState<string>(""); // Logo Medya için arama çubuğu
+  const [searchTerm, setSearchTerm] = useState<string>(""); 
+  const [logoSearchTerm, setLogoSearchTerm] = useState<string>(""); 
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -59,7 +59,6 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
     fetchMediaList();
   }, []);
 
-  // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -82,7 +81,6 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
     };
   }, [isMediaModalOpen, isLogoMediaModalOpen]);
 
-  // Medya önizleme fonksiyonu
   const renderFilePreview = (file: string) => {
     const fileType = file.split(".").pop()?.toLowerCase();
     const previewStyle = "w-full h-32 object-cover mb-2";
@@ -127,34 +125,30 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
     }
   };
 
-  // Medya seçimi yapıldıktan sonra media state'ini güncelleyen fonksiyon
   const handleMediaSelect = (selectedMedia: string) => {
     if (selectedCardId !== null) {
       onMediaChange(selectedCardId, {
         target: { value: selectedMedia },
       } as ChangeEvent<HTMLSelectElement>);
     }
-    setIsMediaModalOpen(false); // Modalı kapatıyoruz
+    setIsMediaModalOpen(false);
   };
 
-  // Logo medya seçimi yapıldıktan sonra logoMedia state'ini güncelleyen fonksiyon
   const handleLogoMediaSelect = (selectedLogoMedia: string) => {
     if (selectedCardId !== null) {
       onLogoMediaChange(selectedCardId, {
         target: { value: selectedLogoMedia },
       } as ChangeEvent<HTMLSelectElement>);
     }
-    setIsLogoMediaModalOpen(false); // Modalı kapatıyoruz
+    setIsLogoMediaModalOpen(false);
   };
 
-  // Medya ve lansman adına göre filtreleme işlemi
   const filteredMediaList = mediaList.filter(
     (mediaItem) =>
       mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
       mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Logo medya ve lansman adına göre filtreleme işlemi
   const filteredLogoMediaList = mediaList.filter(
     (mediaItem) =>
       mediaItem.key.toLowerCase().includes(logoSearchTerm.toLowerCase()) ||
@@ -213,7 +207,7 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                 onClick={() => {
                   setSelectedCardId(card.id);
                   setIsMediaModalOpen(true);
-                }} // Modalı açan buton ve hangi kartın seçildiğini takip eden fonksiyon
+                }}
                 className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#4B5563]"
                 style={{
                   width: "288px",
@@ -221,10 +215,10 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   borderRadius: "8px",
                 }}
               />
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>1250x750(px)
+              </p>
             </div>
-
-            {/* Medya Önizleme */}
-            <div className="mb-4"></div>
 
             <div className="mb-4">
               <label className="block text-sm text-[#1F2937] mb-1">
@@ -288,7 +282,7 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                 onClick={() => {
                   setSelectedCardId(card.id);
                   setIsLogoMediaModalOpen(true);
-                }} // Logo Medya Modalını açan buton
+                }}
                 className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#4B5563]"
                 style={{
                   width: "288px",
@@ -296,10 +290,10 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   borderRadius: "8px",
                 }}
               />
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>80x80(px)
+              </p>
             </div>
-
-            {/* Logo Medya Önizleme */}
-            <div className="mb-4"></div>
           </div>
         ))}
 
@@ -376,7 +370,6 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   <p className="text-center text-sm truncate">
                     {mediaItem.launchName}
                   </p>{" "}
-                  {/* Lansman adı gösteriliyor */}
                 </div>
               ))}
             </div>
@@ -434,7 +427,6 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   <p className="text-center text-sm truncate">
                     {mediaItem.launchName}
                   </p>{" "}
-                  {/* Lansman adı gösteriliyor */}
                 </div>
               ))}
             </div>

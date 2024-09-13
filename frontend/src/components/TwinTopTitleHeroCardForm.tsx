@@ -215,6 +215,9 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
                 onClick={() => setIsRightMediaModalOpen(true)}
                 className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm"
               />
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>440x700(px)
+              </p>
             </div>
             <div className="mt-4">
               <label className="block text-sm text-gray-700 mb-1">Başlık</label>
@@ -278,6 +281,9 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
                 onClick={() => setIsLeftMediaModalOpen(true)}
                 className="block w-full p-3 border border-gray-300 rounded-lg shadow-sm"
               />
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>440x700(px)
+              </p>
             </div>
             <div className="mt-4">
               <label className="block text-sm text-gray-700 mb-1">Başlık</label>

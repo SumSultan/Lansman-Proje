@@ -189,9 +189,14 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
                 style={{
                   height: "56px", // Input boyutu büyütüldü
                   borderRadius: "12px", // Kenar yuvarlama artırıldı
-                  marginBottom: "16px",
+                  marginBottom: "8px",
                 }}
               />
+              {/* Yıldız işaretli medya ölçüsü ekleniyor */}
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>min 400x700(px)
+              </p>
+
               <input
                 type="text"
                 value={item.title}

@@ -198,6 +198,9 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               outline: "none",
             }}
           />
+          <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "2px" }}>
+            <span style={{ color: "red" }}>*</span>530x790(px)
+          </p>
         </div>
 
         {/* Modal */}

@@ -157,6 +157,10 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px", marginLeft: "3%" }}
         />
+        {/* Yıldız işaretli medya ölçüsü */}
+        <p style={{ color: "#667085", fontSize: "12px", marginLeft: "3%" }}>
+          <span style={{ color: "red" }}>*</span>440x700(px)
+        </p>
       </div>
 
       {/* Sol Medya */}
@@ -175,6 +179,10 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px", marginLeft: "3%" }}
         />
+        {/* Yıldız işaretli medya ölçüsü */}
+        <p style={{ color: "#667085", fontSize: "12px", marginLeft: "3%" }}>
+          <span style={{ color: "red" }}>*</span>440x700(px)
+        </p>
       </div>
 
       {/* Sağ Medya Modal */}

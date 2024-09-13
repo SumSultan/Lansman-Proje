@@ -32,7 +32,6 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [hoveredButtonId, setHoveredButtonId] = useState<number | null>(null); 
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -180,9 +179,14 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
                 style={{
                   height: "56px", 
                   borderRadius: "12px", 
-                  marginBottom: "16px",
+                  marginBottom: "8px",
                 }}
               />
+              {/* Yıldız işaretli medya ölçüsü ekleniyor */}
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>400x700(px)
+              </p>
+
               <input
                 type="text"
                 value={item.title}
@@ -215,13 +219,10 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
                 onChange={(e) => onButtonTextChange(item.id, e)}
                 placeholder="Buton Adı"
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
-                onMouseEnter={() => setHoveredButtonId(item.id)} 
-                onMouseLeave={() => setHoveredButtonId(null)} 
                 style={{
                   marginBottom: "16px",
                   height: "56px",
                   borderRadius: "12px",
-                  backgroundColor: hoveredButtonId === item.id ? "#f0f0f0" : "#fff", 
                 }}
               />
 
@@ -253,23 +254,14 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              marginTop: "20px",
             }}
           >
-            <span
-              style={{
-                fontFamily: "Poppins",
-                fontSize: "12px",
-                fontWeight: 500,
-                lineHeight: "16px",
-              }}
-            >
-              Reels Card Ekle
-            </span>
+            Kart Ekle +
           </button>
         </div>
       </div>
 
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div
@@ -284,6 +276,7 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
             <div className="grid grid-cols-4 gap-4">
               {mediaList.map((mediaItem, index) => (
                 <div

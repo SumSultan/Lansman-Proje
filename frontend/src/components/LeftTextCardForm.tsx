@@ -150,6 +150,10 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
+        {/* Yıldız işaretli medya ölçüsü ekleniyor */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span>500x600(px)
+        </p>
       </div>
 
       {/* Yazı alanı */}

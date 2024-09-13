@@ -41,10 +41,7 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
   // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -108,8 +105,8 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
   };
 
   // Medya ve lansman adına göre filtreleme işlemi
-  const filteredMediaList = mediaList.filter(
-    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  const filteredMediaList = mediaList.filter((mediaItem) =>
+    mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
   );
 
   // Medya seçildikten sonra state'i güncelleyen fonksiyon
@@ -147,6 +144,10 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span> max 960x630(px)
+        </p>
       </div>
 
       {/* Arka Medya Alanı */}
@@ -168,6 +169,10 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span> max 960x630(px)
+        </p>
       </div>
 
       {/* Medya Modalı */}

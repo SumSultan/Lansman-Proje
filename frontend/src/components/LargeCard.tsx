@@ -131,6 +131,10 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
+        {/* Altına uyarı mesajı ekliyoruz */}
+        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+          <span style={{ color: "red" }}>*</span>960x630(px)
+        </p>
       </div>
 
       <div className="flex flex-col" style={{ paddingLeft: "3%" }}>

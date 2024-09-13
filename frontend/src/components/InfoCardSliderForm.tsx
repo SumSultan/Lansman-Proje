@@ -186,6 +186,10 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
                 }}
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] text-[#4B5563]"
               />
+              {/* Yıldız işaretli medya ölçüsü ekleniyor */}
+              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+                <span style={{ color: "red" }}>*</span>100x100(px)
+              </p>
             </div>
 
             <div className="mb-4">
