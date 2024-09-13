@@ -45,7 +45,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
             ...style,
             width: "100%",
             height: "100%",
-            objectFit: "contain",
+            objectFit: "contain", // Görseli tam olarak sığdır
             zIndex: 0,
           }}
         >
@@ -127,20 +127,21 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
   // Tam ekran için modalContentStyle ayarı
   const modalContentStyle: React.CSSProperties = {
     position: "relative",
-    width: "100vw", // Ekran genişliği
-    height: "100vh", // Ekran yüksekliği
+    width: "80vw", // Genişliği yüzde olarak belirle
+    height: "80vh", // Yüksekliği sabitle
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     overflow: "hidden", // Taşma olmasın
+    borderRadius: "10px",
   };
 
-  // Tam ekran media için stil
+  // Tam ekran media için stil (Sabit ölçülerle)
   const modalImageStyle: React.CSSProperties = {
     width: "100%",
     height: "100%",
-    objectFit: "contain", // Görseli tam olarak sığdır
-    borderRadius: "20px",
+    objectFit: "contain", // Görseli sığdır (oranı bozmadan)
+    borderRadius: "10px",
   };
 
   // Çarpı butonuna hover efekti için stil
@@ -235,7 +236,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
 
               {/* Render Selected Item Media */}
               {renderMedia(
-                `${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${selectedItem.media}`,
+                `${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${selectedItem?.media}`,
                 modalImageStyle
               )}
             </motion.div>

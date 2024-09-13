@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { motion, AnimatePresence } from "framer-motion";
-import { FaTimes } from "react-icons/fa";
 
 interface ReelsBottomCardItem {
   media: string;
@@ -16,30 +14,10 @@ interface ReelsBottomCardSectionProps {
 }
 
 const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }) => {
-  const [selectedItem, setSelectedItem] = useState<ReelsBottomCardItem | null>(null);
   const [isButtonHovered, setIsButtonHovered] = useState(false);
-
-  // Modal animation variants
-  const modalVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1 },
-    exit: { opacity: 0, scale: 0.8 },
-  };
-
-  // Modal close function
-  const closeModal = () => {
-    setSelectedItem(null);
-  };
-
-  // Modal open function
-  const openModal = (item: ReelsBottomCardItem) => {
-    setSelectedItem(item);
-  };
 
   // Media rendering function
   const renderMedia = (mediaUrl: string, style?: React.CSSProperties) => {
-    console.log("Media URL: ", mediaUrl);  // Log the media URL for debugging
-
     const fileType = mediaUrl.split(".").pop()?.toLowerCase();
 
     if (fileType === "mp4" || fileType === "webm" || fileType === "ogg") {
@@ -155,48 +133,11 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }
       }
     : {};
 
-  const modalContentStyle: React.CSSProperties = {
-    position: "relative",
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    overflow: "hidden",
-  };
-
-  const modalImageStyle: React.CSSProperties = {
-    width: "100%",
-    height: "100%",
-    objectFit: "contain",
-    borderRadius: "20px",
-  };
-
-  const closeButtonStyle: React.CSSProperties = {
-    position: "absolute",
-    top: "10px",
-    right: "10px",
-    width: "40px",
-    height: "40px",
-    backgroundColor: "transparent",
-    border: "2px solid white",
-    borderRadius: "50%",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    cursor: "pointer",
-    fontSize: "24px",
-    transition: "all 0.3s ease",
-  };
-
   return (
     <>
       {/* Slider Section */}
       <div style={sliderStyle}>
         {items.map((item, index) => {
-          // Log the entire item for debugging purposes
-          console.log("Item: ", item);
-
           const { ref, inView } = useInView({
             triggerOnce: false,
             threshold: 0.2,
@@ -221,7 +162,6 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }
                   : "translateY(20px)";
                 element.style.boxShadow = "";
               }}
-              onClick={() => openModal(item)}
             >
               {/* Media Render */}
               {renderMedia(
@@ -250,41 +190,6 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }
           );
         })}
       </div>
-
-      {/* Modal Section */}
-      <AnimatePresence>
-        {selectedItem && (
-          <motion.div
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={modalVariants}
-            transition={{ duration: 0.5 }}
-            className="fixed inset-0 bg-black bg-opacity-80 flex justify-center items-center z-50"
-          >
-            <motion.div style={modalContentStyle}>
-              <motion.button
-                onClick={closeModal}
-                style={{ ...closeButtonStyle, ...buttonHoverStyle }}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
-              >
-                <FaTimes
-                  className={`text-xl ${
-                    isButtonHovered ? "text-[#666666]" : "text-white"
-                  }`}
-                />
-              </motion.button>
-
-              {/* Render Selected Item Media */}
-              {renderMedia(
-                `${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${selectedItem.media}`,
-                modalImageStyle
-              )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </>
   );
 };
