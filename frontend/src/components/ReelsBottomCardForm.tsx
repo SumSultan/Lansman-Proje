@@ -32,6 +32,7 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+  const [hoveredButtonId, setHoveredButtonId] = useState<number | null>(null); 
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -214,10 +215,13 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
                 onChange={(e) => onButtonTextChange(item.id, e)}
                 placeholder="Buton Adı"
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm text-[#1F2937] focus:outline-none focus:ring-2 focus:ring-[#6366F1]"
+                onMouseEnter={() => setHoveredButtonId(item.id)} 
+                onMouseLeave={() => setHoveredButtonId(null)} 
                 style={{
                   marginBottom: "16px",
                   height: "56px",
                   borderRadius: "12px",
+                  backgroundColor: hoveredButtonId === item.id ? "#f0f0f0" : "#fff", 
                 }}
               />
 
