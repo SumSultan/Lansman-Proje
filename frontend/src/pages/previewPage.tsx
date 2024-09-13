@@ -22,8 +22,9 @@ import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-sectio
 import LargePopupCardSection from "../sections/largePopupCard-section";
 import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
-import SpaceSection from "../sections/SpaceSection"; 
+import SpaceSection from "../sections/SpaceSection";
 import BannerSection from "../sections/BannerSection";
+import ReelsBottomCardSection from "../sections/ReelsBottomCardSection"; // ReelsBottomCardSection'u import ediyoruz
 
 interface FullScreenCardItem {
   media: string;
@@ -38,6 +39,7 @@ interface InfoCardItem {
   title: string;
   subtitle: string;
 }
+
 interface MiniCardItem {
   id: number;
   buttonText: string;
@@ -53,6 +55,16 @@ interface ReelsCardItem {
   title: string;
   subTitle: string;
 }
+
+interface ReelsBottomCardItem {
+  id: number;
+  media: string;
+  title: string;
+  subTitle: string;
+  buttonText: string;
+  buttonUrl: string;
+}
+
 interface Content {
   title?: string;
   subTitle?: string;
@@ -83,6 +95,7 @@ interface Content {
   backMedia?: string;
   miniCardItems?: MiniCardItem[];
   reelsCardSliderItems?: ReelsCardItem[];
+  reelsBottomCardItems?: ReelsBottomCardItem[]; // Reels Bottom Card ekleniyor
 }
 
 interface Component {
@@ -218,7 +231,6 @@ const PreviewPage: React.FC = () => {
           }
 
           if (component.type === "Banner Form") {
-            console.log("Banner Form Rendered");
             return (
               <BannerSection
                 key={component._id}
@@ -228,8 +240,6 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
-          
-          
 
           if (component.type === "Accordion Right Card") {
             return (
@@ -362,6 +372,15 @@ const PreviewPage: React.FC = () => {
               <ReelsCardSliderSection
                 key={component._id}
                 items={component.content.reelsCardSliderItems || []}
+              />
+            );
+          }
+
+          if (component.type === "Reels Bottom Card") {
+            return (
+              <ReelsBottomCardSection
+                key={component._id}
+                items={component.content.reelsBottomCardItems || []}
               />
             );
           }

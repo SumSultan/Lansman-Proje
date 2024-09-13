@@ -37,6 +37,14 @@ export type Components = {
     buttonUrl?: string; // Yeni eklenen alan
     backgroundMedia?: string; // Yeni eklenen alan
   }>;
+  reelsBottomCardItems?: Array<{
+    id: number;
+    media: string;
+    title: string;
+    subTitle: string;
+    buttonText: string;
+    buttonUrl: string;
+  }>;
   accordianItems?: Array<{ title: string; subTitle: string }>;
   infoCardSliderItems?: Array<{
     icon: string;
@@ -132,7 +140,6 @@ const createDeployDesign = async (
     console.error("Error in POST request:", error);
   }
 };
-
 const updateInTrailerStatus = async (
   set: (state: Partial<DeployDesignStore>) => void,
   launchId: string,
