@@ -1,6 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
-import headerImage from '../images/Header.png'; // Görseli import ettik
 
 interface HeaderFormProps {
   title: string;
@@ -210,12 +209,7 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
             </div>
           </div>
         )}
-      </div>
-
-      {/* Görsel sağ tarafa eklendi */}
-      <div className="flex items-center">
-        <img src={headerImage} alt="Header Görsel" className="w-8 h-auto" />
-      </div>
+      </div>  
     </div>
   );
 };
