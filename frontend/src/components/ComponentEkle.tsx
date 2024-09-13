@@ -12,6 +12,7 @@ import InfoCardSliderForm from "./InfoCardSliderForm";
 import CTACardForm from "./CTACardForm";
 import TitleForm from "./TitleForm";
 import SpacerForm from "./spaceform";
+import BannerForm from "./BannerForm";
 import TwinCardForm from "./TwinCardForm";
 import TwinFlipCardForm from "./TwinFlipCardForm";
 import AccordionRightCardForm from "./AccordionRightCardForm";
@@ -559,6 +560,14 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
           logoMedia,
         };
         break;
+        case "Banner Form":
+  content = {
+    buttonText,
+    buttonUrl,
+    media, // media değeri eklendi
+  };
+  break;
+
       case "Search Form":
         // searchQuery burada content'e eklenir.
         content = {
@@ -756,6 +765,19 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
             onUrlChange={handleUrlChange}
           />
         );
+        case "Banner Form":
+  return (
+    <BannerForm
+      buttonText={buttonText}
+      buttonUrl={buttonUrl}
+      media={media} // Media alanı buraya ekleniyor
+      onButtonTextChange={handleButtonTextChange}
+      onButtonUrlChange={handleButtonUrlChange}
+      onMediaChange={(e) => setMedia(e.target.value)} // Media için handle fonksiyonu eklendi
+      onFormSubmit={handleFormSubmit}
+    />
+  );
+
       case "Large Popup Card":
         return (
           <LargePopupCardForm media={media} onMediaChange={handleMediaChange} />
@@ -1017,6 +1039,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
               <option value="Large Card">Large Card</option>
               <option value="Large Popup Card">Large Popup Card</option>
               <option value="Search Form">Search Form</option>
+              <option value="Banner Form">Banner Form</option>
               <option value="Large Flip Card">Large Flip Card</option>
               <option value="Large Scalable Card">Large Scalable Card</option>
               <option value="Full Text">Full Text</option>

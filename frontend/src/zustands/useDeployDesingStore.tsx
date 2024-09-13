@@ -12,9 +12,9 @@ export type Components = {
   frontMedia?: string;
   backMedia?: string;
   text?: string;
-  subTitle?: string;
   buttonText?: string;
   buttonUrl?: string;
+  subTitle?: string;
   rightMedia?: string;
   leftMedia?: string;
   rightFrontMedia?: string;
@@ -59,7 +59,7 @@ export type Components = {
     text: string;
     media: string;
   };
-  searchQuery?: string; // Yeni eklenen alan
+  searchQuery?: string; 
 };
 
 export type DeployDesign = {

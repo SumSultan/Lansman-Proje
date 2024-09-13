@@ -22,7 +22,8 @@ import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-sectio
 import LargePopupCardSection from "../sections/largePopupCard-section";
 import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
-import SpaceSection from "../sections/SpaceSection"; // SpaceSection bileşeni eklendi
+import SpaceSection from "../sections/SpaceSection"; 
+import BannerSection from "../sections/BannerSection";
 
 interface FullScreenCardItem {
   media: string;
@@ -216,6 +217,20 @@ const PreviewPage: React.FC = () => {
             );
           }
 
+          if (component.type === "Banner Form") {
+            console.log("Banner Form Rendered");
+            return (
+              <BannerSection
+                key={component._id}
+                buttonText={component.content.buttonText || ""}
+                buttonUrl={component.content.buttonUrl || ""}
+                media={component.content.media || ""}
+              />
+            );
+          }
+          
+          
+
           if (component.type === "Accordion Right Card") {
             return (
               <AccordionRightCardSection
@@ -351,7 +366,6 @@ const PreviewPage: React.FC = () => {
             );
           }
 
-          // SpaceSection bileşeni burada ekleniyor
           if (component.type === "Space") {
             return <SpaceSection key={component._id} />;
           }
