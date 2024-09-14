@@ -62,6 +62,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
     );
   };
 
+  // Gradyanı daha yumuşak ve siyahı azaltılmış hale getiriyoruz
   const gradientOverlayStyle = {
     position: "absolute" as const,
     top: 0,
@@ -72,15 +73,12 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
     background: `
       linear-gradient(
         to bottom,
-        rgba(0, 0, 0, 0.9) 10%,    /* Yoğun siyah */
-        rgba(0, 0, 0, 0.8) 20%,    /* Yavaşça açılan siyah */
-        rgba(0, 0, 0, 0.7) 30%,    /* Siyahın daha da açılması */
-        rgba(0, 0, 0, 0.6) 40%,    /* Gri tonlarına geçiş */
-        rgba(64, 64, 64, 0.5) 50%, /* Griye dönüşüm devam ediyor */
-        rgba(128, 128, 128, 0.4) 60%, /* Daha açık gri */
-        rgba(128, 128, 128, 0.3) 70%, /* Şeffaf griye geçiş */
-        rgba(192, 192, 192, 0.2) 80%, /* Daha şeffaf gri */
-        rgba(192, 192, 192, 0.1) 90%, /* Neredeyse şeffaf gri */
+        rgba(0, 0, 0, 0.7) 10%,    /* Daha az yoğun siyah */
+        rgba(0, 0, 0, 0.5) 25%,    /* Hızla açılan siyah */
+        rgba(0, 0, 0, 0.3) 40%,    /* Siyahın gri tonlarına geçişi */
+        rgba(64, 64, 64, 0.2) 55%, /* Gri tonları */
+        rgba(128, 128, 128, 0.1) 70%, /* Daha açık gri */
+        rgba(192, 192, 192, 0.05) 85%, /* Neredeyse şeffaf gri */
         rgba(192, 192, 192, 0) 100%   /* Tamamen şeffaf */
       )
     `,
@@ -93,7 +91,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
       {/* Left Card */}
       <div
         ref={leftRef}
-        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1000 ease-in-out transform ${
+        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1500 ease-in-out transform ${
           leftInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >
@@ -116,7 +114,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
       {/* Right Card */}
       <div
         ref={rightRef}
-        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1000 ease-in-out transform ${
+        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1500 ease-in-out transform ${
           rightInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >

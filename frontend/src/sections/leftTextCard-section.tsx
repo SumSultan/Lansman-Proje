@@ -30,12 +30,11 @@ const LeftTextCardSection: React.FC<LeftTextCardSectionProps> = ({
     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
     width: "1040px", // Sabit genişlik
     height: "600px", // Sabit yükseklik
-    margin: "20px auto", // Kartı ortalıyoruz ve kartlar arasında boşluk bırakıyoruz
+    margin: "40px auto", // Kartı ortalıyoruz ve kartlar arasında boşluk bırakıyoruz
     border: "1px solid #e0e0e0",
     transition: "transform 1.3s ease, box-shadow 1.3s ease, opacity 1.3s ease", // Geçiş efekti
     opacity: 0, // Başlangıçta görünmez
     transform: "translateY(20px)", // Başlangıçta aşağıda
-    zIndex: 0, // Z-index ayarlaması
     position: "relative", // Kartın layout'taki doğal akışını koruyoruz
   };
 
@@ -49,7 +48,7 @@ const LeftTextCardSection: React.FC<LeftTextCardSectionProps> = ({
   const hoverStyle: React.CSSProperties = {
     transform: "scale(1.05) translateY(-10px)", // Hafif büyüme ve yukarı kayma
     boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.2)", // Daha belirgin gölge
-    zIndex: 1, // Hover'da kartın üstüne çıkmasını sağlıyoruz
+    zIndex: 2, // Hover sırasında önde görünmesi için z-index artırıldı
   };
 
   return (
@@ -67,7 +66,7 @@ const LeftTextCardSection: React.FC<LeftTextCardSectionProps> = ({
         const element = e.currentTarget as HTMLElement;
         element.style.transform = inView ? "translateY(0)" : "translateY(20px)"; // Hover sonrası geri dönüş
         element.style.boxShadow = "0px 8px 16px rgba(0, 0, 0, 0.1)"; // Gölge eski haline döner
-        element.style.zIndex = "0"; // Hover'dan çıkınca z-index sıfırlanır
+        element.style.zIndex = "1"; // Hover'dan çıkınca z-index sıfırlanır
       }}
     >
       {/* Soldaki yazı */}

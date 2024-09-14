@@ -56,7 +56,7 @@ const LargeTopTitleHeroCardSection: React.FC<
   return (
     <div
       ref={ref}
-      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1000 ease-in-out transform ${
+      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1500 ease-in-out transform ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } hover:scale-105 hover:shadow-lg`}
       style={{
@@ -77,36 +77,29 @@ const LargeTopTitleHeroCardSection: React.FC<
         {renderMedia()}
       </div>
 
-      {/* Yukarıdan aşağıya siyah ve gri gradyan (kartın %50'si, daha uzun siyah alan) */}
+      {/* Yukarıdan aşağıya siyah ve gri gradyan (kartın %50'si, daha az siyah alan) */}
       <div
-  style={{
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    zIndex: 1, // Medyanın üstünde olması için z-index değeri
-    background: `
-      linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0.9) 10%,    /* Yoğun siyah */
-        rgba(0, 0, 0, 0.8) 20%,    /* Yavaşça açılan siyah */
-        rgba(0, 0, 0, 0.7) 30%,    /* Siyahın daha da açılması */
-        rgba(0, 0, 0, 0.6) 40%,    /* Gri tonlarına geçiş */
-        rgba(64, 64, 64, 0.5) 50%, /* Griye dönüşüm devam ediyor */
-        rgba(128, 128, 128, 0.4) 60%, /* Daha açık gri */
-        rgba(128, 128, 128, 0.3) 70%, /* Şeffaf griye geçiş */
-        rgba(192, 192, 192, 0.2) 80%, /* Daha şeffaf gri */
-        rgba(192, 192, 192, 0.1) 90%, /* Neredeyse şeffaf gri */
-        rgba(192, 192, 192, 0) 100%   /* Tamamen şeffaf */
-      )
-    `,
-  }}
-></div>
-
-
-
-
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          zIndex: 1, // Medyanın üstünde olması için z-index değeri
+          background: `
+            linear-gradient(
+              to bottom,
+              rgba(0, 0, 0, 0.7) 10%,   /* Daha az yoğun siyah */
+              rgba(0, 0, 0, 0.5) 25%,   /* Hızlı açılan siyah */
+              rgba(0, 0, 0, 0.3) 40%,   /* Gri tonlarına geçiş */
+              rgba(64, 64, 64, 0.2) 55%, /* Griye dönüşüm devam ediyor */
+              rgba(128, 128, 128, 0.1) 70%, /* Daha açık gri */
+              rgba(192, 192, 192, 0.05) 85%, /* Neredeyse şeffaf gri */
+              rgba(192, 192, 192, 0) 100%   /* Tamamen şeffaf */
+            )
+          `,
+        }}
+      ></div>
 
       {/* Başlık, Alt Başlık ve Buton */}
       <div

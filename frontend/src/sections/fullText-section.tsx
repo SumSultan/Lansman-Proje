@@ -23,14 +23,10 @@ const FullTextSection: React.FC<FullTextSectionProps> = ({ text }) => {
     padding: "20px",
     alignItems: "center", // İçerikleri dikeyde ortala
     textAlign: "center", // Metin hizalaması ortalı
-    marginLeft: "auto", // Ortalanmış hizalama
-    marginRight: "auto", // Ortalanmış hizalama
-    marginBottom: "20px", // Kartlar arasında boşluk ekleyelim
+    margin: "20px auto", // Kartları üst ve alt boşluk ile ortala
     transition: "transform 1.3s ease, box-shadow 1.3s ease, opacity 1.3s ease", // Geçiş efektleri
     opacity: 0, // Başlangıçta görünmez
     transform: "translateY(20px)", // Başlangıçta aşağıda
-    zIndex: 0, // Kartın üst üste binmemesi için zIndex sıfırlanır
-    position: "relative", // Kartın üst üste binmesini engellemek için relative
   };
 
   // Kart görünür olduğunda uygulanacak stil
