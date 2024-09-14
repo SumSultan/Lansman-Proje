@@ -223,24 +223,25 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Önizleme Kartı */}
       {isPreviewOpen && (
-        <div
-          className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-center"  // Decreased padding
-          style={{
-            width: "80%", // Reduced the background width
-            height: "200px", // Reduced the background height
-          }}
-        >
-          <div
-            style={{
-              width: "1500px",  // Genişliği artırdım
-              height: "160px",  // Yüksekliği artırdım
-              transform: "scale(0.5)", // %50 küçültme
-            }}
-          >
-            <HeaderSection title={title} logoMedia={logoMedia} />
-          </div>
-        </div>
-      )}
+  <div
+    className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-center items-center"
+    style={{
+      width: "750px", // Arka plan genişliği
+      height: "100px", // Arka plan yüksekliğini 100px yaptım
+    }}
+  >
+    <div
+      style={{
+        width: "1500px",  // Genişlik
+        height: "100px",  // İçerik yüksekliği
+        transform: "scale(0.5)", // %50 küçült
+      }}
+    >
+      <HeaderSection title={title} logoMedia={logoMedia} />
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

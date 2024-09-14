@@ -215,6 +215,7 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
             margin: "0 auto", // Ortalamak için
             width: "100vw", // Orijinal genişliğin yarısı
             height: "50vh", // Orijinal yüksekliğin yarısı
+            marginLeft:"15%",
           }}
           className="p-2 rounded-lg mt-6"
         >

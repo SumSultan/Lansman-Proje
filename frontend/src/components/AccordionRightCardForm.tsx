@@ -372,6 +372,8 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               transformOrigin: "top left", // Sol üstten küçült
               margin: "20px auto",
               width: "100%",
+              height:"400px",
+              marginLeft:"27%",
             }}
           >
             <AccordionRightCardSection media={media} accordian={accordian} />

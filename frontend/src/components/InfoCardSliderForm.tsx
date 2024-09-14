@@ -330,6 +330,8 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            height:"150px",
+            marginLeft:"40%",
           }}
           className="p-2 rounded-lg mt-6"
         >

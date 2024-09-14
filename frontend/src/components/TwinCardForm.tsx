@@ -208,6 +208,8 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            height:"350px",
+            marginLeft:"27%",
           }}
           className="p-2 rounded-lg mt-6"
         >

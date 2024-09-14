@@ -308,6 +308,8 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", 
             width: "100%", 
+            marginLeft:"25%",
+            height:"370px",
           }}
           className="p-2 rounded-lg mt-6"
         >

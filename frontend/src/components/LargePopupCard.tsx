@@ -140,7 +140,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
         className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
         style={{
           width: "100px",
-          marginLeft: "3%",
           textAlign: "center", // Matching text center alignment
         }}
       >

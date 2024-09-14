@@ -229,6 +229,8 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
             transform: "scale(0.5)", // Scale down to 50%
             transformOrigin: "top left", // Anchor scaling from top left
             margin: "0 auto", // Center the preview
+            height:"290px",
+            marginLeft:"10%",
           }}
         >
           <LargeFlipCardSection frontMedia={frontMedia} backMedia={backMedia} />

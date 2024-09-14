@@ -442,6 +442,8 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
             transformOrigin: "top left",
             margin: "20px auto",
             width: "100%",
+            height:"350px",
+            marginLeft:"27%",
           }}
         >
           <TwinTopTitleHeroCardSection

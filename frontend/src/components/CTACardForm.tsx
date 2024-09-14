@@ -130,6 +130,7 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
             transform: "scale(0.5)", // %50 küçültme
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
+            height:"60px",
             width: "100%", // Orijinal genişliğin yarısı
           }}
           className="p-2 rounded-lg mt-6"

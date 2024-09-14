@@ -274,6 +274,8 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "20px auto",
             width: "100%",
+            height:"200px",
+            marginLeft:"5%",
           }}
         >
           <MiniCardSliderSection cards={cards} />

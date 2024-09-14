@@ -211,19 +211,21 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
 
       {/* LargeCardSection'ın %50 küçültülmüş önizleme alanı */}
       {isPreviewOpen && (
-        <div
-          style={{
-            transform: "scale(0.5)", // %50 küçültme
-            transformOrigin: "top left", // Sol üstten küçült
-            margin: "0 auto", // Ortalamak için
-            width: "525px", // %50'lik genişlik
-            height: "325px", // %50'lik yükseklik
-          }}
-          className="p-2 rounded-lg mt-6"
-        >
-          <LargeCardSection media={media} url={url} />
-        </div>
-      )}
+  <div
+    style={{
+      transform: "scale(0.5) translateX(50%)", // %50 küçült ve soldan %50 uzaklaştır
+      transformOrigin: "top left", // Sol üst köşeden küçültme ve kaydırmayı başlat
+      margin: "0", // Otomatik margin kaldırıldı
+      width: "525px", // Kart genişliğinin %50'si
+      height: "325px", // Kart yüksekliğinin %50'si
+      marginLeft:"10%",
+    }}
+    className="p-2 rounded-lg mt-6 max-w-2xl"
+  >
+    <LargeCardSection media={media} url={url} />
+  </div>
+)}
+
     </div>
   );
 };

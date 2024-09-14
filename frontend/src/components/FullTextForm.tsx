@@ -80,7 +80,8 @@ const FullTextForm: React.FC<FullTextFormProps> = ({ text, onTextChange }) => {
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
-            height: "auto", // Yüksekliği içerikle beraber ayarlayalım
+            height: "150px", // Yüksekliği içerikle beraber ayarlayalım
+            marginLeft:"25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -245,6 +245,8 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            height:"340px",
+            marginLeft:"10%",
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -250,6 +250,8 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            height:"300px",
+            marginLeft:"10%",
           }}
           className="p-2 rounded-lg mt-6"
         >

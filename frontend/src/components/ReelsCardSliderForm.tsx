@@ -327,6 +327,8 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            height:"400px",
+            marginLeft:"25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

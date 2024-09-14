@@ -405,6 +405,8 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "20px auto",
             width: "100%",
+            height:"350px",
+            marginLeft:"25%",
           }}
         >
           <FullScreenCardSection items={cards} />

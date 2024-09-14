@@ -267,6 +267,8 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", 
             width: "100%", 
+            height:"320px",
+            marginLeft:"8%",
           }}
           className="p-2 rounded-lg mt-6"
         >

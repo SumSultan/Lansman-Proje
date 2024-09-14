@@ -203,8 +203,9 @@ const BannerForm: React.FC<BannerFormProps> = ({
           style={{
             transform: "scale(0.5)", // %50 küçültme
             transformOrigin: "top left", // Sol üstten küçültme
-            marginTop: "2px",  // Üstte 2px boşluk
-            marginBottom: "2px",  // Altta 2px boşluk
+            width:"635px",
+            height:"150px",
+            marginLeft:"25%",
           }}
           className="p-2 rounded-lg"
         >

@@ -326,7 +326,8 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "520px", // %50 oranında küçültülmüş genişlik
-            height: "320px", // %50 oranında küçültülmüş yükseklik
+            height: "400px", // %50 oranında küçültülmüş yükseklik
+            marginLeft:"33%",
           }}
           className="p-2 rounded-lg mt-6"
         >
