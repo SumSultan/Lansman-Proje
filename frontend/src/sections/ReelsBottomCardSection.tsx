@@ -16,7 +16,9 @@ interface ReelsBottomCardSectionProps {
 const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({
   items,
 }) => {
-  const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [hoveredButtonIndex, setHoveredButtonIndex] = useState<number | null>(
+    null
+  );
 
   // Media rendering function
   const renderMedia = (mediaUrl: string, style?: React.CSSProperties) => {
@@ -56,7 +58,7 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({
     alignItems: "center",
     // Scroll bar'ı gizlemek için eklenen stil
     msOverflowStyle: "none", // Internet Explorer ve Edge için
-    scrollbarWidth: "none",  // Firefox için
+    scrollbarWidth: "none", // Firefox için
   };
 
   // Scroll bar'ı tamamen gizlemek için eklenen stil
@@ -134,14 +136,15 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({
     transition: "all 0.3s ease", // Smooth transition on hover
   };
 
-  // Hover effect with color #666666
-  const buttonHoverStyle: React.CSSProperties = isButtonHovered
-    ? {
-        backgroundColor: "transparent", // Keep background transparent
-        color: "#666666", // Change text color to #666666
-        border: "2px solid #666666", // Change border color to #666666
-      }
-    : {};
+  // Render each button hover style based on its index
+  const getButtonHoverStyle = (index: number): React.CSSProperties =>
+    hoveredButtonIndex === index
+      ? {
+          backgroundColor: "transparent", // Keep background transparent
+          color: "#666666", // Change text color to #666666
+          border: "2px solid #666666", // Change border color to #666666
+        }
+      : {};
 
   return (
     <>
@@ -189,10 +192,10 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({
                 href={item.buttonUrl}
                 style={{
                   ...buttonStyle,
-                  ...(isButtonHovered ? buttonHoverStyle : {}),
+                  ...getButtonHoverStyle(index),
                 }}
-                onMouseEnter={() => setIsButtonHovered(true)}
-                onMouseLeave={() => setIsButtonHovered(false)}
+                onMouseEnter={() => setHoveredButtonIndex(index)}
+                onMouseLeave={() => setHoveredButtonIndex(null)}
               >
                 {item.buttonText}
               </a>
