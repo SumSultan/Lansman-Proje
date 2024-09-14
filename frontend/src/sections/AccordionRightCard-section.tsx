@@ -64,7 +64,10 @@ const AccordionRightCardSection: React.FC<AccordionRightCardSectionProps> = ({
         className="flex bg-[#fafafa] rounded-[20px] shadow-lg h-[787px] w-[1400px] mx-auto"
       >
         {/* Sol kısım - Accordion */}
-        <div className="w-[45%] h-full flex flex-col items-start justify-center mr-16 overflow-y-auto">
+        <div
+          className="w-[45%] h-full flex flex-col items-start justify-start mr-16 overflow-hidden"
+          style={{ maxHeight: "787px", overflowY: "auto" }} // Sol kısım sabitlendi
+        >
           {accordian.map((item, index) => (
             <div key={index} className="w-full">
               <div
@@ -86,7 +89,7 @@ const AccordionRightCardSection: React.FC<AccordionRightCardSectionProps> = ({
                 style={{
                   maxHeight: openIndex === index ? `${heights[index]}px` : "0px",
                   transition: "max-height 0.5s ease",
-                  overflow: "auto", // İçerik açıldıkça taşarsa kaydırılabilir hale getirdik
+                  overflow: "hidden", // Accordion için taşmayı gizle
                   paddingLeft: "5px",
                 }}
                 className="mt-2 mb-8 text-[17px] text-gray-600 leading-relaxed break-words whitespace-normal"
