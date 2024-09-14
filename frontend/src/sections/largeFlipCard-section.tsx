@@ -98,23 +98,21 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     right: "20px",
     width: "40px",
     height: "40px",
-    backgroundColor: "transparent",
-    border: "2px solid white",
-    borderRadius: "50%",
+    backgroundColor: "transparent", // Butonun arka planı tamamen şeffaf
+    border: "2px solid white", // Beyaz sınır çizgisi
+    borderRadius: "50%", // Butonu dairesel yapmak için
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     cursor: "pointer",
     fontSize: "24px",
-    transition: "all 0.3s ease",
+    transition: "border 0.3s ease", // Sadece kenar rengini değiştiriyoruz
     zIndex: 2, // Butonun her zaman kartın önünde kalmasını sağlıyoruz
   };
 
   const buttonHoverStyle: React.CSSProperties = isButtonHovered
     ? {
-        backgroundColor: "#ffffff",
-        color: "#666666",
-        border: "2px solid #666666",
+        border: "2px solid #666666", // Kenar rengini hover'da değiştiriyoruz
       }
     : {};
 
@@ -130,7 +128,7 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     position: "absolute",
     width: "100%",
     height: "2px",
-    backgroundColor: isButtonHovered ? "#666666" : "white",
+    backgroundColor: isButtonHovered ? "#666666" : "white", // İkon rengini hover'da değiştiriyoruz
     top: "50%",
     left: "0",
     transform: "rotate(45deg)",
