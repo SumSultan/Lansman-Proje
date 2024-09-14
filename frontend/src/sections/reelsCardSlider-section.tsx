@@ -61,6 +61,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
     display: "flex",
     gap: "20px",
     overflowX: "auto",
+    overflowY: "hidden", // Yatay kaydırmayı gizler
     padding: "20px",
     backgroundColor: "#ffffff",
     borderRadius: "12px",
@@ -68,6 +69,14 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
     width: "100%",
     height: "850px",
     alignItems: "center",
+    scrollbarWidth: "none", // Firefox için kaydırma çubuğunu gizler
+  };
+
+  // Scroll bar'ı gizlemek için eklenen CSS
+  const hideScrollBarStyle: React.CSSProperties = {
+    ...sliderStyle,
+    msOverflowStyle: "none", // IE ve Edge için
+    scrollbarWidth: "none", // Firefox için
   };
 
   const itemStyle: React.CSSProperties = {
@@ -172,7 +181,7 @@ const ReelsCardSliderSection: React.FC<ReelsCardSliderSectionProps> = ({
 
   return (
     <>
-      <div style={sliderStyle}>
+      <div style={{ ...hideScrollBarStyle }}>
         {items.map((item, index) => {
           const { ref, inView } = useInView({
             triggerOnce: false,

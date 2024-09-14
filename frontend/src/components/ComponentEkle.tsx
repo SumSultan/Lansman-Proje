@@ -1087,7 +1087,7 @@ const ComponentEkleModal: React.FC<ComponentEkleModalProps> = ({
       className={`bg-white rounded-lg shadow-lg w-full ${
         selectedComponent === "Twin Top Title Hero Card"
           ? "max-w-5xl"
-          : "max-w-2xl"
+          : "max-w-6xl"
       } relative modal-content`} // Seçili bileşene göre genişlik ayarlandı
       overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
       style={{

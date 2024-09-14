@@ -209,7 +209,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
             transformOrigin: "top left", // Anchor scaling from top left
             margin: "0 auto", // Center the preview
             width: "525px", // Matching card width at 50% scale
-            height: "325px", // Matching card height at 50% scale
+            height: "425px", // Matching card height at 50% scale
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -24,8 +24,7 @@ import ReelsCardSliderSection from "../sections/reelsCardSlider-section";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
 import SpaceSection from "../sections/SpaceSection";
 import BannerSection from "../sections/BannerSection";
-import ReelsBottomCardSection from "../sections/ReelsBottomCardSection"; // ReelsBottomCardSection'u import ediyoruz
-import LaunchFilter from "../sections/launchFilter";
+import ReelsBottomCardSection from "../sections/ReelsBottomCardSection";
 
 interface FullScreenCardItem {
   media: string;
@@ -96,7 +95,7 @@ interface Content {
   backMedia?: string;
   miniCardItems?: MiniCardItem[];
   reelsCardSliderItems?: ReelsCardItem[];
-  reelsBottomCardItems?: ReelsBottomCardItem[]; // Reels Bottom Card ekleniyor
+  reelsBottomCardItems?: ReelsBottomCardItem[];
 }
 
 interface Component {
@@ -130,7 +129,7 @@ const PreviewPage: React.FC = () => {
   }, [launchId, navigate]);
 
   return (
-    <div className="relative overflow-x-hidden">
+    <div className="relative overflow-hidden"> {/* Hem yatay hem de dikey scroll gizlendi */}
       <div className="p-5">
         <div
           className="font-bold text-4xl flex justify-between items-center"
@@ -170,13 +169,7 @@ const PreviewPage: React.FC = () => {
               />
             );
           }
-          if (component.type === "Search Form") {
-            return (
-              <div key={component._id}>
-                <LaunchFilter />
-              </div>
-            );
-          }
+
           if (component.type === "Full Screen Card Slider") {
             return (
               <FullScreenCardSection

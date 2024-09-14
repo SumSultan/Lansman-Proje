@@ -13,7 +13,9 @@ interface ReelsBottomCardSectionProps {
   items: ReelsBottomCardItem[];
 }
 
-const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }) => {
+const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({
+  items,
+}) => {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   // Media rendering function
@@ -52,6 +54,14 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }
     width: "100%",
     height: "850px",
     alignItems: "center",
+    // Scroll bar'ı gizlemek için eklenen stil
+    msOverflowStyle: "none", // Internet Explorer ve Edge için
+    scrollbarWidth: "none",  // Firefox için
+  };
+
+  // Scroll bar'ı tamamen gizlemek için eklenen stil
+  const hideScrollBarStyle: React.CSSProperties = {
+    ...sliderStyle,
   };
 
   const itemStyle: React.CSSProperties = {
@@ -114,29 +124,29 @@ const ReelsBottomCardSection: React.FC<ReelsBottomCardSectionProps> = ({ items }
     left: "50%",
     transform: "translateX(-50%)",
     padding: "10px 20px",
-    backgroundColor: "transparent",  // Transparent background
-    color: "#fff",                    // White text
-    border: "2px solid white",         // White border
+    backgroundColor: "transparent", // Transparent background
+    color: "#fff", // White text
+    border: "2px solid white", // White border
     borderRadius: "8px",
     cursor: "pointer",
     textDecoration: "none",
     zIndex: 1,
-    transition: "all 0.3s ease",       // Smooth transition on hover
+    transition: "all 0.3s ease", // Smooth transition on hover
   };
 
   // Hover effect with color #666666
   const buttonHoverStyle: React.CSSProperties = isButtonHovered
     ? {
-        backgroundColor: "transparent",    // Keep background transparent
-        color: "#666666",                  // Change text color to #666666
-        border: "2px solid #666666",       // Change border color to #666666
+        backgroundColor: "transparent", // Keep background transparent
+        color: "#666666", // Change text color to #666666
+        border: "2px solid #666666", // Change border color to #666666
       }
     : {};
 
   return (
     <>
       {/* Slider Section */}
-      <div style={sliderStyle}>
+      <div style={{ ...hideScrollBarStyle }}>
         {items.map((item, index) => {
           const { ref, inView } = useInView({
             triggerOnce: false,

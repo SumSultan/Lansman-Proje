@@ -30,11 +30,13 @@ const RightTextCardSection: React.FC<RightTextCardSectionProps> = ({
     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
     width: "1040px", // Sabit genişlik
     height: "600px", // Sabit yükseklik
-    margin: "0 auto", // Kartı ortalıyoruz
+    margin: "20px auto", // Kartı ortalıyoruz ve kartlar arasında boşluk bırakıyoruz
     border: "1px solid #e0e0e0",
     transition: "transform 1.3s ease, box-shadow 1.3s ease, opacity 1.3s ease", // Geçiş efekti
     opacity: 0, // Başlangıçta görünmez
     transform: "translateY(20px)", // Başlangıçta aşağıda
+    position: "relative", // Kartın layout'ta doğru yer alması için relative kullanıyoruz
+    zIndex: 0, // Z-index ile diğer kartların üzerine çıkmasını engelliyoruz
   };
 
   // Kart görünür olduğunda uygulanacak stil
@@ -47,6 +49,7 @@ const RightTextCardSection: React.FC<RightTextCardSectionProps> = ({
   const hoverStyle: React.CSSProperties = {
     transform: "scale(1.05) translateY(-10px)", // Hafif büyüme ve yukarı kayma
     boxShadow: "0px 10px 15px rgba(0, 0, 0, 0.2)", // Daha belirgin gölge
+    zIndex: 1, // Hover sırasında kartın üstte olmasını sağlıyoruz
   };
 
   return (
@@ -64,6 +67,7 @@ const RightTextCardSection: React.FC<RightTextCardSectionProps> = ({
         const element = e.currentTarget as HTMLElement;
         element.style.transform = inView ? "translateY(0)" : "translateY(20px)"; // Hover sonrası geri dönüş
         element.style.boxShadow = "0px 8px 16px rgba(0, 0, 0, 0.1)"; // Gölge eski haline döner
+        element.style.zIndex = "0"; // Hover'dan çıkınca z-index sıfırlanır
       }}
     >
       {/* Fotoğraf veya video */}
@@ -105,7 +109,7 @@ const RightTextCardSection: React.FC<RightTextCardSectionProps> = ({
           justifyContent: "center",
           alignItems: "center", // Yazıyı ortalıyoruz
           textAlign: "center",
-          width: "540px", // Geriye kalan genişlik (1140 - 600)
+          width: "540px", // Geriye kalan genişlik (1040 - 500)
           height: "100%", // Yükseklik sabit
           padding: "20px", // Biraz iç boşluk
           wordWrap: "break-word",
