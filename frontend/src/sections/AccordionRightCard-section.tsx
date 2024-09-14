@@ -65,7 +65,7 @@ const AccordionRightCardSection: React.FC<AccordionRightCardSectionProps> = ({
       >
         {/* Sol kısım - Accordion */}
         <div
-          className="w-[45%] h-full flex flex-col items-start justify-start mr-16 overflow-hidden"
+          className="w-[45%] h-full flex flex-col items-start justify-center mr-16 overflow-hidden" // Değişiklik burada
           style={{ maxHeight: "787px", overflowY: "hidden" }} // Scroll'u gizledik
         >
           {accordian.map((item, index) => (

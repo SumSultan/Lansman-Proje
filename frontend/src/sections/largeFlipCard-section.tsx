@@ -76,7 +76,7 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     transformStyle: "preserve-3d",
     transition: "transform 0.8s ease-out",
     transform: isFlipped ? "rotateX(180deg)" : "rotateX(0deg)",
-    zIndex: 0, // Kartın z-index değeri diğer komponentlerin altına geçmesini engeller
+    zIndex: 1, // Kartın default olarak üstte olmaması için 1'e çekildi
   };
 
   const frontStyle: React.CSSProperties = {
@@ -107,7 +107,7 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     cursor: "pointer",
     fontSize: "24px",
     transition: "all 0.3s ease",
-    zIndex: 1, // Butonun ön planda kalmasını sağlıyoruz
+    zIndex: 2, // Butonun ön planda kalmasını sağlıyoruz
   };
 
   const buttonHoverStyle: React.CSSProperties = isButtonHovered
@@ -152,7 +152,7 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     transform: inView ? "translateY(0)" : "translateY(10px)",
     transition: "opacity 1.3s ease, transform 1.3s ease",
     marginBottom: "40px", // Kartlar arasında yeterli boşluk bırakmak için
-    zIndex: 0, // Hover dışındaki kartın arka planda kalmasını sağlıyoruz
+    zIndex: 0, // Kartın diğer elementlerin altına geçmesini sağlıyoruz
   };
 
   return (
