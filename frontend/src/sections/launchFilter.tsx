@@ -19,7 +19,6 @@ interface SearchComponentSectionProps {
   onFocus?: () => void; // onFocus özelliğini ekleyin, opsiyonel yapın
 }
 
-// SearchComponentSection bileşeni
 const SearchSection: React.FC<SearchComponentSectionProps> = ({
   searchQuery,
   onSearchQueryChange,
@@ -29,7 +28,7 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
   const cardStyle: CSSProperties = {
     width: "100%", // Kartları geniş grid sistemine yaymak için %100 genişlik
     height: "250px",
-    transition: "transform 1.0s ease, box-shadow 1.0s ease",
+    transition: "transform 0.7s ease-in-out, box-shadow 0.7s ease-in-out", // Yavaş büyüme ve küçülme
     cursor: "pointer",
   };
 
@@ -47,9 +46,7 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
 
   return (
     <div className="p-6 bg-white flex flex-col items-center justify-start w-full">
-      {/* Lansman Butonları ve Arama Kutusu */}
       <div className="grid grid-cols-4 gap-8 w-full max-w-6xl mb-6">
-        {/* Lansman Butonları */}
         <button
           type="button"
           className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
@@ -122,7 +119,6 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
           </span>
         </button>
 
-        {/* Arama Kutusu - Tüm kolonlara yayılıyor */}
         <div className="col-span-4">
           <div className="relative w-full" style={searchBoxStyle}>
             <input
@@ -156,6 +152,8 @@ const LaunchFilter: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false); // Yeni animasyon state
+  const [hovered, setHovered] = useState<number | null>(null); // Hovered state
 
   const convertDateFormat = (dateString: string) => {
     const [day, month, year] = dateString.split(".");
@@ -188,6 +186,7 @@ const LaunchFilter: React.FC = () => {
 
   const handleButtonClick = (type: string) => {
     setHasInteracted(true);
+    setIsAnimating(true); // Animasyonu başlat
     const today = dayjs();
 
     let filtered = [];
@@ -220,6 +219,7 @@ const LaunchFilter: React.FC = () => {
     }
 
     setFilteredLaunches(filtered);
+    setTimeout(() => setIsAnimating(false), 1000); // 1000ms sonra animasyonu durdur
   };
 
   const handleSearchQueryChange = (query: string) => {
@@ -254,15 +254,27 @@ const LaunchFilter: React.FC = () => {
       </div>
 
       {hasInteracted && (
-        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-12 w-full max-w-5xl">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16 w-full max-w-6xl">
           {filteredLaunches.length > 0 ? (
-            filteredLaunches.map((launch) => {
+            filteredLaunches.map((launch, index) => {
               const seoData = getSeoForLaunch(launch._id);
 
               return (
                 <div
                   key={launch._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden transition-transform transform hover:scale-105 duration-300 col-span-1"
+                  className={`bg-gray-50 rounded-lg shadow-md overflow-hidden transition-all transform ${
+                    isAnimating
+                      ? "opacity-0 translate-y-10"
+                      : "opacity-100 translate-y-0"
+                  } duration-1000 ease-out col-span-1 hover:scale-105 hover:shadow-lg`}
+                  style={{
+                    transitionDelay: `${index * 100}ms`,
+                    transform: `translateY(${
+                      isAnimating ? "15px" : "0"
+                    }) scale(${hovered === index ? 1.05 : 1})`,
+                  }} // Staggered delay & combined transform
+                  onMouseEnter={() => setHovered(index)}
+                  onMouseLeave={() => setHovered(null)}
                 >
                   {seoData ? (
                     <div className="flex flex-col h-full">
@@ -277,7 +289,7 @@ const LaunchFilter: React.FC = () => {
                       )}
                       <div className="p-4 flex-1 flex flex-col justify-between">
                         <div>
-                          <h3 className="text-lg font-semibold mb-2">
+                          <h3 className="text-lg font-semibold mb-2 text-gray-600">
                             {seoData.title || "Lansman Başlık"}
                           </h3>
                           <p className="text-gray-500 text-sm mb-4">
