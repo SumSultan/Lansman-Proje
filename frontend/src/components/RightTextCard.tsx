@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import RightTextCardSection from "../sections/rightTextCardSlider-section"; // RightTextCardSection'u import et
 
 interface RightTextCardFormProps {
   text: string;
@@ -20,7 +21,8 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
-  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -100,9 +102,7 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">
-            Desteklenmeyen dosya formatı: {fileType}
-          </p>
+          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
         );
     }
   };
@@ -192,6 +192,22 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
         </p>
       </div>
 
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
+      </div>
+
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -240,6 +256,21 @@ const RightTextCardForm: React.FC<RightTextCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* RightTextCardSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <RightTextCardSection text={text} media={media} />
         </div>
       )}
     </div>

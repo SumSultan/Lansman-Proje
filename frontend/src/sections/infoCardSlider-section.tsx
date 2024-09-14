@@ -25,7 +25,7 @@ const InfoCardSliderSection: React.FC<InfoCardSliderSectionProps> = ({
   return (
     <div
       ref={ref}
-      className={`relative p-5 mb-5 rounded-lg max-w-[1600px] mx-auto h-[500px] transition-all duration-1000 ease-in-out ${
+      className={`relative max-w-[1600px] mx-auto h-auto transition-all duration-1000 ease-in-out ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       }`}
     >
@@ -43,7 +43,7 @@ const InfoCardSliderSection: React.FC<InfoCardSliderSectionProps> = ({
           return (
             <div
               key={index}
-              className={`flex-none w-[350px] h-[280px] text-left bg-white rounded-lg p-5 border border-[#fafafa] transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-lg ${
+              className={`flex-none w-[350px] h-[280px] text-left bg-white rounded-lg p-4 border border-[#fafafa] transition-transform duration-500 ease-in-out hover:scale-105 hover:shadow-lg ${
                 inView
                   ? "opacity-100 translate-y-0 animate-fadeIn"
                   : "opacity-0 translate-y-5"

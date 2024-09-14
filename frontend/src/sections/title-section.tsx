@@ -14,7 +14,7 @@ const TitleSection: React.FC<TitleSectionProps> = ({ title }) => {
   return (
     <div
       ref={ref}
-      className={`w-[1292px] h-[10px] bg-white rounded-[20px] flex justify-start items-center px-[30px] my-[92px] mx-auto transition-transform duration-1000 ease-out ${
+      className={`w-[1292px] h-[50px] bg-white rounded-[20px] flex justify-start items-center px-[30px] mx-auto transition-transform duration-1000 ease-out ${
         inView ? "translate-y-0 opacity-100" : "translate-y-[50%] opacity-0"
       }`}
     >

@@ -23,8 +23,6 @@ const FullTextSection: React.FC<FullTextSectionProps> = ({ text }) => {
     padding: "20px",
     alignItems: "center", // İçerikleri dikeyde ortala
     textAlign: "center", // Metin hizalaması ortalı
-    marginTop: "5px", // Üst marjin 10px
-    marginBottom: "5px", // Alt marjin 10px
     marginLeft: "auto", // Ortalanmış hizalama
     marginRight: "auto", // Ortalanmış hizalama
     transition: "transform 1.3s ease, box-shadow 1.3s ease, opacity 1.3s ease", // Geçiş efektleri

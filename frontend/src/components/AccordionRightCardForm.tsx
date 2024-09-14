@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import AccordionRightCardSection from "../sections/AccordionRightCard-section";
 
 interface AccordionRightCardFormProps {
   media: string;
@@ -36,6 +37,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
   const [errors, setErrors] = useState<string[]>(accordian.map(() => ""));
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
 
@@ -165,6 +167,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
   );
 
   return (
+    
     <div className="flex flex-col items-center">
       <div
         className="p-4 border rounded-lg"
@@ -198,6 +201,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               outline: "none",
             }}
           />
+          
           <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "2px" }}>
             <span style={{ color: "red" }}>*</span>530x790(px)
           </p>
@@ -210,6 +214,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
               ref={modalRef}
               className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative"
             >
+              
               <button
                 type="button"
                 className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
@@ -231,6 +236,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
                     boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
                   }}
                 />
+                
               </div>
               <div className="grid grid-cols-4 gap-4">
                 {filteredMediaList.map((mediaItem, index) => (
@@ -249,6 +255,7 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
                     {/* Lansman adı gösteriliyor */}
                   </div>
                 ))}
+                
               </div>
               <button
                 type="button"
@@ -345,6 +352,31 @@ const AccordionRightCardForm: React.FC<AccordionRightCardFormProps> = ({
           </button>
         </div>
       </div>
+      {/* Önizleme Butonu */}
+<div className="w-full mt-4">
+          <button
+            type="button"
+            className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+            style={{ width: "100px", textAlign: "center", marginLeft: "3%" }}
+            onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+          >
+            Önizleme
+          </button>
+        </div>
+
+        {/* Section'un %50 küçültülmüş önizleme alanı */}
+        {isPreviewOpen && (
+          <div
+            style={{
+              transform: "scale(0.5)", // %50 küçültme
+              transformOrigin: "top left", // Sol üstten küçült
+              margin: "20px auto",
+              width: "100%",
+            }}
+          >
+            <AccordionRightCardSection media={media} accordian={accordian} />
+          </div>
+        )}
     </div>
   );
 };

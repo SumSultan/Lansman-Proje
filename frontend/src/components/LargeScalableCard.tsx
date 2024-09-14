@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react"; // useRef eklendi
 import axios from "axios";
+import LargeScalableSection from "../sections/largeScalableCard-section"; // LargeScalableSection'u import et
 
 interface LargeScalableCardFormProps {
   media: string;
@@ -13,6 +14,7 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
   const modalRef = useRef<HTMLDivElement>(null); // useRef eklendi
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -135,6 +137,20 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
         </p>
       </div>
 
+      {/* Önizleme Butonu */}
+      <button
+        type="button"
+        className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+        style={{
+          width: "100px", // Önizleme butonunun genişliği
+          marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          textAlign: "center", // Metni ortalıyoruz
+        }}
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme butonuna basılınca tetiklenen işlev
+      >
+        Önizleme
+      </button>
+
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -187,6 +203,22 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* LargeScalableSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100vw", // Orijinal genişliğin yarısı
+            height: "50vh", // Orijinal yüksekliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <LargeScalableSection media={media} />
         </div>
       )}
     </div>

@@ -28,8 +28,6 @@ const LeftTextCardSection: React.FC<LeftTextCardSectionProps> = ({
     backgroundColor: "#fafafa",
     borderRadius: "15px",
     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
-    marginBottom: "50px", // Alt boşluk 50px
-    marginTop: "50px", // Üst boşluk 50px yapıldı
     width: "1040px", // Sabit genişlik
     height: "600px", // Sabit yükseklik
     margin: "0 auto", // Kartı ortalıyoruz

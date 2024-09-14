@@ -88,7 +88,6 @@ const FullScreenCardSection: React.FC<FullScreenCardSectionProps> = ({
     <div
       ref={ref}
       style={{
-        margin: "40px 0", // Alttan ve üsten 40px margin eklendi
         ...swiperStyle,
         ...(inView ? visibleSwiperStyle : {}),
       }}

@@ -1,13 +1,14 @@
-import React, { ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
+import TitleSection from "../sections/title-section"; // TitleSection'u import ediyoruz
 
-// Prop interface'ini tanımlayın
 interface TitleFormProps {
   title: string;
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// TitleForm bileşeni
 const TitleForm: React.FC<TitleFormProps> = ({ title, onTitleChange }) => {
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
+
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col">
@@ -26,6 +27,37 @@ const TitleForm: React.FC<TitleFormProps> = ({ title, onTitleChange }) => {
           style={{ width: "423px", height: "50px", marginLeft: "3%" }}
         />
       </div>
+
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%",
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* TitleSection'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <TitleSection title={title} />
+        </div>
+      )}
     </div>
   );
 };

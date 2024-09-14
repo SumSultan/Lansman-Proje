@@ -70,7 +70,6 @@ const TwinCardSection: React.FC<TwinCardSectionProps> = ({
       style={{
         display: "flex",
         justifyContent: "center",
-        padding: "20px",
         backgroundColor: "#ffffff",
         borderRadius: "8px",
         marginBottom: "20px",

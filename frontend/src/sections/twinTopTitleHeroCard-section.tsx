@@ -89,7 +89,6 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
   return (
     <div
       className="flex justify-between p-5 bg-white rounded-lg mb-5 w-full max-w-[1440px] mx-auto px-5 gap-x-5" // px-5 sağ-sol boşluk ve gap-x-5 arası boşluk
-      style={{ margin: "40px 0" }} // Alttan ve üsten 40px margin eklendi
     >
       {/* Left Card */}
       <div

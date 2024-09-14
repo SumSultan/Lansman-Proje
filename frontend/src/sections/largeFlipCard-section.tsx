@@ -152,8 +152,6 @@ const LargeFlipCardSection: React.FC<LargeFlipCardSectionProps> = ({
     opacity: inView ? 1 : 0,
     transform: inView ? "translateY(0)" : "translateY(10px)",
     transition: "opacity 1.3s ease, transform 1.3s ease",
-    marginTop: "5px",
-    marginBottom: "5px",
   };
 
   return (

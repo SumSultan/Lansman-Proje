@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useEffect, useState, useRef } from "react";
 import axios from "axios";
+import LargeCardSection from "../sections/largeCard-section"; // LargeCardSection'u import et
 
 interface LargeCardFormProps {
   media: string;
@@ -17,6 +18,7 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -37,10 +39,7 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -56,7 +55,6 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
     };
   }, [isModalOpen]);
 
-  // Medya dosyalarının önizlemesi için fonksiyon
   const renderFilePreview = (file: string) => {
     const fileType = file.split(".").pop()?.toLowerCase();
     const previewStyle = "w-full h-32 object-cover mb-2";
@@ -101,12 +99,10 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
     }
   };
 
-  // Medya ve lansman adına göre filtreleme işlemi
-  const filteredMediaList = mediaList.filter(
-    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  const filteredMediaList = mediaList.filter((mediaItem) =>
+    mediaItem.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Medya seçildikten sonra state'i güncelleyen fonksiyon
   const handleMediaSelect = (selectedMedia: string) => {
     onMediaChange({
       target: { value: selectedMedia },
@@ -117,10 +113,7 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col" style={{ paddingLeft: "3%" }}>
-        <label
-          className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
-          style={{ width: "413px", height: "16px", lineHeight: "15.62px" }}
-        >
+        <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
           Medya
         </label>
         <input
@@ -131,17 +124,13 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
-        {/* Altına uyarı mesajı ekliyoruz */}
         <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
           <span style={{ color: "red" }}>*</span>960x630(px)
         </p>
       </div>
 
       <div className="flex flex-col" style={{ paddingLeft: "3%" }}>
-        <label
-          className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
-          style={{ width: "413px", height: "16px", lineHeight: "15.62px" }}
-        >
+        <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
           URL
         </label>
         <input
@@ -149,10 +138,23 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
           placeholder="  URL Alanı"
           value={url}
           onChange={onUrlChange}
-          className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px] placeholder:text-[#667085] placeholder:text-[16px] placeholder:leading-[24px]" // Medya alanıyla aynı stil yapıldı
+          className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
       </div>
+
+      <button
+        type="button"
+        className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+        style={{
+          width: "100px",  // Önizleme butonunun genişliğini 100px yaptık
+          marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          textAlign: "center", // Önizleme yazısını ortaladık
+        }}
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)}  // Önizleme butonu
+      >
+        Önizleme
+      </button>
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -168,8 +170,6 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
-
-            {/* Arama çubuğu eklendi */}
             <div className="mb-4">
               <input
                 type="text"
@@ -206,6 +206,22 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* LargeCardSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "525px", // %50'lik genişlik
+            height: "325px", // %50'lik yükseklik
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <LargeCardSection media={media} url={url} />
         </div>
       )}
     </div>

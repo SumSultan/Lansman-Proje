@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import FullScreenCardSection from "../sections/fullScreenCard-section";
 
 interface FullScreenCardSliderFormProps {
   cards: {
@@ -39,6 +40,7 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
   const [searchTerm, setSearchTerm] = useState<string>(""); 
   const [logoSearchTerm, setLogoSearchTerm] = useState<string>(""); 
   const modalRef = useRef<HTMLDivElement>(null);
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
 
@@ -383,7 +385,31 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
           </div>
         </div>
       )}
+      {/* Önizleme Butonu - Sol tarafa hizalanmış */}
+      <div className="w-full mt-4 flex justify-start">
+        <button
+          type="button"
+          className="ml-10 bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{ width: "120px", textAlign: "center" }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
 
+      {/* Section'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "20px auto",
+            width: "100%",
+          }}
+        >
+          <FullScreenCardSection items={cards} />
+        </div>
+      )}
       {/* Logo Medya Modal */}
       {isLogoMediaModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -413,6 +439,8 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                 }}
               />
             </div>
+
+          
             <div className="grid grid-cols-4 gap-4">
               {filteredLogoMediaList.map((mediaItem, index) => (
                 <div

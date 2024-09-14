@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import TopTextCardSection from "../sections/topTextCard-section"; // TopTextCardSection'u import et
 
 interface TopTextCardFormProps {
   text: string;
@@ -14,11 +15,10 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<
-    { key: string; launchName: string }[]
-  >([]);
+  const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -42,10 +42,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -174,6 +171,22 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
         </p>
       </div>
 
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
+      </div>
+
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div
@@ -221,6 +234,21 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* TopTextCardSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <TopTextCardSection text={text} media={media} />
         </div>
       )}
     </div>

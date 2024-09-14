@@ -20,7 +20,7 @@ const CTASection: React.FC<CTASectionProps> = ({
   return (
     <div
       ref={ref}
-      className={`w-[1400px] h-[124px] bg-white rounded-[20px] border-2 border-[#fafafa] flex justify-between items-center px-[50px] mx-auto my-[50px] transition-all duration-500 ease-in-out transform ${
+      className={`w-[1400px] h-[124px] bg-white rounded-[20px] border-2 border-[#fafafa] flex justify-between items-center px-[50px] mx-auto transition-all duration-500 ease-in-out transform ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } hover:scale-105 hover:shadow-lg`}
     >

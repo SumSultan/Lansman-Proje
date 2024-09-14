@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import HeaderSection from "../sections/header-section"; // Eğer HeaderSection aynı klasörde ise
 
 interface HeaderFormProps {
   title: string;
@@ -18,6 +19,7 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
   const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrol durumu
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -117,9 +119,7 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
   );
 
   return (
-    <div className="flex flex-row justify-between space-y-6 p-4"> 
-      {/* Tüm Header ve Form elemanlarını içeren yatay bir flex container */}
-      
+    <div className="flex flex-col justify-between space-y-6 p-4">
       <div className="flex flex-col space-y-4" style={{ paddingLeft: "3%" }}>
         <div>
           <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
@@ -134,7 +134,7 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
             style={{ width: "423px", height: "50px" }}
           />
         </div>
-        
+
         <div>
           <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
             Logo Medya
@@ -147,10 +147,20 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
             className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
             style={{ width: "423px", height: "50px" }}
           />
-          {/* Altına uyarı mesajı ekliyoruz */}
           <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
             <span style={{ color: "red" }}>*</span>200x200(px)
           </p>
+        </div>
+
+        <div className="flex space-x-4">
+          {/* Yeni Önizleme Butonu */}
+          <button
+            type="button"
+            className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+            onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+          >
+            Önizleme
+          </button>
         </div>
 
         {isModalOpen && (
@@ -209,7 +219,28 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
             </div>
           </div>
         )}
-      </div>  
+      </div>
+
+      {/* Önizleme Kartı */}
+      {isPreviewOpen && (
+        <div
+          className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-center"  // Decreased padding
+          style={{
+            width: "80%", // Reduced the background width
+            height: "200px", // Reduced the background height
+          }}
+        >
+          <div
+            style={{
+              width: "1500px",  // Genişliği artırdım
+              height: "160px",  // Yüksekliği artırdım
+              transform: "scale(0.5)", // %50 küçültme
+            }}
+          >
+            <HeaderSection title={title} logoMedia={logoMedia} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

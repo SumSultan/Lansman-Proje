@@ -32,7 +32,7 @@ const MiniCardSliderSection: React.FC<MiniCardSliderSectionProps> = ({
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       }`}
       style={{
-        padding: "20px",
+        padding: "0px", // Yukarıdan ve aşağıdan boşluğu kaldırmak için padding sıfırlandı
         width: "1900px",
         height: "250px",
         overflow: "hidden",

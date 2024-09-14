@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
+import FullTextSection from "../sections/fullText-section"; // FullTextSection'u import et
 
 interface FullTextFormProps {
   text: string;
@@ -8,6 +9,7 @@ interface FullTextFormProps {
 const FullTextForm: React.FC<FullTextFormProps> = ({ text, onTextChange }) => {
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
 
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const newText = e.target.value;
@@ -49,12 +51,42 @@ const FullTextForm: React.FC<FullTextFormProps> = ({ text, onTextChange }) => {
         />
         {/* Hata mesajı ve karakter sayacı */}
         {error && (
-          <p className="text-red-500 text-xs mt-1">{error}</p> // Hata mesajı
+          <p className="text-red-500 text-xs mt-1" style={{ marginLeft: "20%" }}>{error}</p> // Hata mesajı soldan %20
         )}
-        <div className="text-right text-sm text-gray-500 mt-1">
+        <div className="text-right text-sm text-gray-500 mt-1" style={{ marginLeft: "20%" }}>
           {charCount}/450 {/* Karakter sayacını gösteriyoruz */}
         </div>
       </div>
+
+      {/* Önizleme Butonu */}
+      <button
+        type="button"
+        className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+        style={{
+          width: "100px", // Önizleme butonunun genişliği
+          marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          textAlign: "center", // Metni ortalıyoruz
+        }}
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme butonuna basılınca tetiklenen işlev
+      >
+        Önizleme
+      </button>
+
+      {/* FullTextSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+            height: "auto", // Yüksekliği içerikle beraber ayarlayalım
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <FullTextSection text={text} />
+        </div>
+      )}
     </div>
   );
 };

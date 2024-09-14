@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import TwinCardSection from "../sections/twinCard-section"; // TwinCardSection'u import ediyoruz
 
 interface TwinCardFormProps {
   rightMedia: string;
@@ -21,6 +22,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
   const [isLeftModalOpen, setIsLeftModalOpen] = useState<boolean>(false);
   const [rightSearchTerm, setRightSearchTerm] = useState<string>(""); // Sağ medya için arama
   const [leftSearchTerm, setLeftSearchTerm] = useState<string>(""); // Sol medya için arama
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -31,7 +33,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
         const response = await axios.get(`${apiUrl}/media/list`);
         const mediaNames = response.data.map((media: any) => ({
           key: media.Key,
-          launchName: media.launchName || "", // Lansman adını ekledik
+          launchName: media.launchName || "",
         }));
         setMediaList(mediaNames);
       } catch (error) {
@@ -45,10 +47,7 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
   // Modal dışında tıklanırsa kapatma işlevi
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsRightModalOpen(false);
         setIsLeftModalOpen(false);
       }
@@ -184,6 +183,37 @@ const TwinCardForm: React.FC<TwinCardFormProps> = ({
           <span style={{ color: "red" }}>*</span>440x700(px)
         </p>
       </div>
+
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%",
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* TwinCardSection'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <TwinCardSection rightMedia={rightMedia} leftMedia={leftMedia} />
+        </div>
+      )}
 
       {/* Sağ Medya Modal */}
       {isRightModalOpen && (

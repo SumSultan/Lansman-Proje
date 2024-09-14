@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import LargePopupCardSection from "../sections/largePopupCard-section"; // Import section component
 
 interface LargePopupCardFormProps {
   media: string;
@@ -13,6 +14,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // State for preview toggle
   const modalRef = useRef<HTMLDivElement>(null); // useRef eklendi
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -56,7 +58,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
     const previewStyle = "w-full h-32 object-cover mb-2";
 
     switch (fileType) {
-      // Yaygın resim formatları
       case "jpg":
       case "jpeg":
       case "png":
@@ -73,7 +74,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
           />
         );
 
-      // Yaygın video formatları
       case "mp4":
       case "webm":
       case "ogg":
@@ -100,8 +100,8 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   };
 
   // Medya ve lansman adına göre filtreleme işlemi
-  const filteredMediaList = mediaList.filter(
-    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  const filteredMediaList = mediaList.filter((mediaItem) =>
+    mediaItem.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   // Medya seçildikten sonra media state'ini güncelleyen fonksiyon
@@ -114,8 +114,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
 
   return (
     <div className="flex flex-col space-y-6 p-4" style={{ paddingLeft: "6%" }}>
-      {" "}
-      {/* Soldan %6 boşluk eklendi */}
       <div className="flex flex-col">
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
@@ -126,16 +124,29 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
         <input
           type="text"
           readOnly
-          value={media || "  Medya Seç"} // Başlangıçta "Medya Seç" yazısı olacak
+          value={media || "  Medya Seç"}
           onClick={() => setIsModalOpen(true)} // Modalı açıyoruz
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
           style={{ width: "423px", height: "50px" }}
         />
-        {/* Altına uyarı mesajı ekliyoruz */}
         <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
           <span style={{ color: "red" }}>*</span>960x630(px)
         </p>
       </div>
+
+      <button
+        type="button"
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Toggle preview state
+        className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+        style={{
+          width: "100px",
+          marginLeft: "3%",
+          textAlign: "center", // Matching text center alignment
+        }}
+      >
+        Önizleme
+      </button>
+
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -188,6 +199,22 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* Preview of LargePopupCardSection */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // Scale down to 50%
+            transformOrigin: "top left", // Anchor scaling from top left
+            margin: "0 auto", // Center the preview
+            width: "525px", // Matching card width at 50% scale
+            height: "325px", // Matching card height at 50% scale
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <LargePopupCardSection media={media} />
         </div>
       )}
     </div>

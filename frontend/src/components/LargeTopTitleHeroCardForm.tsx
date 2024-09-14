@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import LargeTopTitleHeroCardSection from "../sections/largeTopTitleHeroCard-section";
 
 interface LargeTopTitleHeroCardFormProps {
   title: string;
@@ -30,6 +31,7 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme state'i
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -50,10 +52,7 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -243,6 +242,43 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
           <span style={{ color: "red" }}>*</span>1050x650(px)
         </p>
       </div>
+
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%", 
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* Section'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", 
+            width: "100%", 
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <LargeTopTitleHeroCardSection
+            title={title}
+            subTitle={subTitle}
+            buttonText={buttonText}
+            buttonUrl={buttonUrl}
+            media={media}
+          />
+        </div>
+      )}
 
       {/* Modal */}
       {isModalOpen && (

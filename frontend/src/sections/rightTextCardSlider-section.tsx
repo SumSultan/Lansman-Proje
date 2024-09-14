@@ -28,8 +28,6 @@ const RightTextCardSection: React.FC<RightTextCardSectionProps> = ({
     backgroundColor: "#fafafa",
     borderRadius: "15px",
     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.1)",
-    marginBottom: "50px",
-    marginTop: "50px", // Üst margin 40px yapıldı
     width: "1040px", // Sabit genişlik
     height: "600px", // Sabit yükseklik
     margin: "0 auto", // Kartı ortalıyoruz

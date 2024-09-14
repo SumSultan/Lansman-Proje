@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from "react";
+import CTASection from "../sections/cta-section"; // CTASection'u import ediyoruz
 
-// Props interface'i tanımlıyoruz
 interface CTACardFormProps {
   title: string;
   buttonText: string;
@@ -10,7 +10,6 @@ interface CTACardFormProps {
   onButtonUrlChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-// Bileşeni güncelliyoruz
 const CTACardForm: React.FC<CTACardFormProps> = ({
   title,
   buttonText,
@@ -19,6 +18,8 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
   onButtonTextChange,
   onButtonUrlChange,
 }) => {
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
+
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col">
@@ -39,7 +40,7 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
           placeholder="Başlık Alanı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           style={{
-            width: "423px", // Genişlik 423px yapıldı
+            width: "423px",
             marginLeft: "3%",
             height: "50px",
             borderRadius: "8px",
@@ -67,7 +68,7 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
           placeholder="Buton Adı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           style={{
-            width: "423px", // Genişlik 423px yapıldı
+            width: "423px",
             marginLeft: "3%",
             height: "50px",
             borderRadius: "8px",
@@ -95,7 +96,7 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
           placeholder="Buton Url Alanı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           style={{
-            width: "423px", // Genişlik 423px yapıldı
+            width: "423px",
             marginLeft: "3%",
             height: "50px",
             borderRadius: "8px",
@@ -105,6 +106,41 @@ const CTACardForm: React.FC<CTACardFormProps> = ({
           }}
         />
       </div>
+
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%",
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* CTASection'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <CTASection
+            title={title}
+            buttonText={buttonText}
+            buttonUrl={buttonUrl}
+          />
+        </div>
+      )}
     </div>
   );
 };

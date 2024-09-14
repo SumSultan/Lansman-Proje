@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import TwinFlipCardSection from "../sections/twinFlipCard-section";
 
 interface TwinFlipCardFormProps {
   rightFrontMedia: string;
@@ -22,6 +23,7 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
   onLeftFrontMediaChange,
   onLeftBackMediaChange,
 }) => {
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
   const [mediaList, setMediaList] = useState<
     { key: string; launchName: string }[]
   >([]);
@@ -282,6 +284,41 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
           </p>
         </div>
       </div>
+{/* Önizleme Butonu */}
+<div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%", 
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* Section'un %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", 
+            width: "100%", 
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <TwinFlipCardSection
+            rightFrontMedia={rightFrontMedia}
+            rightBackMedia={rightBackMedia}
+            leftFrontMedia={leftFrontMedia}
+            leftBackMedia={leftBackMedia}
+          />
+        </div>
+      )}
 
       {/* Right Front Media Modal */}
       {isRightFrontModalOpen && (

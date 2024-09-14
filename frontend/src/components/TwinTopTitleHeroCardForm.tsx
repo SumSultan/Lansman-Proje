@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import TwinTopTitleHeroCardSection from "../sections/twinTopTitleHeroCard-section";
 
 interface TwinTopTitleHeroCardFormProps {
   rightMedia: string;
@@ -49,6 +50,7 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
   const [mediaList, setMediaList] = useState<
     { Key: string; launchName: string }[]
   >([]);
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
   const [isRightMediaModalOpen, setIsRightMediaModalOpen] =
     useState<boolean>(false);
   const [isLeftMediaModalOpen, setIsLeftMediaModalOpen] =
@@ -418,6 +420,42 @@ const TwinTopTitleHeroCardForm: React.FC<TwinTopTitleHeroCardFormProps> = ({
               ))}
             </div>
           </div>
+        </div>
+      )}
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4 flex justify-start">
+        <button
+          type="button"
+          className="ml-10 bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{ width: "120px", textAlign: "center" }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
+      </div>
+
+      {/* %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)",
+            transformOrigin: "top left",
+            margin: "20px auto",
+            width: "100%",
+          }}
+        >
+          <TwinTopTitleHeroCardSection
+            rightMedia={rightMedia}
+            rightTitle={rightTitle}
+            rightSubTitle={rightSubTitle}
+            rightButtonText={rightButtonText}
+            rightButtonUrl={rightButtonUrl}
+            leftMedia={leftMedia}
+            leftTitle={leftTitle}
+            leftSubTitle={leftSubTitle}
+            leftButtonText={leftButtonText}
+            leftButtonUrl={leftButtonUrl}
+          />
         </div>
       )}
     </div>

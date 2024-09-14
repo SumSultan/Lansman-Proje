@@ -24,7 +24,7 @@ const BannerSection: React.FC<BannerSectionProps> = ({
 
   // Kartın başlangıç stili (animasyon öncesi)
   const sectionStyle: React.CSSProperties = {
-    width: "1600px",
+    width: "1270px",
     maxWidth: "100%",
     height: "300px",
     position: "relative",
@@ -75,7 +75,8 @@ const BannerSection: React.FC<BannerSectionProps> = ({
   return (
     <div
       ref={ref}
-      className="flex justify-center items-center w-full h-[100vh]"
+      className="flex justify-center items-center w-full"
+      style={{ height: "auto", padding: "0" }} // height: 100vh kaldırıldı, padding: 0 yapıldı
     >
       <div
         // Kartın inView görünürlük animasyonu

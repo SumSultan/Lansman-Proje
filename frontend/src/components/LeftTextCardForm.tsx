@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import LeftTextCardSection from "../sections/leftTextCard-section"; // LeftTextCardSection'u import et
 
 interface LeftTextCardFormProps {
   text: string;
@@ -14,13 +15,12 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<
-    { key: string; launchName: string }[]
-  >([]); // Medya ve lansman adını tutacak yapı
+  const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]); // Medya ve lansman adını tutacak yapı
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
   const modalRef = useRef<HTMLDivElement>(null); // Modal için useRef
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -44,10 +44,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
+      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
         setIsModalOpen(false);
       }
     };
@@ -99,11 +96,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
           </video>
         );
       default:
-        return (
-          <p className="text-center">
-            Desteklenmeyen dosya formatı: {fileType}
-          </p>
-        );
+        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
     }
   };
 
@@ -185,6 +178,22 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
       </div>
 
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
+      </div>
+
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -217,12 +226,8 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
                   className="cursor-pointer"
                 >
                   {renderFilePreview(mediaItem.key)}
-                  <p className="text-center text-sm truncate">
-                    {mediaItem.key}
-                  </p>
-                  <p className="text-center text-sm truncate">
-                    {mediaItem.launchName}
-                  </p>
+                  <p className="text-center text-sm truncate">{mediaItem.key}</p>
+                  <p className="text-center text-sm truncate">{mediaItem.launchName}</p>
                 </div>
               ))}
             </div>
@@ -234,6 +239,21 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* LeftTextCardSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <LeftTextCardSection text={text} media={media} />
         </div>
       )}
     </div>

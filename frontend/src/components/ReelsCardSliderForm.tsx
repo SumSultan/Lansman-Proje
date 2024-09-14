@@ -1,5 +1,6 @@
 import React, { useState, useEffect, ChangeEvent, useRef } from "react";
 import axios from "axios";
+import ReelsCardSliderSection from "../sections/reelsCardSlider-section"; // ReelsCardSliderSection'u import et
 
 interface ReelsCardSliderFormProps {
   items: {
@@ -25,10 +26,11 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
 }) => {
   const [mediaList, setMediaList] = useState<
     { key: string; launchName: string }[]
-  >([]); // Medya listesi, medya ve lansman adı içeriyor
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
-  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state eklendi
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
+  const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -39,7 +41,7 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
         const response = await axios.get(`${apiUrl}/media/list`);
         const mediaNames = response.data.map((media: any) => ({
           key: media.Key,
-          launchName: media.launchName || "", // Lansman adı yoksa boş bırakılıyor
+          launchName: media.launchName || "",
         }));
         setMediaList(mediaNames);
       } catch (error) {
@@ -108,9 +110,7 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">
-            Desteklenmeyen dosya formatı: {fileType}
-          </p>
+          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
         );
     }
   };
@@ -124,7 +124,6 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
     }
   };
 
-  // Filtreleme işlemi
   const filteredMediaList = mediaList.filter(
     (mediaItem) =>
       mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -192,7 +191,6 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
                   marginBottom: "8px",
                 }}
               />
-              {/* Yıldız işaretli medya ölçüsü ekleniyor */}
               <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
                 <span style={{ color: "red" }}>*</span>min 400x700(px)
               </p>
@@ -230,10 +228,10 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             onClick={onAddItem}
             className="bg-[#F3F4F6] text-[#1F2937] border border-[#D1D5DB] rounded-lg shadow-xs focus:outline-none hover:bg-[#E5E7EB] transition-transform duration-150 ease-in-out"
             style={{
-              width: "130px", // Genişlik ayarlandı
-              height: "48px", // Boyut büyütüldü
+              width: "130px",
+              height: "48px",
               padding: "12px 16px",
-              borderRadius: "12px", // Kenar yuvarlama artırıldı
+              borderRadius: "12px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -254,6 +252,23 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
         </div>
       </div>
 
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4"> {/* Butonu hizalamak için genişliği tam tutuyoruz */}
+  <button
+    type="button"
+    className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+    style={{
+      width: "100px",
+      textAlign: "center",
+      marginLeft: "4.6%", // Sola %4.6 uzaklık
+    }}
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+      >
+        Önizleme
+      </button>
+      </div>
+
+      {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
           <div
@@ -301,6 +316,21 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
               Kapat
             </button>
           </div>
+        </div>
+      )}
+
+      {/* ReelsCardSliderSection'ın %50 küçültülmüş önizleme alanı */}
+      {isPreviewOpen && (
+        <div
+          style={{
+            transform: "scale(0.5)", // %50 küçültme
+            transformOrigin: "top left", // Sol üstten küçült
+            margin: "0 auto", // Ortalamak için
+            width: "100%", // Orijinal genişliğin yarısı
+          }}
+          className="p-2 rounded-lg mt-6"
+        >
+          <ReelsCardSliderSection items={items} />
         </div>
       )}
     </div>

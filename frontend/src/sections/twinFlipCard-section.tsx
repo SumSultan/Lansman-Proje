@@ -119,7 +119,6 @@ const TwinFlipCardSection: React.FC<TwinFlipCardSectionProps> = ({
         padding: "20px",
         backgroundColor: "#ffffff",
         borderRadius: "8px",
-        margin: "40px 0", // Alttan ve üsten 40px margin eklendi
         width: "100%",
         height: "750px",
       }}
