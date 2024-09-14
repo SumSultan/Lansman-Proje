@@ -181,7 +181,9 @@ const Launches = () => {
           </h2>
 
           {/* Filtreleme butonları */}
-          <div className="flex space-x-4 mt-6"> {/* mt-6 ile sadece üst boşluk eklendi */}
+          <div className="flex space-x-4 mt-6">
+            {" "}
+            {/* mt-6 ile sadece üst boşluk eklendi */}
             <button
               onClick={() => handleFilterChange("all")}
               className={`${

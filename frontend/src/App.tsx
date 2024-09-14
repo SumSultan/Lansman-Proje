@@ -15,10 +15,11 @@ import PreviewPage from "./pages/previewPage"; // PreviewPage bileşenini içe a
 import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarın
 import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
-import LaunchPage from "./pages/launchAndFragmanControl"; // launchAndFragmanControl bileşenini ekleyin
 import HomePage from "./pages/homelist";
+import LaunchLayout from "./pages/LaunchLayout";
 
 const App = () => {
+  
   return (
     <Router>
       <div className="flex h-screen bg-white">
@@ -90,8 +91,8 @@ const App = () => {
               />
               {/* Launch kontrolü ve yönlendirme */}
               <Route
-                path="/lansman/:launchId" // Yeni rota için launch kontrolü
-                element={<LaunchPage />}
+                path="/lansman/:launchUrl" // Yeni rota için launch kontrolü
+                element={<LaunchLayout />}
               />
 
               {/* Error route */}
