@@ -1,8 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Launches from "./pages/launches";
 import CreateLaunch from "./pages/CreateLaunch";
 import GalleryList from "./pages/GalleryList";
@@ -90,7 +86,7 @@ const App = () => {
               />
               {/* Launch kontrolü ve yönlendirme */}
               <Route
-                path="/lansman/:launchUrl" // Yeni rota için launch kontrolü
+                path="/:launchUrl" // Yeni rota için launch kontrolü
                 element={<LaunchLayout />}
               />
 
