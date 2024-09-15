@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import {FaArrowLeft } from "react-icons/fa"; // FaArrowLeft simgesini içe aktar
+import { FaArrowLeft } from "react-icons/fa"; // FaArrowLeft simgesini içe aktar
 import useSeoSettingsStore from "../zustands/useSeoSettingsStore";
 import { useParams, useNavigate } from "react-router-dom";
 import NavBar from "../components/NavBar";
@@ -17,6 +17,7 @@ const SeoSettings = () => {
   );
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [formError, setFormError] = useState<string>(""); // Form hatalarını göstermek için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -106,10 +107,24 @@ const SeoSettings = () => {
   };
 
   const handleSave = async () => {
+    if (
+      !seoSettings.title ||
+      !seoSettings.launchUrl ||
+      !seoSettings.keywords ||
+      !seoSettings.description ||
+      !seoSettings.socialImage
+    ) {
+      setFormError("Lütfen tüm zorunlu alanları doldurunuz.");
+      return;
+    }
+
     try {
       await saveSeoSettings();
+      setFormError(""); // Başarılı olduğunda hata mesajını sıfırla
       alert("Veriler başarıyla kaydedildi!");
-    } catch (error) {}
+    } catch (error) {
+      setFormError("Veriler kaydedilirken bir hata oluştu.");
+    }
   };
 
   const navigateToDesignSettings = () => {
@@ -133,7 +148,7 @@ const SeoSettings = () => {
             borderRadius: "7px", // Buton köşe yuvarlatma küçültüldü
           }}
         >
-          <FaArrowLeft className="mr-1" /> {/* Geri dönüş simgesi daha yakın */}
+          <FaArrowLeft className="mr-1" /> {/* Geri dönüş simgesi daha yakın */}{" "}
           Tasarım Ayarlarına Dön
         </button>
         {/* Başlık bölümü */}
@@ -150,6 +165,8 @@ const SeoSettings = () => {
           >
             SEO Ayarları
           </h2>
+          {formError && <p className="text-red-500">{formError}</p>}{" "}
+          {/* Form hata mesajı */}
           <div className="grid grid-cols-2 gap-[28px] mt-4">
             {/* Başlık */}
             <div>
@@ -173,6 +190,7 @@ const SeoSettings = () => {
                   width: "413px",
                   height: "50px",
                 }}
+                required
               />
             </div>
             {/* Lansman URL */}
@@ -197,6 +215,7 @@ const SeoSettings = () => {
                   width: "413px",
                   height: "50px",
                 }}
+                required
               />
             </div>
             {/* Anahtar Kelime */}
@@ -221,6 +240,7 @@ const SeoSettings = () => {
                   width: "413px",
                   height: "50px",
                 }}
+                required
               />
             </div>
             {/* Açıklama */}
@@ -245,6 +265,7 @@ const SeoSettings = () => {
                   width: "413px",
                   height: "50px",
                 }}
+                required
               />
             </div>
             {/* Sayfa Sosyal Paylaşım Görseli */}
@@ -271,6 +292,7 @@ const SeoSettings = () => {
                   }}
                   readOnly
                   onClick={() => setIsModalOpen(true)}
+                  required
                 />
               </div>
 

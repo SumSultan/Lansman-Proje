@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEye } from "react-icons/fa";
 import MediaFormModal from "./MediaFormModal";
 import NavBar from "../components/NavBar";
 
@@ -15,6 +15,8 @@ const GalleryList = () => {
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
   const [searchTerm, setSearchTerm] = useState(""); // Arama çubuğu için yeni state
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null); // Seçilen medya dosyasını tutmak için state
+  const [isViewModalVisible, setIsViewModalVisible] = useState(false); // Görüntüleme modalı için state
 
   const apiUrl = import.meta.env.VITE_BE_URL;
 
@@ -41,6 +43,11 @@ const GalleryList = () => {
     setIsModalVisible(false);
   };
 
+  const closeViewModal = () => {
+    setIsViewModalVisible(false);
+    setSelectedMedia(null);
+  };
+
   const handleDelete = async (key: string) => {
     try {
       await axios.delete(`${apiUrl}/media`, {
@@ -55,6 +62,11 @@ const GalleryList = () => {
 
   const handleMediaUploaded = () => {
     fetchMedia(); // Medya yüklendiğinde medya listesini yenile
+  };
+
+  const handleViewMedia = (mediaKey: string) => {
+    setSelectedMedia(mediaKey); // Seçilen medya dosyasını ayarla
+    setIsViewModalVisible(true); // Modalı aç
   };
 
   // Arama fonksiyonu
@@ -140,6 +152,8 @@ const GalleryList = () => {
               <th className="p-2">Medya Tipi</th>
               <th className="p-2">Oluşturma Tarihi</th>
               <th className="p-2 text-center">Sil</th>
+              <th className="p-2 text-center">Görüntüle</th>{" "}
+              {/* Görüntüle başlığı */}
             </tr>
           </thead>
           <tbody>
@@ -161,10 +175,53 @@ const GalleryList = () => {
                     <FaTrash className="mr-1" /> Sil
                   </button>
                 </td>
+                <td className="p-2 text-center">
+                  <button
+                    className="text-blue-500 flex items-center justify-center"
+                    onClick={() => handleViewMedia(media.Key)} // Görüntüle butonuna tıklandığında modal aç
+                  >
+                    <FaEye className="mr-1" /> Görüntüle
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+
+        {/* Görüntüleme Modali */}
+        {isViewModalVisible && selectedMedia && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-2xl max-h-full overflow-auto">
+              <h2 className="text-xl font-semibold mb-4">Medya Görüntüle</h2>
+              <div className="flex justify-center items-center">
+                {/* Dosya uzantısına göre render işlemi */}
+                {selectedMedia.split(".").pop()?.toLowerCase() === "mp4" ? (
+                  <video
+                    controls
+                    className="w-full max-h-[500px]"
+                    src={`${
+                      import.meta.env.VITE_AWS_S3_BUCKET_URL
+                    }/${selectedMedia}`}
+                  />
+                ) : (
+                  <img
+                    className="w-full max-h-[500px]"
+                    src={`${
+                      import.meta.env.VITE_AWS_S3_BUCKET_URL
+                    }/${selectedMedia}`}
+                    alt="Görüntü"
+                  />
+                )}
+              </div>
+              <button
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+                onClick={closeViewModal}
+              >
+                Kapat
+              </button>
+            </div>
+          </div>
+        )}
 
         {isModalVisible && (
           <MediaFormModal
