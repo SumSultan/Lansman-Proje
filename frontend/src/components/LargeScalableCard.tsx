@@ -36,7 +36,10 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
   // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -102,8 +105,8 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
   };
 
   // Medya ve lansman adına göre filtreleme işlemi
-  const filteredMediaList = mediaList.filter((mediaItem) =>
-    mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) => mediaItem.toLowerCase().includes(searchTerm.toLowerCase()) // Arama terimine göre filtreleme
   );
 
   // Medya seçildikten sonra media state'ini güncelleyen fonksiyon
@@ -215,7 +218,7 @@ const LargeScalableCardForm: React.FC<LargeScalableCardFormProps> = ({
             margin: "0 auto", // Ortalamak için
             width: "100vw", // Orijinal genişliğin yarısı
             height: "50vh", // Orijinal yüksekliğin yarısı
-            marginLeft:"15%",
+            marginLeft: "17%",
           }}
           className="p-2 rounded-lg mt-6"
         >

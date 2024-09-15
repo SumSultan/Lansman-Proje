@@ -189,7 +189,9 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] text-[#4B5563]"
               />
               {/* Yıldız işaretli medya ölçüsü ekleniyor */}
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>100x100(px)
               </p>
             </div>
@@ -314,7 +316,7 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
           style={{
             width: "100px",
             textAlign: "center",
-            marginLeft: "3%",
+            marginLeft: "4.3%",
           }}
           onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme butonuna basılınca açılıp kapanıyor
         >
@@ -330,8 +332,8 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
-            height:"150px",
-            marginLeft:"40%",
+            height: "150px",
+            marginLeft: "25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

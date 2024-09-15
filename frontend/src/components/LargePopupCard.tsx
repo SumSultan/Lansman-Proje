@@ -36,7 +36,10 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   // Modal dışında tıklanırsa kapatmayı sağlayan fonksiyon
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -113,11 +116,11 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col space-y-6 p-4" style={{ paddingLeft: "6%" }}>
+    <div className="flex flex-col space-y-6 p-4" style={{ paddingLeft: "4.5%" }}> {/* Sola doğru kaydırıldı */}
       <div className="flex flex-col">
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
-          style={{ width: "413px", height: "16px", lineHeight: "15.62px" }}
+          style={{ width: "413px", height: "16px", lineHeight: "15.62px", textAlign: "left" }} // Başlığı sola hizala
         >
           Medya
         </label>
@@ -127,7 +130,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
           value={media || "  Medya Seç"}
           onClick={() => setIsModalOpen(true)} // Modalı açıyoruz
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
-          style={{ width: "423px", height: "50px" }}
+          style={{ width: "423px", height: "50px", paddingLeft: "10px", marginBottom: "4px" }} // Daha sola yakınlaştırıldı
         />
         <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
           <span style={{ color: "red" }}>*</span>960x630(px)
@@ -140,7 +143,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
         className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
         style={{
           width: "100px",
-          textAlign: "center", // Matching text center alignment
+          textAlign: "center",
         }}
       >
         Önizleme
@@ -209,7 +212,8 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
             transformOrigin: "top left", // Anchor scaling from top left
             margin: "0 auto", // Center the preview
             width: "525px", // Matching card width at 50% scale
-            height: "425px", // Matching card height at 50% scale
+            height: "375px", // Matching card height at 50% scale
+            marginLeft: "23%",
           }}
           className="p-2 rounded-lg mt-6"
         >

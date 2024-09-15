@@ -18,7 +18,9 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [searchTerm, setSearchTerm] = useState<string>(""); // Arama çubuğu için state
-  const [selectedMediaType, setSelectedMediaType] = useState<"front" | "back" | null>(null); // Ön ve arka medya tipi için state
+  const [selectedMediaType, setSelectedMediaType] = useState<
+    "front" | "back" | null
+  >(null); // Ön ve arka medya tipi için state
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // State for preview toggle
   const modalRef = useRef<HTMLDivElement>(null); // useRef eklendi
 
@@ -40,7 +42,10 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -93,7 +98,9 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
         );
     }
   };
@@ -163,11 +170,11 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
         type="button"
         className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
         style={{
-          width: "100px",  // Önizleme butonunun genişliği
-          marginLeft: "3%",  // Buton soldan %3 uzaklıkta
-          textAlign: "center",  // Önizleme yazısını ortaladık
+          width: "100px", // Önizleme butonunun genişliği
+          marginLeft: "3%", // Buton soldan %3 uzaklıkta
+          textAlign: "center", // Önizleme yazısını ortaladık
         }}
-        onClick={() => setIsPreviewOpen(!isPreviewOpen)}  // Önizleme butonu
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme butonu
       >
         Önizleme
       </button>
@@ -175,7 +182,10 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
       {/* Medya Modalı */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div ref={modalRef} className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative"
+          >
             <button
               type="button"
               className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
@@ -203,7 +213,11 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
 
             <div className="grid grid-cols-4 gap-4">
               {filteredMediaList.map((mediaItem, index) => (
-                <div key={index} onClick={() => handleMediaSelect(mediaItem)} className="cursor-pointer">
+                <div
+                  key={index}
+                  onClick={() => handleMediaSelect(mediaItem)}
+                  className="cursor-pointer"
+                >
                   {renderFilePreview(mediaItem)}
                   <p className="text-center text-sm truncate">{mediaItem}</p>
                 </div>
@@ -224,13 +238,13 @@ const LargeFlipCardForm: React.FC<LargeFlipCardFormProps> = ({
       {/* LargeFlipCardSection'ın %50 küçültülmüş önizleme alanı */}
       {isPreviewOpen && (
         <div
-          className="p-2 rounded-lg mt-2"  // "p-2" ve "mt-2" ile boşluklar küçültüldü
+          className="p-2 rounded-lg mt-2" // "p-2" ve "mt-2" ile boşluklar küçültüldü
           style={{
             transform: "scale(0.5)", // Scale down to 50%
             transformOrigin: "top left", // Anchor scaling from top left
             margin: "0 auto", // Center the preview
-            height:"290px",
-            marginLeft:"10%",
+            height: "310px",
+            marginLeft: "27%",
           }}
         >
           <LargeFlipCardSection frontMedia={frontMedia} backMedia={backMedia} />

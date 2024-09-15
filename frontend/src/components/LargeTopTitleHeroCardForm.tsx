@@ -52,7 +52,10 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -238,7 +241,14 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
             marginLeft: "3%", // Input alanını da soldan %3 kaydırıyoruz
           }}
         />
-        <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px", marginLeft: "3%" }}>
+        <p
+          style={{
+            color: "#667085",
+            fontSize: "12px",
+            marginTop: "4px",
+            marginLeft: "3%",
+          }}
+        >
           <span style={{ color: "red" }}>*</span>1050x650(px)
         </p>
       </div>
@@ -251,7 +261,7 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
           style={{
             width: "100px",
             textAlign: "center",
-            marginLeft: "3%", 
+            marginLeft: "3%",
           }}
           onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
         >
@@ -265,10 +275,10 @@ const LargeTopTitleHeroCardForm: React.FC<LargeTopTitleHeroCardFormProps> = ({
           style={{
             transform: "scale(0.5)", // %50 küçültme
             transformOrigin: "top left", // Sol üstten küçült
-            margin: "0 auto", 
-            width: "100%", 
-            height:"320px",
-            marginLeft:"8%",
+            margin: "0 auto",
+            width: "100%",
+            height: "320px",
+            marginLeft: "25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -23,27 +23,14 @@ import SpaceSection from "../sections/SpaceSection";
 import ReelsBottomCardSection from "../sections/ReelsBottomCardSection";
 import BottomTextCardSection from "../sections/BottomTextCardSection";
 import BannerSection from "../sections/BannerSection";
+import NavBar from "../sections/NavBar";
 
 const LaunchPage: React.FC<any> = (components: any) => {
   console.log("components", components);
 
   return (
     <div className="relative overflow-x-hidden">
-      <div className="p-5">
-        <div
-          className="font-bold text-4xl flex justify-between items-center"
-          style={{
-            color: "#970928",
-            fontFamily: "Poppins, sans-serif",
-            fontWeight: 520,
-            letterSpacing: "-0.1em",
-            lineHeight: "1.1",
-            marginTop: "20px",
-          }}
-        >
-          DAMISE
-        </div>
-      </div>
+      <NavBar />
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-4 max-w-full bg-white">
         {components.components.map((component: any) => {
           // Sadece inTrailer true olan component'leri gÃ¶ster

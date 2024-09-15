@@ -39,7 +39,10 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -147,11 +150,11 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
         type="button"
         className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
         style={{
-          width: "100px",  // Önizleme butonunun genişliğini 100px yaptık
+          width: "100px", // Önizleme butonunun genişliğini 100px yaptık
           marginLeft: "3%", // Buton soldan %3 uzaklıkta
           textAlign: "center", // Önizleme yazısını ortaladık
         }}
-        onClick={() => setIsPreviewOpen(!isPreviewOpen)}  // Önizleme butonu
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme butonu
       >
         Önizleme
       </button>
@@ -211,21 +214,20 @@ const LargeCardForm: React.FC<LargeCardFormProps> = ({
 
       {/* LargeCardSection'ın %50 küçültülmüş önizleme alanı */}
       {isPreviewOpen && (
-  <div
-    style={{
-      transform: "scale(0.5) translateX(50%)", // %50 küçült ve soldan %50 uzaklaştır
-      transformOrigin: "top left", // Sol üst köşeden küçültme ve kaydırmayı başlat
-      margin: "0", // Otomatik margin kaldırıldı
-      width: "525px", // Kart genişliğinin %50'si
-      height: "325px", // Kart yüksekliğinin %50'si
-      marginLeft:"10%",
-    }}
-    className="p-2 rounded-lg mt-6 max-w-2xl"
-  >
-    <LargeCardSection media={media} url={url} />
-  </div>
-)}
-
+        <div
+          style={{
+            transform: "scale(0.5) translateX(50%)", // %50 küçült ve soldan %50 uzaklaştır
+            transformOrigin: "top left", // Sol üst köşeden küçültme ve kaydırmayı başlat
+            margin: "0", // Otomatik margin kaldırıldı
+            width: "525px", // Kart genişliğinin %50'si
+            height: "325px", // Kart yüksekliğinin %50'si
+            marginLeft: "25%",
+          }}
+          className="p-2 rounded-lg mt-6 max-w-2xl"
+        >
+          <LargeCardSection media={media} url={url} />
+        </div>
+      )}
     </div>
   );
 };

@@ -16,7 +16,9 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
   onTitleChange,
   onLogoMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrol durumu
@@ -43,7 +45,10 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -114,8 +119,8 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
 
   const filteredMediaList = mediaList.filter(
     (mediaItem) =>
-      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) || 
-      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase()) 
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -187,7 +192,7 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
                   style={{
                     width: "300px",
                     height: "40px",
-                    boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)", 
+                    boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
                   }}
                 />
               </div>
@@ -223,25 +228,25 @@ const HeaderForm: React.FC<HeaderFormProps> = ({
 
       {/* Önizleme Kartı */}
       {isPreviewOpen && (
-  <div
-    className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-center items-center"
-    style={{
-      width: "750px", // Arka plan genişliği
-      height: "100px", // Arka plan yüksekliğini 100px yaptım
-    }}
-  >
-    <div
-      style={{
-        width: "1500px",  // Genişlik
-        height: "100px",  // İçerik yüksekliği
-        transform: "scale(0.5)", // %50 küçült
-      }}
-    >
-      <HeaderSection title={title} logoMedia={logoMedia} />
-    </div>
-  </div>
-)}
-
+        <div
+          className="bg-gray-100 p-4 rounded-lg shadow-lg flex justify-center items-center"
+          style={{
+            width: "750px", // Arka plan genişliği
+            height: "100px", // Arka plan yüksekliğini 100px yaptım
+            marginLeft: "17%",
+          }}
+        >
+          <div
+            style={{
+              width: "1500px", // Genişlik
+              height: "100px", // İçerik yüksekliği
+              transform: "scale(0.5)", // %50 küçült
+            }}
+          >
+            <HeaderSection title={title} logoMedia={logoMedia} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

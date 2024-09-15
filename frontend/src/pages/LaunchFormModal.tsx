@@ -6,23 +6,24 @@ import axios from "axios";
 const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
   const [mediaList, setMediaList] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>(""); // Uyarı mesajı için state ekliyoruz
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
 
   const {
-    launchId, // store'dan launchId'yi alıyoruz
-    deleteLaunch, // store'dan silme işlemi için deleteLaunch fonksiyonunu alıyoruz
-    resetLaunchData, // formu sıfırlamak için
-    launchName = "", // Varsayılan değer olarak boş string veriyoruz
-    language = "EN", // Dil varsayılan olarak EN olabilir
-    groupNumber = "", // Varsayılan değer boş string
+    launchId,
+    deleteLaunch,
+    resetLaunchData,
+    launchName = "",
+    language = "EN",
+    groupNumber = "",
     companyName = "",
     companyLogo = "",
     launchDate = "",
     endDate = "",
     sequenceNumber = "",
-    isActive = false, // Varsayılan olarak false
+    isActive = false,
     showOnHomepage = false,
     updateLaunchField,
     submitLaunchData,
@@ -76,7 +77,35 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
     updateLaunchField(name, value);
   };
 
+  const validateForm = () => {
+    // Ay kısmını kontrol et
+    const startDateParts = launchDate.split(".");
+    const endDateParts = endDate.split(".");
+    const startMonth = Number(startDateParts[1]);
+    const endMonth = Number(endDateParts[1]);
+
+    if (startMonth > 12 || endMonth > 12) {
+      setErrorMessage("Ay kısmı 12'den büyük olamaz.");
+      return false;
+    }
+
+    if (
+      !launchName ||
+      !companyName ||
+      !companyLogo ||
+      !launchDate ||
+      !endDate
+    ) {
+      setErrorMessage("Lütfen gerekli tüm alanları doldurunuz.");
+      return false;
+    }
+    setErrorMessage(""); // Eğer sorun yoksa hatayı sıfırla
+    return true;
+  };
+
   const handleSubmit = () => {
+    if (!validateForm()) return; // Doğrulama başarısızsa işlemi durdur
+
     const { launchId } = useLaunchStore.getState();
 
     if (launchId) {
@@ -92,9 +121,9 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
   const handleDelete = async () => {
     if (launchId) {
       try {
-        await deleteLaunch(launchId); // Silme işlemi
-        resetLaunchData(); // Formu sıfırla
-        onClose(); // Modal'ı kapat
+        await deleteLaunch(launchId);
+        resetLaunchData();
+        onClose();
       } catch (error) {
         console.error("Launch silinirken bir hata oluştu:", error);
       }
@@ -208,7 +237,7 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
                 value: launchDate,
                 type: "text",
                 component: ReactInputMask,
-                mask: "99.99.9999", // Tarih formatı maskelemesi
+                mask: "99.99.9999",
                 maskChar: "_",
               },
               {
@@ -217,7 +246,7 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
                 value: endDate,
                 type: "text",
                 component: ReactInputMask,
-                mask: "99.99.9999", // Tarih formatı maskelemesi
+                mask: "99.99.9999",
                 maskChar: "_",
               },
               {
@@ -235,7 +264,7 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
                   options,
                   onClick,
                   isReadOnly,
-                  component: Component = "input", // input mask için bileşen ayarlaması
+                  component: Component = "input",
                   mask,
                   maskChar,
                 },
@@ -267,8 +296,8 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
                       value={value || ""}
                       onClick={onClick}
                       onChange={handleChange}
-                      mask={mask || "99.99.9999"} // Mask tanımlı değilse varsayılan mask
-                      maskChar={maskChar || "_"} // MaskChar tanımlı değilse varsayılan karakter
+                      mask={mask || "99.99.9999"}
+                      maskChar={maskChar || "_"}
                       placeholder="gg.aa.yyyy"
                       readOnly={isReadOnly}
                       className="mt-1 p-2 border border-gray-300 rounded"
@@ -290,6 +319,10 @@ const NewLaunchFormModal: React.FC<any> = ({ onClose }) => {
               )
             )}
           </div>
+
+          {errorMessage && (
+            <div className="text-red-500 font-poppins mt-4">{errorMessage}</div>
+          )}
 
           <div className="mt-4 flex items-center space-x-6">
             <label

@@ -105,7 +105,7 @@ export interface DeployDesignStore {
   clearDeployDesign: () => void;
 }
 
-const apiUrl = import.meta.env.VITE_BE_URL || '';
+const apiUrl = import.meta.env.VITE_BE_URL || "";
 
 const fetchDeployDesign = async (
   set: (state: Partial<DeployDesignStore>) => void,
@@ -124,21 +124,25 @@ const fetchDeployDesign = async (
   }
 };
 
-const fetchLaunch = async (
-  set: (state: Partial<DeployDesignStore>) => void,
-  launchUrl: string
-): Promise<void> => {
+const fetchLaunch = async (set: any, launchUrl: string): Promise<void> => {
   set({ loading: true, error: null });
   try {
     const response = await axios.get(
       `${apiUrl}/launch/by-launch-url/${launchUrl}`
     );
     console.log("Launch API Response:", response.data);
+
+    // Sıralama işlemi burada yapılıyor
+    const sortedComponents = response.data.components.sort(
+      (a: any, b: any) => a.sequenceNumber - b.sequenceNumber
+    );
+
     set({
       launch: response.data.launch,
-      components: response.data.components,
+      components: sortedComponents, // Sıralanmış komponentleri set ediyoruz
       loading: false,
     });
+    return response.data;
   } catch (error: any) {
     set({ error: error.response?.data || "An error occurred", loading: false });
   }

@@ -37,8 +37,8 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
   const [isMediaModalOpen, setIsMediaModalOpen] = useState<boolean>(false);
   const [isLogoMediaModalOpen, setIsLogoMediaModalOpen] =
     useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>(""); 
-  const [logoSearchTerm, setLogoSearchTerm] = useState<string>(""); 
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [logoSearchTerm, setLogoSearchTerm] = useState<string>("");
   const modalRef = useRef<HTMLDivElement>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
 
@@ -217,7 +217,9 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   borderRadius: "8px",
                 }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>1250x750(px)
               </p>
             </div>
@@ -292,7 +294,9 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
                   borderRadius: "8px",
                 }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>80x80(px)
               </p>
             </div>
@@ -386,7 +390,7 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
         </div>
       )}
       {/* Önizleme Butonu - Sol tarafa hizalanmış */}
-      <div className="w-full mt-4 flex justify-start">
+      <div className="w-full mt-4 flex justify-start"style={{marginLeft:"1.5%"}}>
         <button
           type="button"
           className="ml-10 bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
@@ -405,8 +409,8 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "20px auto",
             width: "100%",
-            height:"350px",
-            marginLeft:"25%",
+            height: "350px",
+            marginLeft: "25%",
           }}
         >
           <FullScreenCardSection items={cards} />
@@ -442,7 +446,6 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
               />
             </div>
 
-          
             <div className="grid grid-cols-4 gap-4">
               {filteredLogoMediaList.map((mediaItem, index) => (
                 <div

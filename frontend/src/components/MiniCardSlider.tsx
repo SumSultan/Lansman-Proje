@@ -14,7 +14,10 @@ interface MiniCardSliderFormProps {
   onButtonTextChange: (id: number, e: ChangeEvent<HTMLInputElement>) => void;
   onButtonUrlChange: (id: number, e: ChangeEvent<HTMLInputElement>) => void;
   onTextChange: (id: number, e: ChangeEvent<HTMLInputElement>) => void;
-  onBackgroundMediaChange: (id: number, e: ChangeEvent<HTMLInputElement>) => void;
+  onBackgroundMediaChange: (
+    id: number,
+    e: ChangeEvent<HTMLInputElement>
+  ) => void;
   onLogoMediaChange: (id: number, e: ChangeEvent<HTMLSelectElement>) => void;
   onAddCard: () => void;
   onRemoveCard: (id: number) => void;
@@ -30,10 +33,14 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
   onAddCard,
   onRemoveCard,
 }) => {
-  const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedCardId, setSelectedCardId] = useState<number | null>(null);
-  const [selectedMediaType, setSelectedMediaType] = useState<"logoMedia" | "backgroundMedia" | null>(null);
+  const [selectedMediaType, setSelectedMediaType] = useState<
+    "logoMedia" | "backgroundMedia" | null
+  >(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const modalRef = useRef<HTMLDivElement>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false);
@@ -59,7 +66,10 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -88,7 +98,13 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
       case "svg":
       case "webp":
       case "avif":
-        return <img src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${file}`} alt={file} className={previewStyle} />;
+        return (
+          <img
+            src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${file}`}
+            alt={file}
+            className={previewStyle}
+          />
+        );
       case "mp4":
       case "webm":
       case "ogg":
@@ -97,21 +113,32 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
       case "mkv":
         return (
           <video controls className={previewStyle}>
-            <source src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${file}`} type={`video/${fileType}`} />
+            <source
+              src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${file}`}
+              type={`video/${fileType}`}
+            />
             Tarayıcınız bu videoyu oynatmayı desteklemiyor.
           </video>
         );
       default:
-        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
+        return (
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
+        );
     }
   };
 
   const handleMediaSelect = (selectedMedia: string) => {
     if (selectedCardId !== null && selectedMediaType !== null) {
       if (selectedMediaType === "logoMedia") {
-        onLogoMediaChange(selectedCardId, { target: { value: selectedMedia } } as ChangeEvent<HTMLSelectElement>);
+        onLogoMediaChange(selectedCardId, {
+          target: { value: selectedMedia },
+        } as ChangeEvent<HTMLSelectElement>);
       } else if (selectedMediaType === "backgroundMedia") {
-        onBackgroundMediaChange(selectedCardId, { target: { value: selectedMedia } } as ChangeEvent<HTMLInputElement>);
+        onBackgroundMediaChange(selectedCardId, {
+          target: { value: selectedMedia },
+        } as ChangeEvent<HTMLInputElement>);
       }
       setIsModalOpen(false);
     }
@@ -154,12 +181,17 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
               >
                 Mini Card {card.id}
               </h3>
-              <button onClick={() => onRemoveCard(card.id)} className="text-[#6B7280] hover:text-[#374151] text-xl">
+              <button
+                onClick={() => onRemoveCard(card.id)}
+                className="text-[#6B7280] hover:text-[#374151] text-xl"
+              >
                 ×
               </button>
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Buton Adı</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Buton Adı
+              </label>
               <input
                 type="text"
                 value={card.buttonText}
@@ -170,7 +202,9 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Buton Url</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Buton Url
+              </label>
               <input
                 type="text"
                 value={card.buttonUrl}
@@ -181,7 +215,9 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Arka Plan Medya</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Arka Plan Medya
+              </label>
               <input
                 type="text"
                 readOnly
@@ -194,12 +230,16 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] text-[#4B5563]"
                 style={{ width: "288px", height: "50px", borderRadius: "8px" }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>400x230(px)
               </p>
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Yazı Alanı</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Yazı Alanı
+              </label>
               <input
                 type="text"
                 value={card.text}
@@ -210,7 +250,9 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
               />
             </div>
             <div className="mb-4">
-              <label className="block text-sm text-[#1F2937] mb-1">Logo Alanı</label>
+              <label className="block text-sm text-[#1F2937] mb-1">
+                Logo Alanı
+              </label>
               <input
                 type="text"
                 readOnly
@@ -223,7 +265,9 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
                 className="block w-full p-3 border border-[#D1D5DB] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#6366F1] text-[#4B5563]"
                 style={{ width: "288px", height: "50px", borderRadius: "8px" }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>50x50(px)
               </p>
             </div>
@@ -274,8 +318,8 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "20px auto",
             width: "100%",
-            height:"200px",
-            marginLeft:"5%",
+            height: "130px",
+            marginLeft: "13%",
           }}
         >
           <MiniCardSliderSection cards={cards} />
@@ -284,7 +328,10 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div ref={modalRef} className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative"
+          >
             <button
               type="button"
               className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
@@ -303,10 +350,18 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
             />
             <div className="grid grid-cols-4 gap-4">
               {filteredMediaList.map((mediaItem, index) => (
-                <div key={index} onClick={() => handleMediaSelect(mediaItem.key)} className="cursor-pointer">
+                <div
+                  key={index}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
+                  className="cursor-pointer"
+                >
                   {renderFilePreview(mediaItem.key)}
-                  <p className="text-center text-sm truncate">{mediaItem.key}</p>
-                  <p className="text-center text-sm truncate">{mediaItem.launchName}</p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>

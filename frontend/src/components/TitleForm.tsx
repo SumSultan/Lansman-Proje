@@ -52,6 +52,7 @@ const TitleForm: React.FC<TitleFormProps> = ({ title, onTitleChange }) => {
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
+            marginLeft: "30%",
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
 import Launches from "./pages/launches";
 import CreateLaunch from "./pages/CreateLaunch";
@@ -17,9 +16,9 @@ import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
 import HomePage from "./pages/homelist";
 import LaunchLayout from "./pages/LaunchLayout";
+import Home from "./pages/homepage";
 
 const App = () => {
-  
   return (
     <Router>
       <div className="flex h-screen bg-white">
@@ -28,7 +27,7 @@ const App = () => {
             <Routes>
               {/* Kök yol ("/") için yönlendirme ekliyoruz */}
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Navigate to="/launches" replace />} />
+              <Route path="/" element={<Home />} />
 
               <Route
                 path="/homelist"

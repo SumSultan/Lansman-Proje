@@ -15,7 +15,9 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<{ key: string; launchName: string }[]>([]); // Medya ve lansman adını tutacak yapı
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]); // Medya ve lansman adını tutacak yapı
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
@@ -44,7 +46,10 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -96,7 +101,11 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
           </video>
         );
       default:
-        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
+        return (
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
+        );
     }
   };
 
@@ -172,7 +181,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             outline: "none",
           }}
         />
-        <div className="text-right text-sm text-gray-500 mt-1">
+        <div className="text-right text-sm text-gray-500 mt-1"style={{marginRight:"61.7%"}}>
           {charCount}/325
         </div>
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -226,8 +235,12 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
                   className="cursor-pointer"
                 >
                   {renderFilePreview(mediaItem.key)}
-                  <p className="text-center text-sm truncate">{mediaItem.key}</p>
-                  <p className="text-center text-sm truncate">{mediaItem.launchName}</p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -250,8 +263,8 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
-            height:"300px",
-            marginLeft:"10%",
+            height: "300px",
+            marginLeft: "25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

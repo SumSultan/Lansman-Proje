@@ -43,7 +43,10 @@ const BannerForm: React.FC<BannerFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -95,7 +98,11 @@ const BannerForm: React.FC<BannerFormProps> = ({
           </video>
         );
       default:
-        return <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>;
+        return (
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
+        );
     }
   };
 
@@ -107,8 +114,8 @@ const BannerForm: React.FC<BannerFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col space-y-6 p-4">
-      <div className="flex flex-col">
+    <div className="flex flex-col space-y-6 p-4 ">
+      <div className="flex flex-col"style={{paddingLeft: "3%"}}>
         <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
           Buton
         </label>
@@ -119,10 +126,11 @@ const BannerForm: React.FC<BannerFormProps> = ({
           placeholder="Buton Adı"
           className="block text-gray-900 bg-white border border-gray-300 sm:text-sm"
           style={{ width: "423px", height: "50px", borderRadius: "8px" }}
+          
         />
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col"style={{paddingLeft: "3%"}}>
         <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
           Buton Url
         </label>
@@ -136,7 +144,7 @@ const BannerForm: React.FC<BannerFormProps> = ({
         />
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex flex-col"style={{paddingLeft: "3%"}}>
         <label className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1">
           Medya
         </label>
@@ -158,9 +166,9 @@ const BannerForm: React.FC<BannerFormProps> = ({
         onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Toggle preview
         className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
         style={{
-          width: "100px",  // Önizleme butonunun genişliği
-          marginLeft: "3%",  // Buton hizalaması
-          textAlign: "center",  // Metin ortalama
+          width: "100px", // Önizleme butonunun genişliği
+          marginLeft: "3%", // Buton hizalaması
+          textAlign: "center", // Metin ortalama
         }}
       >
         Önizleme
@@ -169,7 +177,10 @@ const BannerForm: React.FC<BannerFormProps> = ({
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
-          <div ref={modalRef} className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-lg p-4 w-3/4 max-h-full overflow-y-auto relative"
+          >
             <button
               type="button"
               className="absolute top-2 right-2 text-[#970928] bg-white rounded-full p-2 hover:bg-gray-100 transition transform duration-150 ease-in-out"
@@ -180,7 +191,11 @@ const BannerForm: React.FC<BannerFormProps> = ({
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
             <div className="grid grid-cols-4 gap-4">
               {mediaList.map((mediaItem, index) => (
-                <div key={index} onClick={() => handleMediaSelect(mediaItem)} className="cursor-pointer">
+                <div
+                  key={index}
+                  onClick={() => handleMediaSelect(mediaItem)}
+                  className="cursor-pointer"
+                >
                   {renderFilePreview(mediaItem)}
                   <p className="text-center text-sm truncate">{mediaItem}</p>
                 </div>
@@ -203,13 +218,17 @@ const BannerForm: React.FC<BannerFormProps> = ({
           style={{
             transform: "scale(0.5)", // %50 küçültme
             transformOrigin: "top left", // Sol üstten küçültme
-            width:"635px",
-            height:"150px",
-            marginLeft:"25%",
+            width: "635px",
+            height: "150px",
+            marginLeft: "35%",
           }}
           className="p-2 rounded-lg"
         >
-          <BannerSection buttonText={buttonText} buttonUrl={buttonUrl} media={media} />
+          <BannerSection
+            buttonText={buttonText}
+            buttonUrl={buttonUrl}
+            media={media}
+          />
         </div>
       )}
     </div>

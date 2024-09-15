@@ -10,7 +10,7 @@ const OrderSettings = () => {
   const {
     deployDesign,
     fetchDeployDesign,
-    clearDeployDesign, // Clear function added to reset the deployDesign state
+    clearDeployDesign,
     updatePreviewStatus,
     updateInTrailerStatus,
     deleteDeployDesign,
@@ -19,12 +19,12 @@ const OrderSettings = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPreviewEnabled, setIsPreviewEnabled] = useState(false);
+  const [savedMessages, setSavedMessages] = useState<string[]>([]);
 
-  // Yeni launchId geldiğinde önce eski veriyi temizle, sonra yeniyi yükle
   useEffect(() => {
     if (launchId) {
-      clearDeployDesign(); // Clear the old state when launchId changes
-      fetchDeployDesign(launchId); // Fetch new deploy design data
+      clearDeployDesign();
+      fetchDeployDesign(launchId);
     }
   }, [launchId]);
 
@@ -36,6 +36,15 @@ const OrderSettings = () => {
       setIsPreviewEnabled(false);
     }
   }, [deployDesign]);
+
+  const showSavedMessage = () => {
+    const newMessageId = `saved-${Date.now()}`;
+    setSavedMessages((prev) => [newMessageId, ...prev]);
+
+    setTimeout(() => {
+      setSavedMessages((prev) => prev.filter((msg) => msg !== newMessageId));
+    }, 2000);
+  };
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -55,7 +64,7 @@ const OrderSettings = () => {
 
   const navigateToPreview = () => {
     if (launchId) {
-      navigate(`/preview/${launchId}`); // launchId'ye göre PreviewPage'e yönlendirir
+      navigate(`/preview/${launchId}`);
     } else {
       console.error("Launch ID mevcut değil!");
     }
@@ -67,7 +76,6 @@ const OrderSettings = () => {
   ) => {
     if (!launchId) return;
 
-    // Önce local state'i güncelliyoruz ki anlık değişikliği görebilelim
     useDeployDesignStore.setState((state) => ({
       deployDesign: state.deployDesign.map((item) =>
         item._id === deployDesignId
@@ -77,14 +85,13 @@ const OrderSettings = () => {
     }));
 
     try {
-      // Backend'deki durumu güncelliyoruz
       await updateInTrailerStatus(
         launchId,
         deployDesignId,
         !currentInTrailerStatus
       );
-      // Güncellenmiş verileri backend'den yeniden çekiyoruz
       fetchDeployDesign(launchId);
+      showSavedMessage();
     } catch (error) {
       console.error(`Error updating inTrailer status`, error);
     }
@@ -107,6 +114,8 @@ const OrderSettings = () => {
       } else {
         fetchDeployDesign(launchId);
       }
+
+      showSavedMessage();
     } catch (error) {
       console.error(`Error deleting deployDesign`, error);
     }
@@ -133,6 +142,7 @@ const OrderSettings = () => {
       );
 
       fetchDeployDesign(launchId);
+      showSavedMessage();
     } catch (error) {
       console.error("Error updating sequence number", error);
     }
@@ -145,10 +155,10 @@ const OrderSettings = () => {
   const togglePreview = async () => {
     if (!launchId) return;
     try {
-      await updatePreviewStatus(launchId, !isPreviewEnabled); // Backend'e yeni durumu gönderiyoruz
-      setIsPreviewEnabled(!isPreviewEnabled); // Local state güncelleniyor
-      // Sunucudan güncel veriyi tekrar çek
+      await updatePreviewStatus(launchId, !isPreviewEnabled);
+      setIsPreviewEnabled(!isPreviewEnabled);
       fetchDeployDesign(launchId);
+      showSavedMessage();
     } catch (error) {
       console.error("Preview durumu güncellenemedi:", error);
     }
@@ -189,7 +199,7 @@ const OrderSettings = () => {
 
               <button
                 onClick={navigateToPreview}
-                disabled={!isPreviewEnabled} // Disabled when preview is off
+                disabled={!isPreviewEnabled}
                 className={`px-4 py-2 text-sm font-poppins rounded-lg ${
                   isPreviewEnabled
                     ? "bg-blue-500 text-white"
@@ -283,6 +293,59 @@ const OrderSettings = () => {
             launchId={launchId}
           />
         </div>
+
+        <style>
+          {`
+            .saved-message {
+              position: fixed;
+              background-color: #38a169;
+              color: white;
+              padding: 10px 20px;
+              border-radius: 5px;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+              opacity: 0;
+              transform: translateY(50px);
+              animation: slideIn 0.5s ease-out forwards, fadeOut 1.5s ease forwards 1.5s;
+            }
+
+            @keyframes slideIn {
+              0% {
+                opacity: 0;
+                transform: translateY(50px);
+              }
+              100% {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+
+            @keyframes fadeOut {
+              0% {
+                opacity: 1;
+                transform: translateY(0);
+              }
+              100% {
+                opacity: 0;
+                transform: translateY(-20px);
+              }
+            }
+          `}
+        </style>
+
+        {/* Saved Message */}
+        {savedMessages.map((msg, index) => (
+          <div
+            key={msg}
+            className="saved-message"
+            style={{
+              bottom: `${4 + (savedMessages.length - 1 - index) * 60}px`, // Her mesaj yukarı kaydırılır
+              right: "4px",
+              animationDelay: `${index * 0.1}s`, // Her mesaj için gecikme
+            }}
+          >
+            Kaydedildi
+          </div>
+        ))}
       </div>
     </div>
   );
