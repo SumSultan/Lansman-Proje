@@ -30,7 +30,7 @@ import NavBar from "../sections/NavBar";
 const HomePage: React.FC = () => {
   const { homepageLaunch, components, getHomepageData } = useHomePageStore();
 
-  // Verileri çek
+  // Verileri Ã§ek
   useEffect(() => {
     getHomepageData();
   }, [getHomepageData]);
@@ -42,38 +42,6 @@ const HomePage: React.FC = () => {
   return (
     <div className="relative overflow-x-hidden">
       <NavBar />
-      <div
-        className="absolute top-0 right-0 p-5 flex items-center"
-        style={{ marginRight: "15%" }}
-      >
-        <div className="mr-5">
-          <button
-            style={{
-              backgroundColor: "#970928",
-              color: "white",
-              padding: "5px 10px",
-              marginRight: "px",
-              borderRadius: "5px",
-              border: "none",
-              cursor: "pointer",
-              fontSize: "0.875rem",
-            }}
-            onClick={() => (window.location.href = "/login")}
-          >
-            Login 'e Git
-          </button>
-          <p
-            style={{
-              color: "black",
-              marginTop: "5px",
-              textAlign: "right",
-              fontSize: "0.75rem", // Yazı boyutu küçültüldü
-            }}
-          >
-            Geçici olarak yapılmıştır.
-          </p>
-        </div>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-4 max-w-full bg-white">
         {components.map((component: any) => {
