@@ -31,7 +31,7 @@ const LargeTopTitleHeroCardSection: React.FC<
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            borderRadius: "8px",
+            borderRadius: "8px", // Kartla aynı şekilde yuvarlatılmış köşeler
           }}
         >
           <source src={mediaUrl} type={`video/${mediaType}`} />
@@ -47,7 +47,7 @@ const LargeTopTitleHeroCardSection: React.FC<
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          borderRadius: "8px",
+          borderRadius: "8px", // Kartla aynı şekilde yuvarlatılmış köşeler
         }}
       />
     );
@@ -56,11 +56,12 @@ const LargeTopTitleHeroCardSection: React.FC<
   return (
     <div
       ref={ref}
-      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1500 ease-in-out transform ${
+      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1000 ease-in-out transform ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } hover:scale-105 hover:shadow-lg`}
       style={{
         backgroundColor: "#ffffff", // Arka plan rengi (isteğe bağlı)
+        borderRadius: "8px", // Kartın tamamı yuvarlatılmış köşelere sahip
       }}
     >
       {/* Medya görseli veya videosu */}
@@ -72,6 +73,7 @@ const LargeTopTitleHeroCardSection: React.FC<
           top: 0, // Sabit pozisyon
           left: 0, // Sabit pozisyon
           zIndex: 0, // Arka planda kalması için z-index değeri
+          borderRadius: "8px", // Medyanın köşeleri de yuvarlatıldı
         }}
       >
         {renderMedia()}
@@ -86,6 +88,7 @@ const LargeTopTitleHeroCardSection: React.FC<
           width: "100%",
           height: "100%",
           zIndex: 1, // Medyanın üstünde olması için z-index değeri
+          borderRadius: "8px", // Gradyan katmanı için yuvarlatılmış köşeler
           background: `
             linear-gradient(
               to bottom,

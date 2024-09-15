@@ -14,7 +14,9 @@ interface TwinTopTitleHeroCardSectionProps {
   leftButtonUrl: string;
 }
 
-const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = ({
+const TwinTopTitleHeroCardSection: React.FC<
+  TwinTopTitleHeroCardSectionProps
+> = ({
   rightMedia,
   rightTitle,
   rightSubTitle,
@@ -91,7 +93,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
       {/* Left Card */}
       <div
         ref={leftRef}
-        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1500 ease-in-out transform ${
+        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1000 ease-in-out transform ${
           leftInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >
@@ -114,7 +116,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
       {/* Right Card */}
       <div
         ref={rightRef}
-        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1500 ease-in-out transform ${
+        className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1000 ease-in-out transform ${
           rightInView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
         } h-[694px]`}
       >
