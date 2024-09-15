@@ -75,7 +75,7 @@ const TopTextCardSection: React.FC<TopTextCardSectionProps> = ({
           lineHeight: "42px",
           textAlign: "center",
           textShadow: "0px 4px 4px rgba(0, 0, 0, 0)",
-          marginBottom: "50px",
+          marginBottom: "50px", // Alttaki boşluk.
           width: "800px",
           margin: "0 auto",
         }}
@@ -87,10 +87,11 @@ const TopTextCardSection: React.FC<TopTextCardSectionProps> = ({
         <video
           controls
           style={{
-            width: "1040px",
+            width: "100%", // Kart genişliği ile uyumlu.
             height: "400px",
             objectFit: "cover",
-            borderRadius: "0 0 15px 15px",
+            borderRadius: "0 0 15px 15px", // Alt köşeler yuvarlatıldı.
+            marginBottom: "0", // Alt boşluk sıfırlandı.
           }}
         >
           <source src={mediaUrl} type={`video/${mediaType}`} />
@@ -101,10 +102,11 @@ const TopTextCardSection: React.FC<TopTextCardSectionProps> = ({
           src={mediaUrl}
           alt="Media"
           style={{
-            width: "1040px",
+            width: "100%", // Kart genişliği ile uyumlu.
             height: "400px",
             objectFit: "cover",
-            borderRadius: "0 0 15px 15px",
+            borderRadius: "0 0 15px 15px", // Alt köşeler yuvarlatıldı.
+            marginBottom: "0", // Alt boşluk sıfırlandı.
           }}
         />
       )}
