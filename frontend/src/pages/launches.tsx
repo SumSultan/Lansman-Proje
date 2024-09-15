@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import dayjs from "dayjs";
 import useLaunchStore from "../zustands/useLaunchStore";
 import NewLaunchFormModal from "./LaunchFormModal";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +19,46 @@ const Launches = () => {
     "all" | "active" | "inactive"
   >("all");
   const [searchTerm, setSearchTerm] = useState(""); // Arama çubuğu için yeni state
+  const [filterType, setFilterType] = useState<
+    "today" | "upcoming" | "ongoing" | "past" | null
+  >(null); // Yeni: tarih bazlı filtreleme
   const navigate = useNavigate();
+  const today = dayjs(); // Bugünün tarihini alıyoruz
+
+  // Tarih formatını dönüştürme fonksiyonu
+  const convertDateFormat = useCallback((dateString: string) => {
+    const [day, month, year] = dateString.split(".");
+    return `${year}-${month}-${day}`;
+  }, []);
+
+  // Lansmanları tarih ve duruma göre filtreleyen fonksiyon
+  const filterLaunchesByDate = useCallback(
+    (
+      launches: any[],
+      type: "today" | "ongoing" | "upcoming" | "past" | null
+    ) => {
+      if (!type) return launches;
+
+      return launches.filter((launch) => {
+        const launchDate = dayjs(convertDateFormat(launch.launchDate));
+        const endDate = dayjs(convertDateFormat(launch.endDate));
+
+        switch (type) {
+          case "today":
+            return launchDate.isSame(today, "day");
+          case "ongoing":
+            return launchDate.isBefore(today) && endDate.isAfter(today);
+          case "upcoming":
+            return launchDate.isAfter(today);
+          case "past":
+            return endDate.isBefore(today, "day");
+          default:
+            return true;
+        }
+      });
+    },
+    [convertDateFormat, today]
+  );
 
   // Sayfa yüklendiğinde verileri çek
   useEffect(() => {
@@ -39,7 +79,7 @@ const Launches = () => {
     );
   };
 
-  // Duruma göre filtreleme fonksiyonu
+  // Duruma ve tarihe göre filtreleme fonksiyonu
   const filterLaunches = (launches: any[]) => {
     const filteredByStatus =
       filterStatus === "active"
@@ -47,7 +87,11 @@ const Launches = () => {
         : filterStatus === "inactive"
         ? launches.filter((launch) => !launch.isActive)
         : launches;
-    return searchLaunches(filteredByStatus); // Hem filtreleme hem arama fonksiyonunu birleştiriyoruz
+
+    // Tarih bazlı filtreleme
+    const filteredByDate = filterLaunchesByDate(filteredByStatus, filterType);
+
+    return searchLaunches(filteredByDate); // Hem filtreleme hem arama fonksiyonunu birleştiriyoruz
   };
 
   const handleCreateClick = () => {
@@ -95,6 +139,13 @@ const Launches = () => {
   // Filtreleme seçeneğini değiştir
   const handleFilterChange = (status: "all" | "active" | "inactive") => {
     setFilterStatus(status);
+  };
+
+  // Tarih bazlı filtre butonları
+  const handleDateFilterClick = (
+    type: "today" | "ongoing" | "upcoming" | "past" | null
+  ) => {
+    setFilterType(type); // Filtre tipini ayarla
   };
 
   return (
@@ -182,16 +233,6 @@ const Launches = () => {
 
           {/* Filtreleme butonları */}
           <div className="flex space-x-4 mt-6">
-            {" "}
-            {/* mt-6 ile sadece üst boşluk eklendi */}
-            <button
-              onClick={() => handleFilterChange("all")}
-              className={`${
-                filterStatus === "all" ? "text-black" : "text-gray-400"
-              }`}
-            >
-              Tüm Lansmanlar
-            </button>
             <button
               onClick={() => handleFilterChange("active")}
               className={`${
@@ -209,6 +250,51 @@ const Launches = () => {
               Pasif Lansmanlar
             </button>
           </div>
+
+          {/* Tarih bazlı filtreleme butonları */}
+          <div className="flex space-x-4 mt-6">
+            <button
+              onClick={() => handleDateFilterClick(null)}
+              className={`${
+                filterType === null ? "text-black" : "text-gray-400"
+              }`}
+            >
+              Tüm Lansmanlar
+            </button>
+            <button
+              onClick={() => handleDateFilterClick("today")}
+              className={`${
+                filterType === "today" ? "text-black" : "text-gray-400"
+              }`}
+            >
+              Bugünün Lansmanları
+            </button>
+            <button
+              onClick={() => handleDateFilterClick("ongoing")}
+              className={`${
+                filterType === "ongoing" ? "text-black" : "text-gray-400"
+              }`}
+            >
+              Devam Eden Lansmanlar
+            </button>
+            <button
+              onClick={() => handleDateFilterClick("upcoming")}
+              className={`${
+                filterType === "upcoming" ? "text-black" : "text-gray-400"
+              }`}
+            >
+              Gelecek Lansmanlar
+            </button>
+            <button
+              onClick={() => handleDateFilterClick("past")}
+              className={`${
+                filterType === "past" ? "text-black" : "text-gray-400"
+              }`}
+            >
+              Geçmiş Lansmanlar
+            </button>
+          </div>
+
           <hr className="my-5" />
 
           {/* Tablonun oluşturulması */}

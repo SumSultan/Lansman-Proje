@@ -51,12 +51,17 @@ const NavBar: React.FC = () => {
         </div>
 
         {/* Admin butonu */}
-        <button
-          onClick={goToLoginPage}
-          className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition-colors"
-        >
-          Admin Panele Git
-        </button>
+        <div className="flex flex-col items-center">
+          <button
+            onClick={goToLoginPage}
+            className="bg-[#970928] text-white p-1 rounded-md hover:bg-[#780720] transition-colors"
+          >
+            Admin Panele Git
+          </button>
+          <p className="text-xs text-gray-500 mt-1">
+            *Geçici olarak yapılmıştır
+          </p>
+        </div>
       </div>
     </nav>
   );
