@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Yönlendirme için useNavigate'i ekleyin
 
 const NavBar: React.FC = () => {
-  const [selectedLanguage, setSelectedLanguage] = useState('tr'); // Varsayılan dil Türkçe
+  const [selectedLanguage, setSelectedLanguage] = useState("tr"); // Varsayılan dil Türkçe
   const [isVisible, setIsVisible] = useState(false); // Animasyon durumu
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Yönlendirme için hook'u kullanıyoruz
 
   // Sayfa yüklendiğinde animasyonu tetikle
   useEffect(() => {
@@ -18,26 +18,23 @@ const NavBar: React.FC = () => {
     console.log("Selected Language:", e.target.value);
   };
 
-  const goToHomePage = () => {
-    navigate("/launch"); // "Anasayfa"ya tıklanınca yönlendirilecek sayfa
+  const goToLoginPage = () => {
+    navigate("/login"); // Yönlendirme işlemi
   };
 
   return (
     <nav
       className={`bg-white p-4 text-black flex justify-between items-center transition-transform duration-[1.3s] ease-in-out ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
+        isVisible ? "translate-y-0" : "-translate-y-full"
       }`}
     >
       {/* Sol tarafta büyük ve özel renkte DAMISE yazısı */}
-      <div className="text-4xl font-semibold" style={{ color: '#970928' }}>
+      <div className="text-4xl font-semibold" style={{ color: "#970928" }}>
         DAMISE
       </div>
 
-      {/* Sağ tarafta dil seçme dropdown ve Anasayfa */}
+      {/* Sağ tarafta dil seçme dropdown, Anasayfa ve Admin butonu */}
       <div className="flex items-center space-x-4">
-        <span className="text-black font-medium cursor-pointer" onClick={goToHomePage}>
-          Anasayfa
-        </span>
         <div>
           <label htmlFor="language-select" className="mr-2 text-black">
             Dil Seç:
@@ -52,6 +49,14 @@ const NavBar: React.FC = () => {
             <option value="tr">Türkçe</option>
           </select>
         </div>
+
+        {/* Admin butonu */}
+        <button
+          onClick={goToLoginPage}
+          className="bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition-colors"
+        >
+          Admin Panele Git
+        </button>
       </div>
     </nav>
   );

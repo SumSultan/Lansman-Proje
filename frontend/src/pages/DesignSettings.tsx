@@ -4,6 +4,41 @@ import ComponentEkle from "../components/ComponentEkle";
 import useDeployDesignStore from "../zustands/useDeployDesingStore";
 import NavBar from "../components/NavBar";
 
+// Onay modal bileşeni
+const ConfirmModal = ({
+  isOpen,
+  onConfirm,
+  onCancel,
+}: {
+  isOpen: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) => {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white p-6 rounded-lg shadow-lg">
+        <h2 className="text-lg mb-4">Bu öğeyi silmek istediğinize emin misiniz?</h2>
+        <div className="flex justify-end space-x-4">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 bg-gray-300 rounded-md text-black"
+          >
+            Hayır
+          </button>
+          <button
+            onClick={onConfirm}
+            className="px-4 py-2 bg-red-500 text-white rounded-md"
+          >
+            Evet
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const OrderSettings = () => {
   const { launchId } = useParams<{ launchId: string }>();
   const navigate = useNavigate();
@@ -20,6 +55,8 @@ const OrderSettings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPreviewEnabled, setIsPreviewEnabled] = useState(false);
   const [savedMessages, setSavedMessages] = useState<string[]>([]);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false); // Onay modalını kontrol eden state
+  const [selectedDeployDesignId, setSelectedDeployDesignId] = useState<string | null>(null); // Silinecek öğeyi saklar
 
   useEffect(() => {
     if (launchId) {
@@ -97,15 +134,22 @@ const OrderSettings = () => {
     }
   };
 
-  const onDeleteDeployDesign = async (deployDesignId: string) => {
-    if (!launchId) return;
+  // Silme işlemi için confirm modalını açar
+  const onDeleteDeployDesign = (deployDesignId: string) => {
+    setSelectedDeployDesignId(deployDesignId);
+    setIsConfirmOpen(true); // Onay modalını aç
+  };
+
+  // Onay modalındaki "Evet" butonuna basılırsa
+  const handleConfirmDelete = async () => {
+    if (!launchId || !selectedDeployDesignId) return;
 
     try {
-      await deleteDeployDesign(launchId, deployDesignId);
+      await deleteDeployDesign(launchId, selectedDeployDesignId);
 
       useDeployDesignStore.setState((state) => ({
         deployDesign: state.deployDesign.filter(
-          (item) => item._id !== deployDesignId
+          (item) => item._id !== selectedDeployDesignId
         ),
       }));
 
@@ -119,6 +163,14 @@ const OrderSettings = () => {
     } catch (error) {
       console.error(`Error deleting deployDesign`, error);
     }
+
+    setIsConfirmOpen(false); // Onay modalını kapat
+  };
+
+  // "Hayır" seçilirse modalı kapat
+  const handleCancelDelete = () => {
+    setIsConfirmOpen(false);
+    setSelectedDeployDesignId(null); // Seçilen öğeyi temizle
   };
 
   const moveComponent = async (index: number, direction: "up" | "down") => {
@@ -332,15 +384,22 @@ const OrderSettings = () => {
           `}
         </style>
 
+        {/* Confirm Modal */}
+        <ConfirmModal
+          isOpen={isConfirmOpen}
+          onConfirm={handleConfirmDelete}
+          onCancel={handleCancelDelete}
+        />
+
         {/* Saved Message */}
         {savedMessages.map((msg, index) => (
           <div
             key={msg}
             className="saved-message"
             style={{
-              bottom: `${4 + (savedMessages.length - 1 - index) * 60}px`, // Her mesaj yukarı kaydırılır
+              bottom: `${4 + (savedMessages.length - 1 - index) * 60}px`,
               right: "4px",
-              animationDelay: `${index * 0.1}s`, // Her mesaj için gecikme
+              animationDelay: `${index * 0.1}s`,
             }}
           >
             Kaydedildi
