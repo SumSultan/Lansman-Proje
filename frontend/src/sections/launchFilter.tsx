@@ -1,4 +1,4 @@
-import React, { useState, useEffect, CSSProperties } from "react";
+import React, { useState, useEffect, CSSProperties, useCallback } from "react";
 import dayjs from "dayjs";
 import {
   FaCalendarAlt,
@@ -17,6 +17,7 @@ interface SearchComponentSectionProps {
   loading: boolean;
   onButtonClick: (type: string) => void;
   onFocus?: () => void;
+  onClearSearch: () => void;
 }
 
 const SearchSection: React.FC<SearchComponentSectionProps> = ({
@@ -24,6 +25,7 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
   onSearchQueryChange,
   loading,
   onButtonClick,
+  onClearSearch,
 }) => {
   const cardStyle: CSSProperties = {
     width: "100%",
@@ -37,89 +39,43 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
     boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
   };
 
-  const [hovered, setHovered] = useState<number | null>(null);
-
   const searchBoxStyle: CSSProperties = {
     boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "8px",
   };
 
+  const clearButtonStyle: CSSProperties = {
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
+    borderRadius: "8px",
+    transition: "transform 0.7s ease-in-out, box-shadow 0.7s ease-in-out",
+  };
+
+  const [hovered, setHovered] = useState<number | null>(null);
+  const [isClearHovered, setIsClearHovered] = useState<boolean>(false);
+
   return (
     <div className="p-6 bg-white flex flex-col items-center justify-start w-full">
       <div className="grid grid-cols-4 gap-8 w-full max-w-6xl mb-6">
-        <button
-          type="button"
-          className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
-          onClick={() => onButtonClick("todayLaunches")}
-          disabled={loading}
-          style={{
-            ...cardStyle,
-            ...(hovered === 1 ? hoverStyle : {}),
-          }}
-          onMouseEnter={() => setHovered(1)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <FaCalendarAlt className="text-3xl mb-2 text-gray-500 mx-auto" />
-          <span className="font-semibold text-md text-gray-500">
-            Bugünün Lansmanları
-          </span>
-        </button>
+        {/* Button Components */}
+        {["todayLaunches", "ongoing", "upcoming", "past"].map((type, index) => (
+          <button
+            key={type}
+            type="button"
+            className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
+            onClick={() => onButtonClick(type)}
+            disabled={loading}
+            style={{
+              ...cardStyle,
+              ...(hovered === index ? hoverStyle : {}),
+            }}
+            onMouseEnter={() => setHovered(index)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            <IconLabel index={index} />
+          </button>
+        ))}
 
-        <button
-          type="button"
-          className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
-          onClick={() => onButtonClick("ongoing")}
-          disabled={loading}
-          style={{
-            ...cardStyle,
-            ...(hovered === 2 ? hoverStyle : {}),
-          }}
-          onMouseEnter={() => setHovered(2)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <FaPlayCircle className="text-3xl mb-2 text-gray-500 mx-auto" />
-          <span className="font-semibold text-md text-gray-500">
-            Devam Eden Lansmanlar
-          </span>
-        </button>
-
-        <button
-          type="button"
-          className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
-          onClick={() => onButtonClick("upcoming")}
-          disabled={loading}
-          style={{
-            ...cardStyle,
-            ...(hovered === 3 ? hoverStyle : {}),
-          }}
-          onMouseEnter={() => setHovered(3)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <FaClock className="text-3xl mb-2 text-gray-500 mx-auto" />
-          <span className="font-semibold text-md text-gray-500">
-            Gelecek Lansmanlar
-          </span>
-        </button>
-
-        <button
-          type="button"
-          className="bg-gray-100 rounded-lg text-center shadow-md cursor-pointer"
-          onClick={() => onButtonClick("past")}
-          disabled={loading}
-          style={{
-            ...cardStyle,
-            ...(hovered === 4 ? hoverStyle : {}),
-          }}
-          onMouseEnter={() => setHovered(4)}
-          onMouseLeave={() => setHovered(null)}
-        >
-          <FaSyncAlt className="text-3xl mb-2 text-gray-500 mx-auto" />
-          <span className="font-semibold text-md text-gray-500">
-            Geçmiş Lansmanlar
-          </span>
-        </button>
-
-        <div className="col-span-4">
+        <div className="col-span-4 flex">
           <div className="relative w-full" style={searchBoxStyle}>
             <input
               type="text"
@@ -133,6 +89,21 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
               <FaSearch className="text-gray-400" />
             </div>
           </div>
+
+          {/* Temizle Butonu */}
+          <button
+            className="ml-4 border border-gray-300 bg-gray-50 text-gray-400 px-4 py-2 rounded-lg shadow-md hover:bg-gray-100"
+            onClick={onClearSearch}
+            disabled={loading}
+            onMouseEnter={() => setIsClearHovered(true)}
+            onMouseLeave={() => setIsClearHovered(false)}
+            style={{
+              ...clearButtonStyle,
+              ...(isClearHovered ? hoverStyle : {}),
+            }}
+          >
+            Temizle
+          </button>
         </div>
       </div>
 
@@ -143,28 +114,63 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
   );
 };
 
+// Separate Icon Label for Optimization
+const IconLabel = ({ index }: { index: number }) => {
+  const labels = [
+    {
+      icon: <FaCalendarAlt className="text-3xl mb-2 text-gray-500 mx-auto" />,
+      text: "Bugünün Lansmanları",
+    },
+    {
+      icon: <FaPlayCircle className="text-3xl mb-2 text-gray-500 mx-auto" />,
+      text: "Devam Eden Lansmanlar",
+    },
+    {
+      icon: <FaClock className="text-3xl mb-2 text-gray-500 mx-auto" />,
+      text: "Gelecek Lansmanlar",
+    },
+    {
+      icon: <FaSyncAlt className="text-3xl mb-2 text-gray-500 mx-auto" />,
+      text: "Geçmiş Lansmanlar",
+    },
+  ];
+
+  return (
+    <>
+      {labels[index].icon}
+      <span className="font-semibold text-md text-gray-500">
+        {labels[index].text}
+      </span>
+    </>
+  );
+};
+
 const LaunchFilter: React.FC = () => {
   const { launches, getLaunchData } = useLaunchStore();
   const { fetchAllSeoSettings, allSeoSettings } = useSeoSettingsStore();
 
   const [filteredLaunches, setFilteredLaunches] = useState<any[]>([]);
-  const [allLaunches, setAllLaunches] = useState<any[]>([]); // Tüm lansmanları saklar
+  const [allLaunches, setAllLaunches] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // Seçilen kategori
-  const [isAnimating, setIsAnimating] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [hovered, setHovered] = useState<number | null>(null);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isHiding, setIsHiding] = useState(false); // Gizleme animasyonu durumu
 
-  const convertDateFormat = (dateString: string) => {
+  const convertDateFormat = useCallback((dateString: string) => {
     const [day, month, year] = dateString.split(".");
     return `${year}-${month}-${day}`;
-  };
+  }, []);
 
-  const getFormattedDate = (dateString: string) => {
-    const formattedDate = convertDateFormat(dateString);
-    return dayjs(formattedDate);
-  };
+  const getFormattedDate = useCallback(
+    (dateString: string) => {
+      const formattedDate = convertDateFormat(dateString);
+      return dayjs(formattedDate);
+    },
+    [convertDateFormat]
+  );
 
   useEffect(() => {
     const fetchData = async () => {
@@ -172,8 +178,8 @@ const LaunchFilter: React.FC = () => {
       try {
         await getLaunchData();
         await fetchAllSeoSettings();
-        setAllLaunches(launches); // Tüm lansmanları burada ayırıyoruz
-        setFilteredLaunches(launches); // Başlangıçta tüm lansmanlar
+        setAllLaunches(launches);
+        setFilteredLaunches(launches);
       } catch (error) {
         console.error("Veri çekilirken bir hata oluştu:", error);
       } finally {
@@ -186,99 +192,102 @@ const LaunchFilter: React.FC = () => {
     }
   }, [getLaunchData, fetchAllSeoSettings, launches, loading, allLaunches]);
 
-  const handleButtonClick = (type: string) => {
-    setHasInteracted(true);
-    setSelectedCategory(type); // Kategori setle
-    setIsAnimating(true);
-    const today = dayjs();
+  const handleButtonClick = useCallback(
+    (type: string) => {
+      setHasInteracted(true);
+      setSelectedCategory(type);
+      setIsAnimating(true); // Açılma animasyonu başlat
+      const today = dayjs();
 
-    let filtered = [];
+      const filtered = allLaunches.filter((launch) => {
+        const launchDate = getFormattedDate(launch.launchDate);
+        const endDate = getFormattedDate(launch.endDate);
 
-    switch (type) {
-      case "todayLaunches":
-        filtered = allLaunches.filter((launch) =>
-          getFormattedDate(launch.launchDate).isSame(today, "day")
-        );
-        break;
-      case "ongoing":
-        filtered = allLaunches.filter(
-          (launch) =>
-            getFormattedDate(launch.launchDate).isBefore(today) &&
-            getFormattedDate(launch.endDate).isAfter(today)
-        );
-        break;
-      case "upcoming":
-        filtered = allLaunches.filter((launch) =>
-          getFormattedDate(launch.launchDate).isAfter(today)
-        );
-        break;
-      case "past":
-        filtered = allLaunches.filter((launch) =>
-          getFormattedDate(launch.endDate).isBefore(today, "day")
-        );
-        break;
-      default:
-        filtered = allLaunches;
-    }
-
-    setFilteredLaunches(filtered);
-    setTimeout(() => setIsAnimating(false), 1000);
-  };
-
-  const handleSearchQueryChange = (query: string) => {
-    setHasInteracted(true);
-    setSearchQuery(query);
-
-    if (query.trim() === "") {
-      if (selectedCategory) {
-        handleButtonClick(selectedCategory); // Kategori seçilmişse onu uygula
-      } else {
-        setFilteredLaunches(allLaunches); // Kategori seçilmemişse tüm lansmanları göster
-      }
-      return;
-    }
-
-    // SEO anahtar kelimeleri ve başlık ile arama yapıyoruz
-    const launchData = selectedCategory ? filteredLaunches : allLaunches;
-
-    const searched = launchData.filter((launch) => {
-      const seoData = getSeoForLaunch(launch._id);
-
-      let seoMatches = false;
-
-      // SEO anahtar kelimelerine göre arama
-      if (seoData?.keywords) {
-        if (Array.isArray(seoData.keywords)) {
-          seoMatches = seoData.keywords.some((keyword: string) =>
-            keyword.toLowerCase().includes(query.toLowerCase())
-          );
-        } else if (typeof seoData.keywords === "string") {
-          seoMatches = seoData.keywords
-            .toLowerCase()
-            .includes(query.toLowerCase());
+        switch (type) {
+          case "todayLaunches":
+            return launchDate.isSame(today, "day");
+          case "ongoing":
+            return launchDate.isBefore(today) && endDate.isAfter(today);
+          case "upcoming":
+            return launchDate.isAfter(today);
+          case "past":
+            return endDate.isBefore(today, "day");
+          default:
+            return true;
         }
+      });
+
+      setFilteredLaunches(filtered);
+      setTimeout(() => setIsAnimating(false), 1000); // Açılma animasyonunu bitir
+    },
+    [allLaunches, getFormattedDate]
+  );
+
+  const handleSearchQueryChange = useCallback(
+    (query: string) => {
+      setHasInteracted(true);
+      setSearchQuery(query);
+
+      if (query.trim() === "") {
+        handleButtonClick(selectedCategory || "");
+        return;
       }
 
-      // Başlığa göre arama
-      const titleMatches = seoData?.title
-        ? seoData.title.toLowerCase().includes(query.toLowerCase())
-        : false;
+      const launchData = selectedCategory ? filteredLaunches : allLaunches;
 
-      return seoMatches || titleMatches;
-    });
+      const searched = launchData.filter((launch) => {
+        const seoData = getSeoForLaunch(launch._id);
 
-    setFilteredLaunches(searched);
+        let seoMatches = false;
+
+        if (seoData?.keywords) {
+          if (Array.isArray(seoData.keywords)) {
+            seoMatches = seoData.keywords.some((keyword: string) =>
+              keyword.toLowerCase().includes(query.toLowerCase())
+            );
+          } else if (typeof seoData.keywords === "string") {
+            seoMatches = seoData.keywords
+              .toLowerCase()
+              .includes(query.toLowerCase());
+          }
+        }
+
+        const titleMatches = seoData?.title
+          ? seoData.title.toLowerCase().includes(query.toLowerCase())
+          : false;
+
+        return seoMatches || titleMatches;
+      });
+
+      setFilteredLaunches(searched);
+    },
+    [allLaunches, filteredLaunches, selectedCategory]
+  );
+
+  // Temizle Butonu Fonksiyonu
+  const handleClearSearch = () => {
+    setIsHiding(true); // Gizleme animasyonunu başlat
+    setTimeout(() => {
+      setSearchQuery(""); // Arama sorgusunu temizle
+      setFilteredLaunches([]); // Lansmanları gizle
+      setHasInteracted(false); // İlk haline dön
+      setSelectedCategory(null); // Seçilen kategoriyi sıfırla
+      setIsHiding(false); // Gizleme animasyonunu durdur
+    }, 700); // 700ms sonra gizle
   };
 
-  const getSeoForLaunch = (launchId: string) => {
-    return allSeoSettings.find((seo) => seo.launchId === launchId);
-  };
+  const getSeoForLaunch = useCallback(
+    (launchId: string) => {
+      return allSeoSettings.find((seo) => seo.launchId === launchId);
+    },
+    [allSeoSettings]
+  );
 
-  const handleMoreClick = (launchUrl: string) => {
+  const handleMoreClick = useCallback((launchUrl: string) => {
     if (launchUrl) {
       window.location.href = launchUrl;
     }
-  };
+  }, []);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -289,71 +298,70 @@ const LaunchFilter: React.FC = () => {
           loading={loading}
           onButtonClick={handleButtonClick}
           onFocus={() => setHasInteracted(true)}
+          onClearSearch={handleClearSearch}
         />
       </div>
 
-      {hasInteracted && (
+      {hasInteracted && filteredLaunches.length > 0 && (
         <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-16 w-full max-w-6xl">
-          {filteredLaunches.length > 0 ? (
-            filteredLaunches.map((launch, index) => {
-              const seoData = getSeoForLaunch(launch._id);
+          {filteredLaunches.map((launch, index) => {
+            const seoData = getSeoForLaunch(launch._id);
 
-              return (
-                <div
-                  key={launch._id}
-                  className={`bg-gray-50 rounded-lg shadow-md overflow-hidden transition-all transform ${
-                    isAnimating
-                      ? "opacity-0 translate-y-10"
-                      : "opacity-100 translate-y-0"
-                  } duration-1000 ease-out col-span-1 hover:scale-105 hover:shadow-lg`}
-                  style={{
-                    transitionDelay: `${index * 100}ms`,
-                    transform: `translateY(${
-                      isAnimating ? "15px" : "0"
-                    }) scale(${hovered === index ? 1.05 : 1})`,
-                  }}
-                  onMouseEnter={() => setHovered(index)}
-                  onMouseLeave={() => setHovered(null)}
-                >
-                  {seoData ? (
-                    <div className="flex flex-col h-full">
-                      {seoData.socialImage && (
-                        <img
-                          src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${
-                            seoData.socialImage
-                          }`}
-                          alt="SEO Görseli"
-                          className="w-full h-48 object-cover"
-                        />
-                      )}
-                      <div className="p-4 flex-1 flex flex-col justify-between">
-                        <div>
-                          <h3 className="text-lg font-semibold mb-2 text-gray-600">
-                            {seoData.title || "Lansman Başlık"}
-                          </h3>
-                          <p className="text-gray-500 text-sm mb-4">
-                            {seoData.description || "Lansman açıklaması..."}
-                          </p>
-                        </div>
-                        <div>
-                          <button
-                            className="text-indigo-600 text-sm font-medium hover:underline"
-                            onClick={() => handleMoreClick(seoData.launchUrl)}
-                          >
-                            Daha fazlası...
-                          </button>
-                        </div>
+            return (
+              <div
+                key={launch._id}
+                className={`bg-gray-50 rounded-lg shadow-md overflow-hidden transition-all transform ${
+                  isAnimating && !isHiding
+                    ? "opacity-0 translate-y-10"
+                    : "opacity-100 translate-y-0"
+                } duration-1000 ease-out col-span-1 hover:scale-105 hover:shadow-lg ${
+                  isHiding ? "opacity-0 translate-y-10" : ""
+                }`}
+                style={{
+                  transitionDelay: `${index * 100}ms`,
+                  transform: `translateY(${
+                    isAnimating || isHiding ? "15px" : "0"
+                  }) scale(${hovered === index ? 1.05 : 1})`,
+                }}
+                onMouseEnter={() => setHovered(index)}
+                onMouseLeave={() => setHovered(null)}
+              >
+                {seoData ? (
+                  <div className="flex flex-col h-full">
+                    {seoData.socialImage && (
+                      <img
+                        src={`${import.meta.env.VITE_AWS_S3_BUCKET_URL}/${
+                          seoData.socialImage
+                        }`}
+                        alt="SEO Görseli"
+                        className="w-full h-48 object-cover"
+                      />
+                    )}
+                    <div className="p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-lg font-semibold mb-2 text-gray-600">
+                          {seoData.title || "Lansman Başlık"}
+                        </h3>
+                        <p className="text-gray-500 text-sm mb-4">
+                          {seoData.description || "Lansman açıklaması..."}
+                        </p>
+                      </div>
+                      <div>
+                        <button
+                          className="text-indigo-600 text-sm font-medium hover:underline"
+                          onClick={() => handleMoreClick(seoData.launchUrl)}
+                        >
+                          Daha fazlası...
+                        </button>
                       </div>
                     </div>
-                  ) : (
-                    <p>SEO bilgisi bulunamadı.</p>
-                  )}
-                </div>
-              );
-            })
-          ) : (
-            <p>Seçilen kritere göre lansman bulunamadı.</p>
-          )}
+                  </div>
+                ) : (
+                  <p>SEO bilgisi bulunamadı.</p>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
