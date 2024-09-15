@@ -10,13 +10,13 @@ import {
 import useLaunchStore from "../zustands/useLaunchStore";
 import useSeoSettingsStore from "../zustands/useSeoSettingsStore";
 
-// SearchComponentSection Props arayüzünü güncelleyin
+// SearchComponentSection Props
 interface SearchComponentSectionProps {
   searchQuery: string;
   onSearchQueryChange: (query: string) => void;
   loading: boolean;
   onButtonClick: (type: string) => void;
-  onFocus?: () => void; // onFocus özelliğini ekleyin, opsiyonel yapın
+  onFocus?: () => void;
 }
 
 const SearchSection: React.FC<SearchComponentSectionProps> = ({
@@ -26,21 +26,21 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
   onButtonClick,
 }) => {
   const cardStyle: CSSProperties = {
-    width: "100%", // Kartları geniş grid sistemine yaymak için %100 genişlik
+    width: "100%",
     height: "250px",
-    transition: "transform 0.7s ease-in-out, box-shadow 0.7s ease-in-out", // Yavaş büyüme ve küçülme
+    transition: "transform 0.7s ease-in-out, box-shadow 0.7s ease-in-out",
     cursor: "pointer",
   };
 
   const hoverStyle: CSSProperties = {
-    transform: "scale(1.05)", // Kartların hafifçe büyümesi için scale kullanıyoruz
-    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)", // Hafif bir gölge ekleniyor
+    transform: "scale(1.05)",
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.2)",
   };
 
   const [hovered, setHovered] = useState<number | null>(null);
 
   const searchBoxStyle: CSSProperties = {
-    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)", // Lansman kartlarıyla aynı gölge
+    boxShadow: "0 10px 20px rgba(0, 0, 0, 0.1)",
     borderRadius: "8px",
   };
 
@@ -143,17 +143,18 @@ const SearchSection: React.FC<SearchComponentSectionProps> = ({
   );
 };
 
-// LaunchFilter bileşeni
 const LaunchFilter: React.FC = () => {
   const { launches, getLaunchData } = useLaunchStore();
   const { fetchAllSeoSettings, allSeoSettings } = useSeoSettingsStore();
 
-  const [filteredLaunches, setFilteredLaunches] = useState(launches);
+  const [filteredLaunches, setFilteredLaunches] = useState<any[]>([]);
+  const [allLaunches, setAllLaunches] = useState<any[]>([]); // Tüm lansmanları saklar
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false); // Yeni animasyon state
-  const [hovered, setHovered] = useState<number | null>(null); // Hovered state
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null); // Seçilen kategori
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [hovered, setHovered] = useState<number | null>(null);
 
   const convertDateFormat = (dateString: string) => {
     const [day, month, year] = dateString.split(".");
@@ -166,69 +167,107 @@ const LaunchFilter: React.FC = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     const fetchData = async () => {
+      setLoading(true);
       try {
         await getLaunchData();
         await fetchAllSeoSettings();
+        setAllLaunches(launches); // Tüm lansmanları burada ayırıyoruz
+        setFilteredLaunches(launches); // Başlangıçta tüm lansmanlar
       } catch (error) {
         console.error("Veri çekilirken bir hata oluştu:", error);
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
-  }, [getLaunchData, fetchAllSeoSettings]);
 
-  useEffect(() => {
-    setFilteredLaunches(launches);
-  }, [launches]);
+    if (!loading && allLaunches.length === 0) {
+      fetchData();
+    }
+  }, [getLaunchData, fetchAllSeoSettings, launches, loading, allLaunches]);
 
   const handleButtonClick = (type: string) => {
     setHasInteracted(true);
-    setIsAnimating(true); // Animasyonu başlat
+    setSelectedCategory(type); // Kategori setle
+    setIsAnimating(true);
     const today = dayjs();
 
     let filtered = [];
 
     switch (type) {
       case "todayLaunches":
-        filtered = launches.filter((launch) =>
+        filtered = allLaunches.filter((launch) =>
           getFormattedDate(launch.launchDate).isSame(today, "day")
         );
         break;
       case "ongoing":
-        filtered = launches.filter(
+        filtered = allLaunches.filter(
           (launch) =>
             getFormattedDate(launch.launchDate).isBefore(today) &&
             getFormattedDate(launch.endDate).isAfter(today)
         );
         break;
       case "upcoming":
-        filtered = launches.filter((launch) =>
+        filtered = allLaunches.filter((launch) =>
           getFormattedDate(launch.launchDate).isAfter(today)
         );
         break;
       case "past":
-        filtered = launches.filter((launch) =>
+        filtered = allLaunches.filter((launch) =>
           getFormattedDate(launch.endDate).isBefore(today, "day")
         );
         break;
       default:
-        filtered = launches;
+        filtered = allLaunches;
     }
 
     setFilteredLaunches(filtered);
-    setTimeout(() => setIsAnimating(false), 1000); // 1000ms sonra animasyonu durdur
+    setTimeout(() => setIsAnimating(false), 1000);
   };
 
   const handleSearchQueryChange = (query: string) => {
     setHasInteracted(true);
     setSearchQuery(query);
-    const searchedLaunches = launches.filter((launch) =>
-      launch.launchName.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredLaunches(searchedLaunches);
+
+    if (query.trim() === "") {
+      if (selectedCategory) {
+        handleButtonClick(selectedCategory); // Kategori seçilmişse onu uygula
+      } else {
+        setFilteredLaunches(allLaunches); // Kategori seçilmemişse tüm lansmanları göster
+      }
+      return;
+    }
+
+    // SEO anahtar kelimeleri ve başlık ile arama yapıyoruz
+    const launchData = selectedCategory ? filteredLaunches : allLaunches;
+
+    const searched = launchData.filter((launch) => {
+      const seoData = getSeoForLaunch(launch._id);
+
+      let seoMatches = false;
+
+      // SEO anahtar kelimelerine göre arama
+      if (seoData?.keywords) {
+        if (Array.isArray(seoData.keywords)) {
+          seoMatches = seoData.keywords.some((keyword: string) =>
+            keyword.toLowerCase().includes(query.toLowerCase())
+          );
+        } else if (typeof seoData.keywords === "string") {
+          seoMatches = seoData.keywords
+            .toLowerCase()
+            .includes(query.toLowerCase());
+        }
+      }
+
+      // Başlığa göre arama
+      const titleMatches = seoData?.title
+        ? seoData.title.toLowerCase().includes(query.toLowerCase())
+        : false;
+
+      return seoMatches || titleMatches;
+    });
+
+    setFilteredLaunches(searched);
   };
 
   const getSeoForLaunch = (launchId: string) => {
@@ -272,7 +311,7 @@ const LaunchFilter: React.FC = () => {
                     transform: `translateY(${
                       isAnimating ? "15px" : "0"
                     }) scale(${hovered === index ? 1.05 : 1})`,
-                  }} // Staggered delay & combined transform
+                  }}
                   onMouseEnter={() => setHovered(index)}
                   onMouseLeave={() => setHovered(null)}
                 >
