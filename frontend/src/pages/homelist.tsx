@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FaArrowRight, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import NavBar from "../components/NavBar";
 
-const homePage = () => {
+const homeList = () => {
   const { launches, getLaunchData, fetchLaunchById, clearLaunchData } =
     useLaunchStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -303,4 +303,4 @@ const homePage = () => {
   );
 };
 
-export default homePage;
+export default homeList;

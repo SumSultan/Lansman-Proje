@@ -10,7 +10,7 @@ import PreviewPage from "./pages/previewPage"; // PreviewPage bileşenini içe a
 import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarın
 import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
-import HomeList from "./pages/homelist";
+import HomeList from "./pages/homeList";
 import LaunchLayout from "./pages/LaunchLayout";
 import HomePage from "./pages/HomePage"; 
 
