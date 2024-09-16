@@ -12,7 +12,7 @@ import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
 import HomeList from "./pages/homelist";
 import LaunchLayout from "./pages/LaunchLayout";
-import HomePage from "./pages/HomePage";
+import HomePage from "./pages/HomePage"; 
 
 const App = () => {
   return (
