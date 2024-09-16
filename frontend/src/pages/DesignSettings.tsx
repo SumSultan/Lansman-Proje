@@ -20,21 +20,45 @@ const ConfirmModal = ({
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-lg mb-4">Bu öğeyi silmek istediğinize emin misiniz?</h2>
-        <div className="flex justify-end space-x-4">
+        <div className="flex justify-center space-x-4">
           <button
             onClick={onCancel}
-            className="px-4 py-2 bg-gray-300 rounded-md text-black"
+            className="confirm-button px-4 py-2 bg-gray-300 rounded-md text-black"
           >
             Hayır
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-500 text-white rounded-md"
+            className="confirm-button px-4 py-2 bg-[#970928] text-white rounded-md"
           >
             Evet
           </button>
         </div>
       </div>
+
+      {/* Buton animasyonları */}
+      <style>
+        {`
+          .confirm-button {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+          }
+
+          .confirm-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          }
+
+          .confirm-button:active {
+            transform: scale(0.95);
+            box-shadow: none;
+          }
+
+          .confirm-button:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(151, 9, 40, 0.4);
+          }
+        `}
+      </style>
     </div>
   );
 };
