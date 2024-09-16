@@ -181,7 +181,10 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             outline: "none",
           }}
         />
-        <div className="text-right text-sm text-gray-500 mt-1"style={{marginRight:"61.7%"}}>
+        <div
+          className="text-right text-sm text-gray-500 mt-1"
+          style={{ marginRight: "61.7%" }}
+        >
           {charCount}/325
         </div>
         {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
@@ -221,7 +224,7 @@ const LeftTextCardForm: React.FC<LeftTextCardFormProps> = ({
             {/* Arama çubuğu */}
             <input
               type="text"
-              placeholder="Lansman adına veya medya adına göre ara"
+              placeholder="Medya adı veya lansman adına göre arama"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"

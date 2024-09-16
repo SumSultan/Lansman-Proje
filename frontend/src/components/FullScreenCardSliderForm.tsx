@@ -351,7 +351,7 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
             <div className="mb-4">
               <input
                 type="text"
-                placeholder="Lansman Adına Göre Ara"
+                placeholder="Medya adı veya lansman adına göre arama"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
@@ -390,7 +390,10 @@ const FullScreenCardSliderForm: React.FC<FullScreenCardSliderFormProps> = ({
         </div>
       )}
       {/* Önizleme Butonu - Sol tarafa hizalanmış */}
-      <div className="w-full mt-4 flex justify-start"style={{marginLeft:"1.5%"}}>
+      <div
+        className="w-full mt-4 flex justify-start"
+        style={{ marginLeft: "1.5%" }}
+      >
         <button
           type="button"
           className="ml-10 bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"

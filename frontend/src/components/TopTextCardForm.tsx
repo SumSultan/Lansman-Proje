@@ -167,9 +167,9 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
             {error}
           </p>
         )}
-        <div 
+        <div
           className="text-right text-sm text-gray-500 mt-1"
-          style={{marginRight:"60%"}}
+          style={{ marginRight: "60%" }}
         >
           {charCount}/250
         </div>
@@ -242,7 +242,7 @@ const TopTextCardForm: React.FC<TopTextCardFormProps> = ({
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
             <input
               type="text"
-              placeholder="Medya adına veya lansman adına göre arama"
+              placeholder="Medya adı veya lansman adına göre arama"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"

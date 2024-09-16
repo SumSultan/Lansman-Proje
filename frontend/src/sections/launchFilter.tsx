@@ -283,12 +283,6 @@ const LaunchFilter: React.FC = () => {
     [allSeoSettings]
   );
 
-  const handleMoreClick = useCallback((launchUrl: string) => {
-    if (launchUrl) {
-      window.location.href = launchUrl;
-    }
-  }, []);
-
   return (
     <div className="flex flex-col items-center w-full">
       <div className="w-full max-w-9xl">
@@ -347,12 +341,12 @@ const LaunchFilter: React.FC = () => {
                         </p>
                       </div>
                       <div>
-                        <button
+                        <a
+                          href={`/${seoData.launchUrl}`} // URL, launchUrl dinamik olarak kullanılıyor
                           className="text-indigo-600 text-sm font-medium hover:underline"
-                          onClick={() => handleMoreClick(seoData.launchUrl)}
                         >
                           Daha fazlası...
-                        </button>
+                        </a>
                       </div>
                     </div>
                   </div>

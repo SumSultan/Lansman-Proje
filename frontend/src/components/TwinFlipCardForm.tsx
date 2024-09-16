@@ -284,15 +284,15 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
           </p>
         </div>
       </div>
-{/* Önizleme Butonu */}
-<div className="w-full mt-4">
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
         <button
           type="button"
           className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
           style={{
             width: "100px",
             textAlign: "center",
-            marginLeft: "3%", 
+            marginLeft: "3%",
           }}
           onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Önizleme açılır/kapanır
         >
@@ -306,10 +306,10 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
           style={{
             transform: "scale(0.5)", // %50 küçültme
             transformOrigin: "top left", // Sol üstten küçült
-            margin: "0 auto", 
-            width: "100%", 
-            marginLeft:"25%",
-            height:"370px",
+            margin: "0 auto",
+            width: "100%",
+            marginLeft: "25%",
+            height: "370px",
           }}
           className="p-2 rounded-lg mt-6"
         >
@@ -339,7 +339,7 @@ const TwinFlipCardForm: React.FC<TwinFlipCardFormProps> = ({
             <h3 className="text-lg font-semibold mb-4">Sağ Ön Medya Seç</h3>
             <input
               type="text"
-              placeholder="Medya adına veya lansman adına göre arama"
+              placeholder="Medya adı veya lansman adına göre arama"
               value={rightFrontSearchTerm}
               onChange={(e) => setRightFrontSearchTerm(e.target.value)}
               className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"

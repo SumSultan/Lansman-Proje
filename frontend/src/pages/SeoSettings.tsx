@@ -15,8 +15,11 @@ const SeoSettings = () => {
   const [isFollowActive, setIsFollowActive] = useState(
     seoSettings.followStatus
   );
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama terimi için state
   const [formError, setFormError] = useState<string>(""); // Form hatalarını göstermek için state
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -32,7 +35,10 @@ const SeoSettings = () => {
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName,
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -105,6 +111,12 @@ const SeoSettings = () => {
         );
     }
   };
+
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
+  ); // Lansman adına göre arama işlevi
 
   const handleSave = async () => {
     if (
@@ -316,16 +328,36 @@ const SeoSettings = () => {
                     X
                   </button>
                   <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
+                  {/* Arama Alanı */}
+                  <div className="mb-4">
+                    <input
+                      type="text"
+                      placeholder="Lansman Adına Göre Ara"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                      style={{
+                        width: "300px",
+                        height: "40px",
+                        boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                      }}
+                    />
+                  </div>
+
                   <div className="grid grid-cols-4 gap-4">
-                    {mediaList.map((mediaItem, index) => (
+                    {filteredMediaList.map((mediaItem, index) => (
                       <div
                         key={index}
-                        onClick={() => handleMediaSelect(mediaItem)}
+                        onClick={() => handleMediaSelect(mediaItem.key)}
                         className="cursor-pointer"
                       >
-                        {renderFilePreview(mediaItem)}
+                        {renderFilePreview(mediaItem.key)}
                         <p className="text-center text-sm truncate">
-                          {mediaItem}
+                          {mediaItem.key}
+                        </p>
+                        <p className="text-center text-sm truncate">
+                          {mediaItem.launchName}
                         </p>
                       </div>
                     ))}

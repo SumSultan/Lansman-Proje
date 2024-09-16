@@ -110,7 +110,9 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
         );
       default:
         return (
-          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
         );
     }
   };
@@ -191,7 +193,9 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
                   marginBottom: "8px",
                 }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>min 400x700(px)
               </p>
 
@@ -253,19 +257,21 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
       </div>
 
       {/* Önizleme Butonu */}
-      <div className="w-full mt-4"> {/* Butonu hizalamak için genişliği tam tutuyoruz */}
-  <button
-    type="button"
-    className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
-    style={{
-      width: "100px",
-      textAlign: "center",
-      marginLeft: "4.6%", // Sola %4.6 uzaklık
-    }}
-        onClick={() => setIsPreviewOpen(!isPreviewOpen)}
-      >
-        Önizleme
-      </button>
+      <div className="w-full mt-4">
+        {" "}
+        {/* Butonu hizalamak için genişliği tam tutuyoruz */}
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "4.6%", // Sola %4.6 uzaklık
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
       </div>
 
       {/* Modal */}
@@ -285,7 +291,7 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
             <input
               type="text"
-              placeholder="Medya adına veya lansman adına göre arama"
+              placeholder="Medya adı veya lansman adına göre arama"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700 mb-4"
@@ -327,8 +333,8 @@ const ReelsCardSliderForm: React.FC<ReelsCardSliderFormProps> = ({
             transformOrigin: "top left", // Sol üstten küçült
             margin: "0 auto", // Ortalamak için
             width: "100%", // Orijinal genişliğin yarısı
-            height:"400px",
-            marginLeft:"25%",
+            height: "400px",
+            marginLeft: "25%",
           }}
           className="p-2 rounded-lg mt-6"
         >

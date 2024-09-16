@@ -116,11 +116,21 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
   };
 
   return (
-    <div className="flex flex-col space-y-6 p-4" style={{ paddingLeft: "4.5%" }}> {/* Sola doğru kaydırıldı */}
+    <div
+      className="flex flex-col space-y-6 p-4"
+      style={{ paddingLeft: "4.5%" }}
+    >
+      {" "}
+      {/* Sola doğru kaydırıldı */}
       <div className="flex flex-col">
         <label
           className="block text-[#2B3674] font-[DM Sans] text-[12px] font-normal mb-1"
-          style={{ width: "413px", height: "16px", lineHeight: "15.62px", textAlign: "left" }} // Başlığı sola hizala
+          style={{
+            width: "413px",
+            height: "16px",
+            lineHeight: "15.62px",
+            textAlign: "left",
+          }} // Başlığı sola hizala
         >
           Medya
         </label>
@@ -130,13 +140,17 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
           value={media || "  Medya Seç"}
           onClick={() => setIsModalOpen(true)} // Modalı açıyoruz
           className="block border border-[#D0D5DD] rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-[#667085] text-[16px] leading-[24px]"
-          style={{ width: "423px", height: "50px", paddingLeft: "10px", marginBottom: "4px" }} // Daha sola yakınlaştırıldı
+          style={{
+            width: "423px",
+            height: "50px",
+            paddingLeft: "10px",
+            marginBottom: "4px",
+          }} // Daha sola yakınlaştırıldı
         />
         <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
           <span style={{ color: "red" }}>*</span>960x630(px)
         </p>
       </div>
-
       <button
         type="button"
         onClick={() => setIsPreviewOpen(!isPreviewOpen)} // Toggle preview state
@@ -148,7 +162,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
       >
         Önizleme
       </button>
-
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-20">
@@ -169,7 +182,7 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
             <div className="mb-4">
               <input
                 type="text"
-                placeholder="Medya adına göre ara"
+                placeholder="Lansman Adına Göre Ara"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
@@ -203,7 +216,6 @@ const LargePopupCardForm: React.FC<LargePopupCardFormProps> = ({
           </div>
         </div>
       )}
-
       {/* Preview of LargePopupCardSection */}
       {isPreviewOpen && (
         <div

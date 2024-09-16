@@ -30,10 +30,13 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
   onAddItem,
   onRemoveItem,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama terimi için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -42,7 +45,10 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key);
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName,
+        }));
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -54,7 +60,10 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(event.target as Node)
+      ) {
         setIsModalOpen(false);
       }
     };
@@ -109,7 +118,9 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
 
       default:
         return (
-          <p className="text-center">Desteklenmeyen dosya formatı: {fileType}</p>
+          <p className="text-center">
+            Desteklenmeyen dosya formatı: {fileType}
+          </p>
         );
     }
   };
@@ -122,6 +133,12 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
       setIsModalOpen(false);
     }
   };
+
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
+  ); // Lansman adına göre arama işlevi
 
   return (
     <div className="flex flex-col items-center">
@@ -184,7 +201,9 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
                   marginBottom: "8px",
                 }}
               />
-              <p style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}>
+              <p
+                style={{ color: "#667085", fontSize: "12px", marginTop: "4px" }}
+              >
                 <span style={{ color: "red" }}>*</span>400x700(px)
               </p>
 
@@ -262,22 +281,23 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
         </div>
       </div>
 
-{/* Önizleme Butonu */}
-<div className="w-full mt-4"> {/* Butonu hizalamak için genişliği tam tutuyoruz */}
-  <button
-    type="button"
-    className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
-    style={{
-      width: "100px",
-      textAlign: "center",
-      marginLeft: "4.6%", // Sola %4.6 uzaklık
-    }}
-    onClick={() => setIsPreviewOpen(!isPreviewOpen)}
-  >
-    Önizleme
-  </button>
-</div>
-
+      {/* Önizleme Butonu */}
+      <div className="w-full mt-4">
+        {" "}
+        {/* Butonu hizalamak için genişliği tam tutuyoruz */}
+        <button
+          type="button"
+          className="bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
+          style={{
+            width: "100px",
+            textAlign: "center",
+            marginLeft: "4.6%", // Sola %4.6 uzaklık
+          }}
+          onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        >
+          Önizleme
+        </button>
+      </div>
 
       {/* Modal */}
       {isModalOpen && (
@@ -295,15 +315,36 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
 
+            {/* Arama Alanı */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Medya adı veya lansman adına göre arama"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+            </div>
+
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleMediaSelect(mediaItem)}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
@@ -327,7 +368,7 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
             margin: "0 auto", // Ortalamak için
             width: "520px", // %50 oranında küçültülmüş genişlik
             height: "400px", // %50 oranında küçültülmüş yükseklik
-            marginLeft:"33%",
+            marginLeft: "33%",
           }}
           className="p-2 rounded-lg mt-6"
         >

@@ -15,11 +15,14 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
   onTextChange,
   onMediaChange,
 }) => {
-  const [mediaList, setMediaList] = useState<string[]>([]);
+  const [mediaList, setMediaList] = useState<
+    { key: string; launchName: string }[]
+  >([]); // Medya listesi için düzenleme yapıldı
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [charCount, setCharCount] = useState<number>(text.length); // Karakter sayacı
   const [error, setError] = useState<string>(""); // Hata mesajı için state
   const [isPreviewOpen, setIsPreviewOpen] = useState<boolean>(false); // Önizleme kontrolü için state
+  const [searchTerm, setSearchTerm] = useState<string>(""); // Arama terimi için state
   const modalRef = useRef<HTMLDivElement>(null);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
@@ -28,7 +31,10 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
     const fetchMediaList = async () => {
       try {
         const response = await axios.get(`${apiUrl}/media/list`);
-        const mediaNames = response.data.map((media: any) => media.Key); // Medya isimlerini alıyoruz
+        const mediaNames = response.data.map((media: any) => ({
+          key: media.Key,
+          launchName: media.launchName,
+        })); // Lansman adına göre düzenleme yapıldı
         setMediaList(mediaNames);
       } catch (error) {
         console.error("Medya listesi alınamadı:", error);
@@ -123,6 +129,12 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
     setCharCount(newText.length > 250 ? 250 : newText.length); // Karakter sayacını sınırla güncelliyoruz
   };
 
+  const filteredMediaList = mediaList.filter(
+    (mediaItem) =>
+      mediaItem.key.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mediaItem.launchName?.toLowerCase().includes(searchTerm.toLowerCase())
+  ); // Lansman adına göre arama işlevi
+
   return (
     <div className="flex flex-col space-y-6 p-4">
       <div className="flex flex-col">
@@ -188,9 +200,9 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
             {error}
           </p>
         )}
-        <div 
+        <div
           className="text-right text-sm text-gray-500 mt-1"
-          style={{marginRight:"60%"}}
+          style={{ marginRight: "60%" }}
         >
           {charCount}/250
         </div>
@@ -225,18 +237,41 @@ const BottomTextCardForm: React.FC<BottomTextCardFormProps> = ({
               X
             </button>
             <h3 className="text-lg font-semibold mb-4">Medya Seç</h3>
+
+            {/* Arama Alanı */}
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Medya adı veya lansman adına göre arama"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="border border-gray-500 rounded-md px-2 py-1 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-gray-500 text-sm font-medium text-gray-700"
+                style={{
+                  width: "300px",
+                  height: "40px",
+                  boxShadow: "0 0 3px rgba(0, 0, 0, 0.1)",
+                }}
+              />
+            </div>
+
             <div className="grid grid-cols-4 gap-4">
-              {mediaList.map((mediaItem, index) => (
+              {filteredMediaList.map((mediaItem, index) => (
                 <div
                   key={index}
-                  onClick={() => handleMediaSelect(mediaItem)}
+                  onClick={() => handleMediaSelect(mediaItem.key)}
                   className="cursor-pointer"
                 >
-                  {renderFilePreview(mediaItem)}
-                  <p className="text-center text-sm truncate">{mediaItem}</p>
+                  {renderFilePreview(mediaItem.key)}
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.key}
+                  </p>
+                  <p className="text-center text-sm truncate">
+                    {mediaItem.launchName}
+                  </p>
                 </div>
               ))}
             </div>
+
             <button
               type="button"
               className="mt-4 w-full bg-[#970928] text-white py-2 px-4 rounded-md hover:bg-[#7a0620] transition transform duration-150 ease-in-out"
