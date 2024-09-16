@@ -10,9 +10,9 @@ import PreviewPage from "./pages/previewPage"; // PreviewPage bileşenini içe a
 import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarın
 import Error404 from "./pages/error404"; // Error404 bileşenini içe aktarın
 import PreviewRoute from "./access/previewRoute"; // PreviewRoute bileşenini içe aktarın
-import HomePage from "./pages/homelist";
+import HomeList from "./pages/homelist";
 import LaunchLayout from "./pages/LaunchLayout";
-import Home from "./pages/HomePage"; 
+import HomePage from "./pages/HomePage";
 
 const App = () => {
   return (
@@ -23,13 +23,13 @@ const App = () => {
             <Routes>
               {/* Kök yol ("/") için yönlendirme ekliyoruz */}
               <Route path="/login" element={<Login />} />
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<HomePage />} />
 
               <Route
                 path="/homelist"
                 element={
                   <ProtectedRoute>
-                    <HomePage />
+                    <HomeList />
                   </ProtectedRoute>
                 }
               />
