@@ -4,7 +4,7 @@ import CreateLaunch from "./pages/CreateLaunch";
 import GalleryList from "./pages/GalleryList";
 import DesignSettings from "./pages/DesignSettings";
 import SeoSettings from "./pages/SeoSettings";
-import Login from "./pages/login";
+import Login from "./pages/login"; 
 import ProtectedRoute from "./access/control-access"; // ProtectedRoute bileşenini içe aktarın
 import PreviewPage from "./pages/previewPage"; // PreviewPage bileşenini içe aktarın
 import ErrorPage from "./pages/errorPage"; // ErrorPage bileşenini içe aktarın
