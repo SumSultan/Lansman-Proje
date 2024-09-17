@@ -13,21 +13,22 @@ interface MediaItem {
 const GalleryList = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [mediaList, setMediaList] = useState<MediaItem[]>([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Arama çubuğu için yeni state
+  const [searchTerm, setSearchTerm] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [selectedMedia, setSelectedMedia] = useState<string | null>(null); // Seçilen medya dosyasını tutmak için state
-  const [isViewModalVisible, setIsViewModalVisible] = useState(false); // Görüntüleme modalı için state
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedMediaItems, setSelectedMediaItems] = useState<string[]>([]);
 
   const apiUrl = import.meta.env.VITE_BE_URL;
 
   const fetchMedia = async () => {
     try {
       const response = await axios.get(`${apiUrl}/media/list`);
-      console.log("Gelen veri:", response.data);
       setMediaList(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
       console.error("Medya listesi alınamadı:", error);
-      setErrorMessage("Medya listesi alınamadı."); // Hata mesajını ayarla
+      setErrorMessage("Medya listesi alınamadı.");
     }
   };
 
@@ -56,23 +57,55 @@ const GalleryList = () => {
       setMediaList(mediaList.filter((media) => media.Key !== key));
     } catch (error) {
       console.error("Dosya silinirken hata oluştu:", error);
-      setErrorMessage("Dosya silinirken bir hata oluştu."); // Hata mesajını ayarla
+      setErrorMessage("Dosya silinirken bir hata oluştu.");
     }
   };
 
   const handleMediaUploaded = () => {
-    fetchMedia(); // Medya yüklendiğinde medya listesini yenile
+    fetchMedia();
   };
 
   const handleViewMedia = (mediaKey: string) => {
-    setSelectedMedia(mediaKey); // Seçilen medya dosyasını ayarla
-    setIsViewModalVisible(true); // Modalı aç
+    setSelectedMedia(mediaKey);
+    setIsViewModalVisible(true);
   };
 
-  // Arama fonksiyonu
   const filteredMediaList = mediaList.filter((media) =>
     media.Key.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // Medya seçme ve seçimi yönetme
+  const handleMediaSelect = (key: string) => {
+    if (selectedMediaItems.includes(key)) {
+      setSelectedMediaItems(selectedMediaItems.filter((item) => item !== key));
+    } else {
+      setSelectedMediaItems([...selectedMediaItems, key]);
+    }
+  };
+
+  // Toplu silme işlemi (geçici tek tek silme çözümü)
+const handleBulkDelete = async () => {
+  if (selectedMediaItems.length === 0) {
+    setErrorMessage("Silmek için medya seçin.");
+    return;
+  }
+
+  try {
+    // Her bir medya dosyasını tek tek sil
+    for (const key of selectedMediaItems) {
+      await axios.delete(`${apiUrl}/media`, { data: { key } });
+    }
+
+    // Medya listesini güncelle
+    setMediaList(mediaList.filter((media) => !selectedMediaItems.includes(media.Key)));
+    setSelectedMediaItems([]); // Seçimleri temizle
+    setIsSelectionMode(false); // Seçim modunu kapat
+  } catch (error) {
+    console.error("Toplu silme sırasında hata oluştu:", error);
+    setErrorMessage("Dosyalar silinirken bir hata oluştu.");
+  }
+};
+
 
   return (
     <div className="flex h-full">
@@ -94,9 +127,7 @@ const GalleryList = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="border border-[#D6D6D6] rounded-md px-4 py-2 pl-10 w-80 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 ease-in-out"
-                style={{
-                  height: "40px", // Arama çubuğunun yüksekliği buton ile aynı yapıldı
-                }}
+                style={{ height: "40px" }}
               />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +151,7 @@ const GalleryList = () => {
               onClick={handleAddNewClick}
               style={{
                 width: "92px",
-                height: "40px", // Buton yüksekliği arama çubuğu ile aynı yapıldı
+                height: "40px",
                 borderRadius: "8px",
                 padding: "10px 16px",
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -135,6 +166,14 @@ const GalleryList = () => {
             >
               <span>Yeni</span>&nbsp;<span>Ekle</span>
             </button>
+
+            {/* Seç Butonu */}
+            <button
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              onClick={() => setIsSelectionMode(!isSelectionMode)}
+            >
+              {isSelectionMode ? "Seçim Kapat" : "Seç"}
+            </button>
           </div>
         </div>
 
@@ -144,21 +183,40 @@ const GalleryList = () => {
           </div>
         )}
 
+        {/* Toplu Silme Butonu */}
+        {isSelectionMode && selectedMediaItems.length > 0 && (
+          <button
+            className="bg-red-500 text-white px-4 py-2 rounded-md my-4"
+            onClick={handleBulkDelete}
+          >
+            Seçilenleri Sil ({selectedMediaItems.length})
+          </button>
+        )}
+
         <table className="w-full mt-6 border-collapse">
           <thead>
             <tr className="text-left">
+              {isSelectionMode && <th className="p-2">Seç</th>}
               <th className="p-2">ID</th>
               <th className="p-2">Medya Adı</th>
               <th className="p-2">Medya Tipi</th>
               <th className="p-2">Oluşturma Tarihi</th>
               <th className="p-2 text-center">Sil</th>
-              <th className="p-2 text-center">Görüntüle</th>{" "}
-              {/* Görüntüle başlığı */}
+              <th className="p-2 text-center">Görüntüle</th>
             </tr>
           </thead>
           <tbody>
             {filteredMediaList.map((media, index) => (
               <tr key={media.Key} className="border-t">
+                {isSelectionMode && (
+                  <td className="p-2 text-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedMediaItems.includes(media.Key)}
+                      onChange={() => handleMediaSelect(media.Key)}
+                    />
+                  </td>
+                )}
                 <td className="p-2">{`DL${index + 1}`}</td>
                 <td className="p-2">{media.Key.split(".")[0]}</td>
                 <td className="p-2">
@@ -178,7 +236,7 @@ const GalleryList = () => {
                 <td className="p-2 text-center">
                   <button
                     className="text-blue-500 flex items-center justify-center"
-                    onClick={() => handleViewMedia(media.Key)} // Görüntüle butonuna tıklandığında modal aç
+                    onClick={() => handleViewMedia(media.Key)}
                   >
                     <FaEye className="mr-1" /> Görüntüle
                   </button>
@@ -194,7 +252,6 @@ const GalleryList = () => {
             <div className="bg-white p-6 rounded-lg max-w-2xl max-h-full overflow-auto">
               <h2 className="text-xl font-semibold mb-4">Medya Görüntüle</h2>
               <div className="flex justify-center items-center">
-                {/* Dosya uzantısına göre render işlemi */}
                 {selectedMedia.split(".").pop()?.toLowerCase() === "mp4" ? (
                   <video
                     controls
