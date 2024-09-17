@@ -56,12 +56,13 @@ const LargeTopTitleHeroCardSection: React.FC<
   return (
     <div
       ref={ref}
-      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1500 ease-in-out transform ${
+      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden duration-1300 ease-in-out ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } hover:scale-105 hover:shadow-lg`}
       style={{
         backgroundColor: "#ffffff", // Arka plan rengi (isteğe bağlı)
         borderRadius: "8px", // Kartın tamamı yuvarlatılmış köşelere sahip
+        transition: "opacity 1.3s ease-in-out, transform 1.3s ease-in-out", // Animasyonları belirliyoruz
       }}
     >
       {/* Medya görseli veya videosu */}
