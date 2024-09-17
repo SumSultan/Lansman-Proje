@@ -56,7 +56,7 @@ const LargeTopTitleHeroCardSection: React.FC<
   return (
     <div
       ref={ref}
-      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1300 ease-in-out transform ${
+      className={`w-[1050px] h-[650px] mx-auto relative overflow-hidden transition-all duration-1000 ease-in-out transform ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } hover:scale-105 hover:shadow-lg`}
       style={{
