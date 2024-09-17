@@ -262,7 +262,8 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
           </div>
         ))}
 
-        <div className="flex items-center">
+        {/* Kart Ekle Butonu ve Uyarı Mesajı */}
+        <div className="flex items-center space-x-2 mt-4">
           <button
             onClick={onAddItem}
             className="bg-[#F3F4F6] text-[#1F2937] border border-[#D1D5DB] rounded-lg shadow-xs focus:outline-none hover:bg-[#E5E7EB] transition-transform duration-150 ease-in-out"
@@ -276,8 +277,27 @@ const ReelsBottomCardForm: React.FC<ReelsBottomCardFormProps> = ({
               justifyContent: "center",
             }}
           >
-            Kart Ekle
+            <span
+              style={{
+                fontFamily: "Poppins",
+                fontSize: "12px", // Daha küçük font
+                fontWeight: 500,
+                lineHeight: "16px",
+              }}
+            >
+             Reels Card Ekle
+            </span>
           </button>
+          <span
+            className="text-sm"
+            style={{
+              fontFamily: "Poppins",
+              color: "#7A8699",
+              marginTop: "5px", // Butondan biraz aşağıya yerleştirme
+            }}
+          >
+            <span style={{ color: "red" }}>*</span> En az 4 card girilmelidir.
+          </span>
         </div>
       </div>
 

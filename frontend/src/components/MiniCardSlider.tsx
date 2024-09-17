@@ -169,18 +169,20 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
             style={{ width: "350px", borderRadius: "10px" }}
           >
             <div className="flex justify-between items-center mb-4">
-              <h3
-                className="text-lg font-semibold"
-                style={{
-                  fontFamily: "Poppins",
-                  fontWeight: 700,
-                  fontSize: "14px",
-                  lineHeight: "20px",
-                  color: "#7A8699",
-                }}
-              >
-                Mini Card {card.id}
-              </h3>
+              <div className="flex items-center gap-x-2">
+                <h3
+                  className="text-lg font-semibold"
+                  style={{
+                    fontFamily: "Poppins",
+                    fontWeight: 700,
+                    fontSize: "14px",
+                    lineHeight: "20px",
+                    color: "#7A8699", // MiniCard başlığının rengi
+                  }}
+                >
+                  Mini Card {card.id}
+                </h3>
+              </div>
               <button
                 onClick={() => onRemoveCard(card.id)}
                 className="text-[#6B7280] hover:text-[#374151] text-xl"
@@ -274,7 +276,8 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
           </div>
         ))}
 
-        <div className="flex items-center">
+        {/* Buton ve Uyarı Mesajı */}
+        <div className="flex items-center space-x-2 mt-4">
           <button
             onClick={onAddCard}
             className="bg-[#FCFCFC] text-[#353642] border border-[#D6D6D6] rounded-lg shadow-xs focus:outline-none"
@@ -295,6 +298,12 @@ const MiniCardSliderForm: React.FC<MiniCardSliderFormProps> = ({
           >
             Mini Card Ekle
           </button>
+          <span
+            className="text-sm"
+            style={{ fontFamily: "Poppins", color: "#7A8699" }}
+          >
+            <span style={{ color: "red" }}>*</span> En az 5 card girilmelidir.
+          </span>
         </div>
       </div>
 

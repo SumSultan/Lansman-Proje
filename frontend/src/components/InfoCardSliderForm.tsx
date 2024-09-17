@@ -223,7 +223,7 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
           </div>
         ))}
 
-        <div className="flex items-center">
+        <div className="flex items-center space-x-2 mt-4">
           <button
             onClick={onAddItem}
             className="bg-[#FCFCFC] text-[#353642] border border-[#D6D6D6] rounded-lg shadow-xs focus:outline-none"
@@ -250,6 +250,16 @@ const InfoCardSliderForm: React.FC<InfoCardSliderFormProps> = ({
               Info Card Ekle
             </span>
           </button>
+          <span
+            className="text-sm"
+            style={{
+              fontFamily: "Poppins",
+              color: "#7A8699",
+              marginTop: "5px", // Butondan biraz aşağıya yerleştirme
+            }}
+          >
+            <span style={{ color: "red" }}>*</span> En az 4 card girilmelidir.
+          </span>
         </div>
 
         {/* Modal */}
