@@ -97,7 +97,7 @@ const TwinTopTitleHeroCardSection: React.FC<TwinTopTitleHeroCardSectionProps> = 
   ) => (
     <div
       ref={ref}
-      className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative transition-all duration-1500 ease-in-out transform ${
+      className={`w-[48%] bg-[#DFE2E6] rounded-xl overflow-hidden relative duration-[1300ms] ease-in-out transform ${
         inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5"
       } h-[694px] flex flex-col justify-start items-center`} // İçeriği üstte hizalıyoruz
     >
