@@ -139,6 +139,7 @@ const Launches = () => {
   // Filtreleme seçeneğini değiştir
   const handleFilterChange = (status: "all" | "active" | "inactive") => {
     setFilterStatus(status);
+    setFilterType(null); // Filtre tipi sıfırlanacak
   };
 
   // Tarih bazlı filtre butonları
@@ -146,6 +147,7 @@ const Launches = () => {
     type: "today" | "ongoing" | "upcoming" | "past" | null
   ) => {
     setFilterType(type); // Filtre tipini ayarla
+    setFilterStatus("all"); // Tüm lansmanları göstermek için statüsü sıfırla
   };
 
   return (
